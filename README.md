@@ -33,6 +33,7 @@ site/index.html                 the store and admin (built, do not edit by hand)
 site/img/                       product photos and logo
 site-source/store.src.html      source of the page; build with: python3 site-source/build.py
 functions/                      Cloudflare Pages backend (orders, settings, site edits, photos, login), data in KV
+functions/_lib/ai.js            the admin's AI assistant (Workers AI binding AI, or Claude with ANTHROPIC_API_KEY)
 site/_redirects, site/_headers  /admin address and security headers (Cloudflare and Netlify)
 netlify/functions/, netlify.toml  Netlify backend (same API), data in Netlify Blobs, login with Netlify Identity
 store/                          an alternative full build (Next.js + Supabase), not used by the live site
