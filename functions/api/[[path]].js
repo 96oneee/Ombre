@@ -1,4 +1,5 @@
 import { DEF_CFG, COLORS, json, getCfg, isAdmin, makeToken, sameText } from "../_lib/core.js";
+import { askAI } from "../_lib/ai.js";
 
 const STATUSES = ["New", "Confirmed", "Out for delivery", "Delivered", "Cancelled"];
 const GOV = ["Beirut", "Mount Lebanon", "North", "Akkar", "Bekaa", "Baalbek-Hermel", "South", "Nabatieh"];
@@ -130,6 +131,15 @@ export async function onRequest({ request, env, params }) {
     const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
     await env.DATA.put("media/" + id, buf, { metadata: { type } });
     return json({ ok: true, id });
+  }
+  if (path === "ai" && m === "POST") {
+    if (+(request.headers.get("content-length") || 0) > 200_000) return json({ error: "That message is too long." }, 400);
+    const b = await body();
+    try {
+      return json({ ok: true, ...(await askAI(env, { ...b, cfg: await getCfg(env) })) });
+    } catch (e) {
+      return json({ error: e.message || "The AI assistant couldn't answer. Try again." }, e.status || 502);
+    }
   }
   return json({ error: "Not found." }, 404);
 }

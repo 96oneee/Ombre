@@ -677,6 +677,23 @@ body.editing .toast{z-index:200}
   .ectr select{max-width:150px}
 }
 @media (max-width:560px){.ebrand,.eundo{display:none}.etop{gap:6px;padding:0 8px}.eb{padding:0 10px}}
+.aic{display:flex;flex-direction:column;gap:10px;padding:0 4px}
+.ailog{display:flex;flex-direction:column;gap:8px}
+.aim{border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.45;overflow-wrap:anywhere}
+.aim .tx{white-space:pre-wrap}
+.aim.u{background:#303030;color:#fff;align-self:flex-end;max-width:88%}
+.aim.a{background:#f3f3f3;color:#303030;align-self:flex-start;max-width:96%}
+.aim.err{background:#fff4f2;color:#8e1f0b}
+.aim small{display:block;color:#616161;font-size:11px;margin-top:4px}
+.aicfg{background:#fff;border:1px solid #e3e3e3;border-radius:8px;padding:8px;margin-top:6px;display:flex;flex-direction:column;gap:6px;white-space:normal}
+.aicfg .row{display:flex;gap:6px}
+.aichips{display:flex;flex-wrap:wrap;gap:6px}
+.aichips button{border:1px solid #d4d4d4;background:#fff;border-radius:999px;padding:5px 10px;font:inherit;font-size:12px;cursor:pointer;color:#303030;text-align:left}
+.aichips button:hover{background:#f1f1f1}
+.aiin{position:sticky;bottom:0;background:#fff;padding:8px 0 4px;display:flex;flex-direction:column;gap:6px}
+.aiin textarea{width:100%;min-height:72px;resize:vertical;border:1px solid #8a8a8a;border-radius:8px;padding:8px 10px;font:inherit;font-size:13px}
+.aiin .eb{align-self:flex-end}
+.aith{color:#616161;font-size:12px;margin:0}
 body.live .pv-only,body.live .demo,body.live [data-asample],body.pwauth .id-only{display:none!important}
 </style>
 
@@ -937,7 +954,7 @@ function renderHome(){const vis=SITE.home.filter(x=>!x.hidden);
 function applyTheme(){const t=SITE.theme;let st=$("#theme-vars");if(!st){st=document.createElement("style");st.id="theme-vars";document.head.appendChild(st)}
   const fams=[t.display,t.body].filter(f=>!["Bodoni Moda","Manrope"].includes(f));
   fams.forEach(f=>{const id="gf-"+f.replace(/\W/g,"");if(!document.getElementById(id)){const l=document.createElement("link");l.id=id;l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+f.replace(/ /g,"+")+":ital,wght@0,400;0,500;0,600;1,400&display=swap";document.head.appendChild(l)}});
-  st.textContent=`:root{--sand:${t.bg};--ink:${t.text};--sea:${t.accent};--paper:color-mix(in srgb,${t.bg} 60%,#fff);--stone:color-mix(in srgb,${t.bg} 85%,${t.text});--line:color-mix(in srgb,${t.text} 14%,transparent);--line-2:color-mix(in srgb,${t.text} 28%,transparent);--ink-2:color-mix(in srgb,${t.text} 72%,${t.bg});--display:"${t.display}","Didot",Georgia,serif;--body:"${t.body}","Helvetica Neue",system-ui,sans-serif}
+  st.textContent=`html:root{--sand:${t.bg};--ink:${t.text};--sea:${t.accent};--paper:color-mix(in srgb,${t.bg} 60%,#fff);--stone:color-mix(in srgb,${t.bg} 85%,${t.text});--line:color-mix(in srgb,${t.text} 14%,transparent);--line-2:color-mix(in srgb,${t.text} 28%,transparent);--ink-2:color-mix(in srgb,${t.text} 72%,${t.bg});--display:"${t.display}","Didot",Georgia,serif;--body:"${t.body}","Helvetica Neue",system-ui,sans-serif}
   ${t.buttons==="rounded"?".btn,.qty,.radio{border-radius:40px}.btn{padding:0 32px}":""}`}
 
 function fillStatic(){const g=SITE.global,m=(g.ticker||[]).filter(Boolean);const off=g.tickerOn===false;$(".ticker").style.display=off?"none":"";document.body.classList.toggle("noticker",off);if(g.menu){$(".hnav").innerHTML=g.menu.map(x=>`<a href="${HREF(x.link)}"${ANCH(x.link)} data-r="${x.link}">${esc(x.label)}</a>`).join("");$("#mlinks").innerHTML=`<a class="big" href="#home">Home</a>`+g.menu.map(x=>`<a class="big" href="${HREF(x.link)}"${ANCH(x.link)}>${esc(x.label)}</a>`).join("")}$$(".hright a.hide-m").forEach(a=>a.style.display=g.showInsta===false?"none":"");const ft=$("#ft-title");if(ft){ft.innerHTML=T(SITE.global.footerTitle);$("#ft-text").innerHTML=T(SITE.global.footerText)}$$('a[href*="instagram.com"]').forEach(a=>a.href=SITE.global.instagram);const h=m.map(x=>`<span>${esc(x).replace(/\{fee\}/g,money(DELIVERY))}</span>`).join("");$("#tick").innerHTML=h+h;$$(".wa-num").forEach(e=>e.textContent=waFmt());$$(".wa-link").forEach(e=>e.href="https://wa.me/"+WA);$$(".del-fee").forEach(e=>e.textContent=money(DELIVERY))}
@@ -1174,7 +1191,7 @@ const stCls=s=>s.split(" ")[0];
 const fmtD=iso=>{const d=new Date(iso);return d.toLocaleDateString("en-GB",{day:"numeric",month:"short"})+" · "+d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})};
 const oItems=o=>o.lines.map(([id,q])=>q+" × "+(COLORS[id]?COLORS[id].name:id)).join(", ");
 function aShell(inner){const os=getOrders();const nw=os.filter(o=>o.status==="New").length;
-  const tabs=[["dash","Dashboard"],["orders","Orders"],["products","Products"],["customize","Customize site"],["settings","Settings"]];
+  const tabs=[["dash","Dashboard"],["orders","Orders"],["products","Products"],["customize","Customize site"],["ai","Ask AI ✦"],["settings","Settings"]];
   return `<div class="adm"><aside class="aside"><span class="wm" aria-hidden="true"></span><span class="tag">Store admin</span>
   ${tabs.map(([k,l])=>`<button data-atab="${k}" aria-current="${A.tab===k}"><span>${l}</span>${k==="orders"&&nw?`<span class="cnt">${nw}</span>`:""}</button>`).join("")}
   <a class="back" href="#home">← View store</a><button data-alogout>Log out</button></aside><div class="amain">
@@ -1236,6 +1253,7 @@ document.addEventListener("click",e=>{
   const d=b.dataset;
   if(LIVE&&(d.astatus&&d.astatus!=="Cancelled"||d.acancel==="yes")){A.ask=null;liveStatus(A.open,d.acancel?"Cancelled":d.astatus);return}
   if(d.atab==="customize"){location.hash="#editor";return}
+  if(d.atab==="ai"){ED.tab="ai";ED.sel=null;location.hash="#editor";return}
   if(d.atab){A.tab=d.atab;A.open=null;A.ask=null}
   if(d.aopen){A.tab="orders";A.open=d.aopen;A.ask=null}
   if(d.aback!==undefined){A.open=null;A.ask=null}
@@ -1337,6 +1355,65 @@ const EI={sec:SV('<rect x="3" y="4" width="14" height="12" rx="2"/><path d="M3 8
   drag:'<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="7.5" cy="5" r="1.3"/><circle cx="12.5" cy="5" r="1.3"/><circle cx="7.5" cy="10" r="1.3"/><circle cx="12.5" cy="10" r="1.3"/><circle cx="7.5" cy="15" r="1.3"/><circle cx="12.5" cy="15" r="1.3"/></svg>',
   plus:SV('<circle cx="10" cy="10" r="7"/><path d="M10 7v6M7 10h6"/>'),layers:SV('<path d="M10 3l7 4-7 4-7-4 7-4z"/><path d="M3 11l7 4 7-4"/>'),gear:SV('<circle cx="10" cy="10" r="2.5"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M4.7 15.3l1.4-1.4M13.9 6.1l1.4-1.4"/>'),
   desk:SV('<rect x="2.5" y="4" width="15" height="10" rx="1.5"/><path d="M7 17h6"/>'),mob:SV('<rect x="6" y="2.5" width="8" height="15" rx="1.8"/><path d="M9.5 15h1"/>'),undo:SV('<path d="M7 4L3 8l4 4"/><path d="M3 8h9a4.5 4.5 0 010 9H8"/>'),redo:SV('<path d="M13 4l4 4-4 4"/><path d="M17 8H8a4.5 4.5 0 000 9h4"/>'),back:SV('<path d="M12 4l-6 6 6 6"/>')};
+EI.ai=SV('<path d="M10 2.5l1.7 4.6 4.6 1.7-4.6 1.7L10 15.1l-1.7-4.6L3.7 8.8l4.6-1.7z"/><path d="M15.5 13.5l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6z"/>');
+/* AI assistant: the server returns a reply plus edits ("ops") that go into the draft */
+const AI={msgs:[],busy:false,input:""};
+const AI_ROOTS=["theme","global","home","product","productSpecs","about","aboutPillars","shop"];
+const AI_IMGS=["img/inuse-wide.jpg","img/inuse.jpg","img/couple.jpg","img/hands.jpg","img/shore.jpg","img/beige.jpg","img/beige-detail.jpg","img/blue.jpg","img/blue-detail.jpg"];
+const AI_CHIPS=["Make the home page heading more summery","Add a question about how to fold it","Change the button colour to a sand tone","Add a customer quotes section"];
+function aiSchemaText(){const fl=fs=>fs.map(f=>f.k+(f.type==="select"?"="+f.options.map(o=>o[0]).join("|"):f.type==="text"?"":"("+f.type+")")).join(", ");
+  return Object.entries(SCHEMA).map(([k,S])=>`- ${k} (${S.name}${S.single?", only one allowed":""}): s = {${fl(S.fields)}}${S.list?`; items (max ${S.list.max}) = {${fl(S.list.fields)}}`:""}`).join("\n")
+  +`\nOther pages and parts: theme = {bg, text, accent (hex colours), display (heading font), body (body font), buttons=square|rounded}; global = {ticker (list of announcement strings), tickerOn, menu (list of {label, link}), showInsta, footerTitle, footerText, instagram}; `
+  +Object.entries(PAGE_FORMS).filter(([k])=>k!=="global").map(([k,P])=>`${k} = {${fl(P.fields)}}${P.listKey?`; ${P.listKey} = list of {${fl(P.list.fields)}}`:""}`).join("; ")}
+const aiBad=k=>k==="__proto__"||k==="constructor"||k==="prototype";
+function aiKeys(p){const ks=String(p||"").split(".").filter(x=>x!=="");if(!ks.length||!AI_ROOTS.includes(ks[0])||ks.some(aiBad))throw new Error("path");
+  if(ks[0]==="home"&&ks[1]!==undefined&&!/^\d+$/.test(ks[1])){const i=secIdx(ks[1]);if(i<0)throw new Error("section");ks[1]=String(i)}return ks}
+function aiGet(ks){return ks.reduce((a,k)=>a==null?a:a[k],DRAFT)}
+function aiOk(ks,v){const last=ks[ks.length-1];
+  if(ks[0]==="theme"){if(["bg","text","accent"].includes(last))return /^#[0-9a-f]{6}$/i.test(v);if(last==="display")return DISPLAY_FONTS.includes(v);if(last==="body")return BODY_FONTS.includes(v);if(last==="buttons")return v==="square"||v==="rounded";return false}
+  if(/image/i.test(last)&&typeof v==="string")return AI_IMGS.includes(v)||v.startsWith("media:")||v==="";
+  if(typeof v==="string")return v.length<=3000;return ["number","boolean","object"].includes(typeof v)&&JSON.stringify(v).length<=20000}
+function aiSet(ks,v){let o=DRAFT;for(let i=0;i<ks.length-1;i++){const k=ks[i];if(o[k]==null||typeof o[k]!=="object")o[k]=/^\d+$/.test(ks[i+1])?[]:{};o=o[k]}o[ks[ks.length-1]]=v}
+const AI_PAGE={product:"product",productSpecs:"product",about:"about",aboutPillars:"about",shop:"shop",home:"home"};
+function aiApply(ops){let n=0,skip=0,pg=null;
+  for(const op of ops){try{const t=op&&op.op;
+    if(t==="set"){const ks=aiKeys(op.path);if(!aiOk(ks,op.value))throw 0;aiSet(ks,op.value);pg=pg||AI_PAGE[ks[0]]}
+    else if(t==="add_item"||t==="remove_item"){const ks=aiKeys(op.path),a=aiGet(ks);if(!Array.isArray(a))throw 0;
+      if(t==="add_item"){if(a.length>=20||!aiOk(ks,op.value))throw 0;a.push(op.value)}else{const i=+op.index;if(!(i>=0&&i<a.length))throw 0;a.splice(i,1)}pg=pg||AI_PAGE[ks[0]]}
+    else if(t==="add_section"){const S=SCHEMA[op.type];if(!S||S.single&&DRAFT.home.some(x=>x.type===op.type))throw 0;
+      const x={id:op.type+"-"+uid(),type:op.type,s:{...clone(S.blank||blankFor(S)),...(op.s&&typeof op.s==="object"?op.s:{})},items:Array.isArray(op.items)&&op.items.length?op.items.slice(0,S.list?S.list.max:0):clone(S.blankItems||[])};
+      Object.keys(x.s).forEach(k=>{if(aiBad(k)||!aiOk(["home","0","s",k],x.s[k]))delete x.s[k]});
+      const at=op.after==="start"?0:secIdx(op.after)>=0?secIdx(op.after)+1:DRAFT.home.length;DRAFT.home.splice(at,0,x);pg="home"}
+    else if(t==="remove_section"){const i=secIdx(op.id);if(i<0)throw 0;DRAFT.home.splice(i,1);pg="home"}
+    else if(t==="move_section"){const i=secIdx(op.id);if(i<0)throw 0;mv(DRAFT.home,i,Math.max(0,Math.min(DRAFT.home.length-1,Math.floor(+op.index||0))));pg="home"}
+    else if(t==="hide_section"){const i=secIdx(op.id);if(i<0)throw 0;DRAFT.home[i].hidden=op.hidden!==false;pg="home"}
+    else throw 0;n++}catch(e){skip++}}
+  return {n,skip,pg}}
+function aiCfgText(c){const r=[];if(c.price!==undefined)r.push("Price: $"+c.price);if(c.delivery!==undefined)r.push("Delivery fee: $"+c.delivery);if(c.wa!==undefined)r.push("WhatsApp: +"+String(c.wa).replace(/\D/g,""));
+  if(c.colors)for(const [id,v] of Object.entries(c.colors)){if(!COLORS[id]||!v)continue;const p=[];if(v.stock!==undefined)p.push(v.stock+" in stock");if(v.visible!==undefined)p.push(v.visible===false?"hidden":"shown");r.push(COLORS[id].name+": "+p.join(", "))}return r}
+function aiMsgHTML(m,i){if(m.role==="user")return `<div class="aim u"><span class="tx">${esc(m.text)}</span></div>`;
+  const cf=m.cfg?aiCfgText(m.cfg):[];
+  return `<div class="aim a${m.err?" err":""}"><span class="tx">${esc(m.text)}</span>${m.n?`<small>${m.n} change${m.n>1?"s":""} made in the preview. Publish to make ${m.n>1?"them":"it"} live, or Undo at the top.</small>`:""}${m.skip?`<small>${m.skip} change${m.skip>1?"s":""} couldn't be made.</small>`:""}
+  ${cf.length?`<div class="aicfg"><b>Store settings, live right away:</b>${cf.map(x=>`<span>${esc(x)}</span>`).join("")}${m.cfgDone?`<small>${m.cfgDone==="applied"?"Applied.":"Skipped."}</small>`:`<div class="row"><button class="eb pri" data-aicfg="${i}">Apply</button><button class="eb" data-aicfgno="${i}">Skip</button></div>`}</div>`:""}</div>`}
+function aiHTML(){return `<div class="lph"><b>AI assistant</b></div><div class="aic">
+  ${LIVE?"":`<p class="etip">The assistant works on your live store. Open the admin on your website to use it.</p>`}
+  <div class="ailog">${AI.msgs.length?AI.msgs.map(aiMsgHTML).join(""):`<p class="emp">Tell me what to change on your store, in your own words. I'll make the edit in the preview, and nothing goes live until you press Publish.</p><div class="aichips">${AI_CHIPS.map(c=>`<button data-aichip="${esc(c)}">${esc(c)}</button>`).join("")}</div>`}</div>
+  ${AI.busy?`<p class="aith">Working on it…</p>`:""}
+  <div class="aiin"><textarea id="aiq" placeholder="For example: change the banner title to Summer is here" aria-label="Message the AI assistant">${esc(AI.input)}</textarea><button class="eb pri" data-aisend ${AI.busy?"disabled":""}>Send</button></div></div>`}
+function aiScroll(){setTimeout(()=>{const l=$(".eleft");if(l&&ED.tab==="ai")l.scrollTop=l.scrollHeight;const q=$("#aiq");if(q&&!AI.busy)q.focus()},0)}
+async function aiSend(text){text=String(text||"").trim();if(!text||AI.busy)return;
+  if(!LIVE){toast("The AI assistant works on your live store.");return}
+  AI.msgs.push({role:"user",text});AI.input="";AI.busy=true;edPanels();aiScroll();
+  const hist=AI.msgs.filter(m=>!m.err).map(m=>({role:m.role,content:m.role==="assistant"?m.text+(m.n?` [made ${m.n} edits]`:""):m.text}));
+  try{const j=await api("/api/ai",{method:"POST",json:{messages:hist,draft:DRAFT,page:ED.page,schema:aiSchemaText(),fonts:{display:DISPLAY_FONTS.join(", "),body:BODY_FONTS.join(", ")},images:AI_IMGS.concat((LIVE_MEDIA||[]).map(id=>"media:"+id)).join(", ")}});
+    const m={role:"assistant",text:j.reply||"Done.",cfg:j.cfg||null};
+    if(Array.isArray(j.ops)&&j.ops.length){snap();const r=aiApply(j.ops);m.n=r.n;m.skip=r.skip;if(r.n){saveDraft();if(r.pg&&r.pg!==ED.page){ED.page=r.pg;ED.sel=null;sendPreview({top:true})}else sendPreview()}}
+    AI.msgs.push(m)}catch(err){AI.msgs.push({role:"assistant",text:err.message,err:1})}
+  AI.busy=false;if(document.body.classList.contains("editing"))edPanels();aiScroll()}
+async function aiCfg(i,yes){const m=AI.msgs[i];if(!m||!m.cfg||m.cfgDone)return;if(!yes){m.cfgDone="skipped";edPanels();return}
+  const c={},x=m.cfg;if(x.price!==undefined)c.price=x.price;if(x.delivery!==undefined)c.delivery=x.delivery;if(x.wa!==undefined)c.wa=x.wa;
+  if(x.colors){c.colors={};for(const id of Object.keys(COLORS))c.colors[id]={...CFG.colors[id],...(x.colors[id]||{})}}
+  try{const j=await api("/api/cfg",{method:"PUT",json:c});LIVE_CFG=j.cfg;loadCfg();m.cfgDone="applied";toast("Store settings updated");sendPreview()}catch(err){toast(err.message)}edPanels()}
 
 function fieldHTML(f,path){const v=getP(DRAFT,path);const id="ef-"+path.replace(/\./g,"-");
   if(f.type==="toggle")return `<label class="etog">${f.label}<input type="checkbox" id="${id}" data-p="${path}" ${v?"checked":""}></label>`;
@@ -1354,6 +1431,7 @@ function kids(listPath,L,items,pre,add){return items.map((it,i)=>trow(pre+i,EI.b
 function addHTML(){const q=ED.q.toLowerCase();const list=Object.entries(SCHEMA).filter(([k,S])=>!(S.single&&DRAFT.home.some(x=>x.type===k))).filter(([k,S])=>!q||(S.name+" "+(S.desc||"")).toLowerCase().includes(q));
   return `<div class="addp"><input type="search" id="eaddq" placeholder="Search sections" value="${esc(ED.q)}" aria-label="Search sections"><div class="addl">${list.map(([k,S])=>`<button data-sadd="${k}"><span class="tic">${EI.sec}</span><span><b>${S.name}</b><small>${S.desc||""}</small></span></button>`).join("")||`<p class="emp" style="padding:0 8px">No sections match.</p>`}</div><button class="eb" data-sadding="0">Cancel</button></div>`}
 function leftHTML(){
+  if(ED.tab==="ai")return aiHTML();
   if(ED.tab==="theme")return themeHTML();
   const g=DRAFT.global;
   let h=`<div class="lph"><b>${PAGES.find(p=>p[0]===ED.page)[1]}</b></div><div class="grp"><p class="gt">Header</p>`
@@ -1381,6 +1459,7 @@ function blockCtx(s){const p=(s||"").split(":");
   return null}
 const conf=(m,k)=>`<div class="econf">${m}<div class="row"><button class="eb danger" data-${k}="yes">Remove</button><button class="eb" data-${k}="no">Cancel</button></div></div>`;
 function rightHTML(){const s=ED.sel;
+  if(ED.tab==="ai")return `<div class="remp">${EI.ai}<b>AI assistant</b><p>Ask for a change in your own words. Edits show in the preview, and you publish when you're happy. Undo reverses any edit.</p></div>`;
   if(ED.tab==="theme")return `<div class="remp">${EI.gear}<b>Theme settings</b><p>Colours, fonts and buttons apply to every page of the store.</p></div>`;
   if(!s)return `<div class="remp">${EI.sec}<b>Customize your store</b><p>Select a section or block in the sidebar, or click one in the preview, to edit it.</p></div>`;
   const tip=`<p class="etip">Write *word* for italics. {price}, {fee} and {whatsapp} fill in automatically.</p>`;
@@ -1416,7 +1495,7 @@ function ensureFrame(){if(PF&&PF.isConnected)return;PF=document.createElement("i
   const base=`<base href="${esc(document.baseURI.split("#")[0])}">`;let h=BOOT_HTML;h=/<head[^>]*>/i.test(h)?h.replace(/<head[^>]*>/i,m=>m+base):base+h;
   PF.srcdoc="<!doctype html>"+h;$(".eframe").appendChild(PF);fitFrame()}
 function edOpen(){const el=$("#editor");
-  if(!ED.built){el.innerHTML=`<div class="etop"></div><nav class="erail" aria-label="Editor"><button data-etab="sections" title="Sections" aria-label="Sections">${EI.layers}</button><button data-etab="theme" title="Theme settings" aria-label="Theme settings">${EI.gear}</button></nav><div class="eleft"></div><div class="ecanvas"><div class="eframe"></div></div><div class="eright"></div>`;ED.built=true}
+  if(!ED.built){el.innerHTML=`<div class="etop"></div><nav class="erail" aria-label="Editor"><button data-etab="sections" title="Sections" aria-label="Sections">${EI.layers}</button><button data-etab="theme" title="Theme settings" aria-label="Theme settings">${EI.gear}</button><button data-etab="ai" title="AI assistant" aria-label="AI assistant">${EI.ai}</button></nav><div class="eleft"></div><div class="ecanvas"><div class="eframe"></div></div><div class="eright"></div>`;ED.built=true}
   DRAFT=LIVE?clone(PUB):mergeSite(readSite("ombre-site-draft")||clone(PUB));ensureFrame();edPanels();sendPreview();if(LIVE)liveDraftLoad()}
 function selectIt(s,fromPreview){ED.sel=s||null;ED.ask=null;ED.adding=false;ED.tab="sections";const p=(s||"").split(":");
   if(p[0]==="blk")ED.open[p[1]]=true;if(["ann","hdr","page"].includes(p[0])&&p.length>1)ED.open[p[0]]=true;
@@ -1442,11 +1521,17 @@ document.addEventListener("input",e=>{const el=e.target;if(!el.closest||!el.clos
   if(el.type==="color"){const c=el.parentElement.querySelector("code");if(c)c.textContent=el.value}
   commit(el.tagName==="SELECT"||el.type==="checkbox")});
 document.addEventListener("change",e=>{if(e.target.id==="epage")setPage(e.target.value)});
+document.addEventListener("input",e=>{if(e.target.id==="aiq")AI.input=e.target.value});
+document.addEventListener("keydown",e=>{if(e.target.id==="aiq"&&e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();aiSend(e.target.value)}});
 document.addEventListener("click",e=>{if(!e.target.closest("#editor"))return;const b=e.target.closest("button,[data-sel]");if(!b)return;const d=b.dataset;
   if(d.tog!==undefined&&b.tagName==="BUTTON"){ED.open[d.tog]=!ED.open[d.tog];edPanels();return}
   if(d.eye){snap();if(d.eye==="ann")DRAFT.global.tickerOn=DRAFT.global.tickerOn===false;else{const x=DRAFT.home[secIdx(d.eye.slice(4))];x.hidden=!x.hidden}commit(true);return}
   if(d.sel!==undefined&&b.tagName!=="BUTTON"){selectIt(d.sel);return}
-  if(d.etab){ED.tab=d.etab;ED.adding=false;ED.ask=null;edPanels();return}
+  if(d.etab){ED.tab=d.etab;ED.adding=false;ED.ask=null;edPanels();if(d.etab==="ai")aiScroll();return}
+  if(d.aisend!==undefined){const q=$("#aiq");aiSend(q?q.value:"");return}
+  if(d.aichip){aiSend(d.aichip);return}
+  if(d.aicfg){aiCfg(+d.aicfg,true);return}
+  if(d.aicfgno){aiCfg(+d.aicfgno,false);return}
   if(d.back!==undefined){ED.sel=null;ED.ask=null;edPanels();sendPreview();return}
   if(d.sadding!==undefined){ED.adding=d.sadding==="1";ED.q="";edPanels();if(ED.adding)setTimeout(()=>{const q=$("#eaddq");if(q){q.focus();q.scrollIntoView({block:"nearest"})}},0);return}
   if(d.sadd){snap();const S=SCHEMA[d.sadd];const x={id:d.sadd+"-"+uid(),type:d.sadd,s:clone(S.blank||blankFor(S)),items:clone(S.blankItems||[])};

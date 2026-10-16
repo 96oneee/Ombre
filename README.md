@@ -6,6 +6,7 @@ The same code runs on **Cloudflare Pages** (free, recommended) or **Netlify**. O
 
 - **Store**: `site/index.html`, one static page (home, product, shop, about, cart, checkout).
 - **Admin**: `https://<your-site>/admin`. Orders, stock, price, delivery fee, WhatsApp number, email subscribers, and **Customize site**, a Shopify-style theme editor with sections and blocks, theme colours and fonts, a desktop and phone preview, undo, and draft then publish.
+- **AI assistant**: *Admin → Ask AI* (or the sparkle in the editor). Type a change in your own words and it edits the draft in the preview; nothing goes live until you press Publish, and Undo reverses it. Price, delivery fee, WhatsApp number and stock changes are shown for you to confirm. Cloudflare only (see setup step 4).
 - **Data**: orders, stock, settings, site edits and uploaded photos are saved online (Cloudflare KV, or Netlify Blobs on Netlify). Every visitor sees the same published site, and every order reaches the admin.
 
 ## One-time Cloudflare setup (free)
@@ -13,8 +14,9 @@ The same code runs on **Cloudflare Pages** (free, recommended) or **Netlify**. O
 1. **Create the storage.** In the Cloudflare dashboard: *Storage & databases → KV → Create* a namespace named `ombre`.
 2. **Connect the repository.** *Workers & Pages → Create → Pages → Connect to Git* → GitHub → `96oneee/Ombre`. Framework preset: **None**. Build command: leave empty. Build output directory: **site**. Save and deploy.
 3. **Link the storage and set your password.** In the new Pages project: *Settings → Bindings → Add → KV namespace*, variable name **DATA**, namespace `ombre`. Then *Settings → Variables and secrets → Add*, type **Secret**, name **ADMIN_PASSWORD**, value = the admin password you want. Then *Deployments → Retry deployment* so the changes apply (any new commit pushed to `main` also redeploys).
+4. **Turn on the AI assistant (optional).** *Settings → Bindings → Add → Workers AI*, variable name **AI**, then redeploy. This uses Cloudflare's free daily AI allowance. For smarter answers, add a Secret **ANTHROPIC_API_KEY** (a Claude API key from console.anthropic.com, paid per use) and the assistant uses Claude instead.
 
-The store is then at `https://<project>.pages.dev` and the admin at `https://<project>.pages.dev/admin`. To change the admin password, change the `ADMIN_PASSWORD` secret and redeploy.
+The live store is https://ombre-qad.pages.dev and the admin https://ombre-qad.pages.dev/admin. In general the store is at `https://<project>.pages.dev` and the admin at `https://<project>.pages.dev/admin`. To change the admin password, change the `ADMIN_PASSWORD` secret and redeploy.
 
 ## One-time Netlify setup (alternative)
 
