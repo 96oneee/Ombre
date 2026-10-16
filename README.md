@@ -11,7 +11,7 @@ Online store for **Ombre**, a square folding beach shade (50 × 50 cm, Beige and
 
 ## Open the preview
 
-Open `preview/index.html` in a browser. The admin is at `preview/index.html#admin`.
+Open `preview/index.html` in a browser. The admin is not linked from the store: go to `preview/index.html#admin` and create a password the first time. From the admin, **Customize site** opens the Shopify-style theme editor (sections and blocks, theme settings, desktop and mobile preview, undo, draft and publish).
 
 ## Store details
 
