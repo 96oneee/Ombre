@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ombre</title>
 </head>
 <body>
 <title>Ombre Store</title>
@@ -123,7 +124,7 @@ body.over header.site:not(.solid) .bubble{background:#f6f4ea;color:#10323b}
 @media (max-width:860px){.hero .badge{top:auto;bottom:auto;top:96px;width:92px;height:92px}.hero .badge b{font-size:26px}}
 
 /* usp strip */
-.usps{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+.usps{display:grid;grid-template-columns:repeat(var(--cols,4),1fr);border-bottom:1px solid var(--line)}
 .usp{display:flex;gap:16px;align-items:center;padding:26px 22px;border-right:1px solid var(--line)}
 .usp:last-child{border-right:none}
 .usp svg{width:30px;height:30px;flex:none;color:var(--sea)}
@@ -314,7 +315,7 @@ footer.site{background:var(--ink);color:var(--sand);padding-top:clamp(64px,8vw,1
 .ab-hero .p{grid-column:8/13;aspect-ratio:4/5;max-width:100%;overflow:hidden}
 .ab-hero .p img{width:100%;height:100%;object-fit:cover}
 .manifesto{font-family:var(--display);font-size:clamp(30px,3.8vw,58px);line-height:1.12;max-width:22ch}
-.manifesto em{color:var(--sea)}
+.manifesto em,.manifesto .it{color:var(--sea)}
 .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,48px)}
 .pillar{border-top:1px solid var(--line-2);padding-top:22px;display:flex;flex-direction:column;gap:12px}
 .pillar h3{font-size:28px}
@@ -490,6 +491,116 @@ table.at tr.click:hover td{background:var(--paper)}
   .vrow{grid-template-columns:56px minmax(0,1fr);}
   .vrow .af,.vrow .tog{grid-column:2}
 }
+
+/* new section types */
+.hero.h-large{height:min(76vh,760px)}
+.hero.h-medium{height:min(58vh,560px);min-height:440px}
+.itx{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,90px);align-items:center}
+.itx.rev .im{order:2}
+.itx .im{aspect-ratio:4/5;max-width:100%;overflow:hidden;background:var(--studio)}
+.itx .im img{width:100%;height:100%;object-fit:cover}
+.itx .tx{display:flex;flex-direction:column;gap:20px;align-items:flex-start}
+.itx h2{font-size:clamp(40px,5vw,72px)}
+.rtx{max-width:820px;margin-inline:auto;text-align:center;display:flex;flex-direction:column;gap:20px;align-items:center}
+.rtx.l{text-align:left;align-items:flex-start;margin-inline:0}
+.rtx h2{font-size:clamp(40px,5.4vw,80px)}
+.rtx p{max-width:56ch;font-size:17px}
+.tms{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2vw,28px)}
+.tms figure{margin:0;border-top:1px solid var(--line-2);padding-top:22px;display:flex;flex-direction:column;gap:16px}
+.tms blockquote{margin:0;font-family:var(--display);font-size:clamp(22px,2.2vw,30px);line-height:1.2}
+.tms figcaption{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+@media (max-width:860px){.itx{grid-template-columns:1fr}.itx.rev .im{order:0}}
+
+/* editor */
+body.editing .ticker{margin-left:var(--edw)}
+body.editing header.site,body.editing main,body.editing footer.site{margin-left:var(--edw)}
+body.editing.over header.site{left:var(--edw)}
+body.editing{--edw:360px}
+body.editing.ed-hidden{--edw:0px}
+.sw-sec{position:relative}
+body.editing .sw-sec{cursor:pointer}
+body.editing .sw-sec:hover::after,body.editing .sw-sec.sel::after{content:"";position:absolute;inset:0;outline:2px solid var(--sea);outline-offset:-2px;pointer-events:none;z-index:30}
+body.editing .sw-sec:hover::after{outline-style:dashed;opacity:.6}
+body.editing .sw-sec.sel::before{content:attr(data-name);position:absolute;left:0;top:0;z-index:31;background:var(--sea);color:var(--on-sea);font-size:11px;font-weight:600;letter-spacing:.06em;padding:4px 10px;font-family:var(--body)}
+#editor{position:fixed;left:0;top:0;bottom:0;width:360px;z-index:95;background:#fbfaf6;color:#18282c;border-right:1px solid rgba(16,50,59,.15);display:flex;flex-direction:column;font-family:"Manrope",system-ui,sans-serif;font-size:13px;line-height:1.5;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 0 40px -20px rgba(0,0,0,.3)}
+:root[data-theme="dark"] #editor{background:#14191b;color:#e7e8e3;border-color:rgba(255,255,255,.1)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #editor{background:#14191b;color:#e7e8e3;border-color:rgba(255,255,255,.1)}}
+#editor[hidden]{display:none}
+.ehd{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid rgba(127,127,127,.2)}
+.ehd b{font-size:14px;flex:1}
+.eb{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 12px;border-radius:7px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit;cursor:pointer;font:inherit;font-weight:500;white-space:nowrap}
+.eb:hover{background:rgba(127,127,127,.1)}
+.eb.pri{background:#227b92;border-color:#227b92;color:#fff}
+.eb.pri:hover{background:#1c687c}
+.eb.dark{background:#18282c;border-color:#18282c;color:#fff}
+.eb.ic{width:30px;height:30px;padding:0}
+.eb.danger{color:#b2422b;border-color:rgba(178,66,43,.4)}
+.eb[disabled]{opacity:.4;pointer-events:none}
+.epg{padding:10px 14px;border-bottom:1px solid rgba(127,127,127,.2)}
+.epg select{width:100%;height:36px;border-radius:7px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit;padding:0 10px;font:inherit;font-weight:600}
+.ebody{flex:1;overflow-y:auto;padding:10px 14px 20px}
+.eft{border-top:1px solid rgba(127,127,127,.2);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.eft .row{display:flex;gap:8px}
+.eft .row .eb{flex:1}
+.est{font-size:12px;opacity:.7;display:flex;align-items:center;gap:6px}
+.est i{width:7px;height:7px;border-radius:9px;background:#3c8d5c}
+.est.dirty i{background:#d08a2e}
+.esec{display:flex;align-items:center;gap:6px;padding:6px 6px 6px 10px;border-radius:8px;border:1px solid transparent;cursor:pointer}
+.esec:hover{background:rgba(127,127,127,.08)}
+.esec.sel{border-color:#227b92;background:rgba(34,123,146,.08)}
+.esec .nm{flex:1;min-width:0}
+.esec .nm b{display:block;font-weight:600;font-size:13px}
+.esec .nm span{display:block;opacity:.6;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.esec.off .nm{opacity:.45}
+.esec .eb.ic{border-color:transparent;font-size:14px}
+.elbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;opacity:.55;margin:14px 0 8px}
+.efld{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.efld>label{font-weight:600;font-size:12px}
+.efld input[type=text],.efld textarea,.efld select{width:100%;border-radius:7px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit;padding:8px 10px;font:inherit}
+.efld textarea{min-height:80px;resize:vertical}
+.efld .hint{font-size:11px;opacity:.6}
+.etog{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;font-weight:600;font-size:12px;cursor:pointer}
+.etog input{appearance:none;-webkit-appearance:none;width:36px;height:20px;border-radius:20px;background:rgba(127,127,127,.4);position:relative;cursor:pointer;margin:0;flex:none}
+.etog input::after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s}
+.etog input:checked{background:#227b92}
+.etog input:checked::after{transform:translateX(16px)}
+.eimg{display:flex;gap:10px;align-items:center}
+.eimg .th{width:64px;height:64px;border-radius:7px;background:rgba(127,127,127,.15) center/cover no-repeat;flex:none;border:1px solid rgba(127,127,127,.25)}
+.eimg .acts{display:flex;flex-direction:column;gap:6px}
+.eitem{border:1px solid rgba(127,127,127,.25);border-radius:8px;margin-bottom:8px}
+.eitem>summary{list-style:none;display:flex;align-items:center;gap:6px;padding:8px 8px 8px 10px;cursor:pointer;font-weight:600}
+.eitem>summary::-webkit-details-marker{display:none}
+.eitem>summary span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.eitem .in{padding:4px 10px 6px}
+.ecol{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ecol input[type=color]{width:40px;height:32px;border:1px solid rgba(127,127,127,.35);border-radius:7px;background:none;padding:2px;cursor:pointer}
+.ecol label{flex:1;font-weight:600;font-size:12px}
+.ecol code{font-size:11px;opacity:.6}
+.eadd{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.eadd button{text-align:left;padding:10px;border-radius:8px;border:1px solid rgba(127,127,127,.3);background:transparent;color:inherit;cursor:pointer;font:inherit}
+.eadd button:hover{border-color:#227b92}
+.eadd button b{display:block;font-size:12px}
+.eadd button span{font-size:11px;opacity:.6}
+.econf{background:rgba(178,66,43,.1);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.econf .row{display:flex;gap:8px}
+.etip{font-size:12px;opacity:.7;background:rgba(127,127,127,.1);border-radius:8px;padding:10px;margin:8px 0 12px}
+#edshow{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:96;display:none}
+body.editing.ed-hidden #edshow{display:inline-flex}
+.picker{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.45);display:grid;place-items:center;padding:16px}
+.picker .box{background:#fbfaf6;color:#18282c;border-radius:12px;width:min(720px,100%);max-height:85vh;display:flex;flex-direction:column;font-family:"Manrope",system-ui,sans-serif;font-size:13px}
+:root[data-theme="dark"] .picker .box{background:#14191b;color:#e7e8e3}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .picker .box{background:#14191b;color:#e7e8e3}}
+.picker .hd{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid rgba(127,127,127,.2)}
+.picker .hd b{flex:1;font-size:15px}
+.picker .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;padding:16px;overflow-y:auto}
+.picker .grid2 button{aspect-ratio:1;border-radius:8px;border:2px solid transparent;background:rgba(127,127,127,.15) center/cover no-repeat;cursor:pointer;padding:0}
+.picker .grid2 button[aria-pressed="true"]{border-color:#227b92}
+.picker .grid2 button:hover{border-color:rgba(34,123,146,.5)}
+@media (max-width:900px){
+  body.editing{--edw:0px}
+  #editor{width:100%;top:auto;height:58vh;border-right:none;border-top:1px solid rgba(127,127,127,.25);border-radius:14px 14px 0 0}
+  body.editing main,body.editing footer.site{padding-bottom:58vh}
+}
 </style>
 
 <div class="ticker" aria-label="Store announcements"><div class="run" id="tick"></div></div>
@@ -522,7 +633,7 @@ table.at tr.click:hover td{background:var(--paper)}
 <footer class="site">
   <div class="wrap">
     <div class="fgrid">
-      <div><p class="big">Sun? Blocked.</p><p style="opacity:.7;margin-top:18px;max-width:34ch;font-size:14px">A square folding shade, delivered anywhere in Lebanon. Pay in cash when it arrives.</p></div>
+      <div><p class="big" id="ft-title">Sun? Blocked.</p><p id="ft-text" style="opacity:.7;margin-top:18px;max-width:34ch;font-size:14px">A square folding shade, delivered anywhere in Lebanon. Pay in cash when it arrives.</p></div>
       <div><h4>Shop</h4><ul><li><a href="#shop">All products</a></li><li><a href="#product" data-color="beige">Ombre Beige</a></li><li><a href="#product" data-color="blue">Ombre Blue</a></li></ul></div>
       <div><h4>Help</h4><ul><li><a href="#home" data-anchor="faq">Delivery</a></li><li><a href="#home" data-anchor="faq">Payment</a></li><li><a href="#about">About Ombre</a></li></ul></div>
       <div><h4>Contact</h4><ul><li><a href="https://www.instagram.com/weareombre/" target="_blank" rel="noopener">Instagram</a></li><li><a class="wa-link" href="https://wa.me/96171964944" target="_blank" rel="noopener">WhatsApp</a></li><li style="user-select:all;opacity:.7"><span class="wa-num">+961 71 964 944</span></li></ul></div>
@@ -539,6 +650,7 @@ table.at tr.click:hover td{background:var(--paper)}
   <div class="dbody" id="dbody"></div>
   <div class="dfoot" id="dfoot"></div>
 </aside>
+<aside id="editor" hidden aria-label="Site editor"></aside><button id="edshow" class="eb pri" type="button">Show editor</button>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
@@ -577,7 +689,119 @@ const nItems=()=>items().reduce((s,[,q])=>s+q,0);
 const sub=()=>items().reduce((s,[,q])=>s+q*PRICE,0);
 
 /* ticker */
-function fillStatic(){const m=CFG.ticker.filter(Boolean);const h=m.map(x=>`<span>${esc(x).replace(/\{fee\}/g,money(DELIVERY))}</span>`).join("");$("#tick").innerHTML=h+h;$$(".wa-num").forEach(e=>e.textContent=waFmt());$$(".wa-link").forEach(e=>e.href="https://wa.me/"+WA);$$(".del-fee").forEach(e=>e.textContent=money(DELIVERY))}
+
+/* ---------- editable site content ---------- */
+const LIB=["img/inuse-wide.jpg","img/inuse.jpg","img/couple.jpg","img/hands.jpg","img/shore.jpg","img/beige.jpg","img/blue.jpg","img/beige-detail.jpg","img/blue-detail.jpg"];
+const uid=()=>Math.random().toString(36).slice(2,9);
+const DEFAULT_SITE={
+  theme:{bg:"#f2f0e4",text:"#10323b",accent:"#227b92",display:"Bodoni Moda",body:"Manrope",buttons:"square"},
+  global:{ticker:["Cash on delivery across Lebanon","Delivery {fee}, anywhere in Lebanon","Two colours: Beige and Blue","Sun? Blocked.","Follow @weareombre"],
+    footerTitle:"Sun? Blocked.",footerText:"A square folding shade, delivered anywhere in Lebanon. Pay in cash when it arrives.",instagram:"https://www.instagram.com/weareombre/"},
+  home:[
+    {id:"hero",type:"hero",s:{image:"img/inuse-wide.jpg",eyebrow:"Ombre",title:"Sun? Blocked.",text:"The square folding shade you carry to the beach, set on the sand and lie back under. In Beige and Blue.",btn1:"Shop the Ombre",link1:"product",btn2:"Our story",link2:"about",badge:true,badgeTop:"{price}",badgeText:"Cash on delivery",height:"full"}},
+    {id:"usps",type:"usps",s:{},items:[{icon:"size",title:"50 × 50 cm",text:"Square shade"},{icon:"frame",title:"Folding frame",text:"Wood, carried by hand"},{icon:"cash",title:"Cash on delivery",text:"Pay when it arrives"},{icon:"truck",title:"{fee} delivery",text:"Anywhere in Lebanon"}]},
+    {id:"featured",type:"featured",s:{eyebrow:"The product",title:"The *Ombre*",text:"A square of canvas on a folding wooden frame. Set it on the sand, tilt it over your head and stay in the shade while you lie in the sun.",link:"View full details"}},
+    {id:"editorial",type:"editorial",s:{eyebrow:"On the sand",quote:"Hand up, squint, shift. Or bring your own shade.",image1:"img/couple.jpg",image2:"img/hands.jpg"}},
+    {id:"colours",type:"colours",s:{title:"Pick a colour",link:"Shop all"}},
+    {id:"steps",type:"steps",s:{title:"How ordering *works*",text:"No card, no account. Order in a minute and pay the driver."},items:[{title:"Choose your colour",text:"Beige or Blue, as many as you like. Add them to your cart."},{title:"We confirm on WhatsApp",text:"Leave your name, phone and address. We message you to confirm the order."},{title:"Pay on delivery",text:"We deliver anywhere in Lebanon for {fee}. You pay in cash when it arrives."}]},
+    {id:"band",type:"band",s:{image:"img/shore.jpg",eyebrow:"Ombre · Lebanon",title:"Shade, carried.",btn:"Shop now",link:"shop"}},
+    {id:"faq",type:"faq",s:{eyebrow:"Questions",title:"Good to *know*",text:"Anything else? Message us on WhatsApp at {whatsapp}."},items:[{q:"How much is delivery?",a:"{fee}, anywhere in Lebanon."},{q:"How do I pay?",a:"Cash on delivery. You pay the driver when your Ombre arrives. No card needed."},{q:"How big is it?",a:"Ombre is square, 50 × 50 cm."},{q:"Which colours are there?",a:"Two: Beige and Blue."},{q:"What happens after I order?",a:"You get an order number straight away, and we contact you on WhatsApp to confirm before we deliver."}]},
+    {id:"gallery",type:"gallery",s:{title:"@weareombre",link:"Follow on Instagram"},items:[{image:"img/inuse.jpg"},{image:"img/blue-detail.jpg"},{image:"img/hands.jpg"},{image:"img/beige-detail.jpg"},{image:"img/couple.jpg"}]}
+  ],
+  product:{subtitle:"Square folding beach shade, 50 × 50 cm",waBtn:"Order on WhatsApp",trust1:"Cash on delivery",trust2:"{fee} across Lebanon",trust3:"Confirmed on WhatsApp",
+    delivery:"We deliver to all eight governorates of Lebanon for a flat {fee}. We contact you on WhatsApp to confirm your order and arrange delivery.",
+    payment:"Cash on delivery only for now. You pay the driver when your order arrives.",bandImage:"img/inuse-wide.jpg",bandTitle:"Lie back.\nSun? Blocked."},
+  productSpecs:[{k:"Shape",v:"Square"},{k:"Size",v:"50 × 50 cm"},{k:"Frame",v:"Folding, wood"},{k:"Colours",v:"Beige, Blue"}],
+  about:{eyebrow:"Our story",title:"Made for *the sand.*",image:"img/hands.jpg",manifesto:"Ombre began with a simple wish: *a little shade*, exactly where you lie, that you can carry to the beach and fold away after.",bandImage:"img/couple.jpg",bandTitle:"Sun? Blocked.",bandBtn:"Shop the Ombre"},
+  aboutPillars:[{label:"01 · Shape",title:"A square of shade",text:"50 × 50 cm of canvas, the right size to cover your head and shoulders."},{label:"02 · Frame",title:"Wood that folds",text:"A folding wooden frame, marked with the Ombre name."},{label:"03 · Colour",title:"Beige and Blue",text:"Two colours, picked for the beach."}],
+  shop:{title:"The *Collection*",text:"One shade, two colours. Every order ships across Lebanon for {fee}, paid in cash on delivery."}
+};
+const LINKS=[["home","Home"],["product","Product page"],["shop","Shop"],["about","About"],["faq","Questions (home)"]];
+const ICONS=[["size","Size"],["frame","Frame"],["cash","Cash"],["truck","Delivery"],["chat","WhatsApp"],["check","Check"]];
+const F=(k,label,type="text",x={})=>({k,label,type,...x});
+const SCHEMA={
+  hero:{name:"Image banner",fields:[F("image","Image","image"),F("eyebrow","Small heading"),F("title","Heading","textarea"),F("text","Text","textarea"),F("btn1","First button label"),F("link1","First button link","link"),F("btn2","Second button label"),F("link2","Second button link","link"),F("height","Banner height","select",{options:[["full","Full screen"],["large","Large"],["medium","Medium"]]}),F("badge","Show round badge","toggle"),F("badgeTop","Badge big text"),F("badgeText","Badge small text")]},
+  usps:{name:"Icons with text",fields:[],list:{label:"Item",max:6,fields:[F("icon","Icon","select",{options:ICONS}),F("title","Heading"),F("text","Text")],blank:{icon:"check",title:"New item",text:"Short description"}}},
+  featured:{name:"Featured product",single:true,fields:[F("eyebrow","Small heading"),F("title","Heading"),F("text","Text","textarea"),F("link","Details link label")]},
+  editorial:{name:"Editorial photos",fields:[F("eyebrow","Small heading"),F("quote","Quote","textarea"),F("image1","Large image","image"),F("image2","Small image","image")]},
+  colours:{name:"Colour tiles",fields:[F("title","Heading"),F("link","Link label")]},
+  steps:{name:"Steps",fields:[F("title","Heading"),F("text","Text","textarea")],list:{label:"Step",max:5,fields:[F("title","Heading"),F("text","Text","textarea")],blank:{title:"New step",text:"Describe this step."}}},
+  band:{name:"Full-width image",fields:[F("image","Image","image"),F("eyebrow","Small heading"),F("title","Heading","textarea"),F("btn","Button label"),F("link","Button link","link")]},
+  faq:{name:"Questions",fields:[F("eyebrow","Small heading"),F("title","Heading"),F("text","Text","textarea")],list:{label:"Question",max:12,fields:[F("q","Question"),F("a","Answer","textarea")],blank:{q:"New question?",a:"The answer."}}},
+  gallery:{name:"Photo gallery",fields:[F("title","Heading"),F("link","Link label")],list:{label:"Photo",max:10,fields:[F("image","Image","image")],blank:{image:"img/inuse.jpg"}}},
+  imagetext:{name:"Image with text",fields:[F("image","Image","image"),F("side","Image position","select",{options:[["left","Left"],["right","Right"]]}),F("eyebrow","Small heading"),F("title","Heading"),F("text","Text","textarea"),F("btn","Button label"),F("link","Button link","link")],blank:{image:"img/inuse.jpg",side:"left",eyebrow:"New section",title:"A heading for this *section*",text:"Write a few lines here.",btn:"Shop now",link:"shop"}},
+  richtext:{name:"Text block",fields:[F("eyebrow","Small heading"),F("title","Heading"),F("text","Text","textarea"),F("align","Alignment","select",{options:[["center","Centre"],["left","Left"]]}),F("btn","Button label"),F("link","Button link","link")],blank:{eyebrow:"",title:"A short *statement*",text:"Write something about Ombre here.",align:"center",btn:"",link:"shop"}},
+  testimonials:{name:"Customer quotes",fields:[F("title","Heading")],list:{label:"Quote",max:6,fields:[F("quote","Quote","textarea"),F("name","Name")],blank:{quote:"Write a real customer's words here.",name:"Customer name"}},blank:{title:"What customers *say*"},blankItems:[{quote:"Write a real customer's words here.",name:"Customer name"}]}
+};
+SCHEMA.usps.blankItems=[{icon:"check",title:"New item",text:"Short description"}];
+SCHEMA.steps.blankItems=[{title:"First step",text:"Describe this step."}];
+SCHEMA.faq.blankItems=[{q:"New question?",a:"The answer."}];
+SCHEMA.gallery.blankItems=[{image:"img/inuse.jpg"},{image:"img/couple.jpg"},{image:"img/hands.jpg"}];
+const PAGE_FORMS={
+  product:{name:"Product page",fields:[F("subtitle","Line under the name"),F("waBtn","WhatsApp button label"),F("trust1","Badge 1"),F("trust2","Badge 2"),F("trust3","Badge 3"),F("delivery","Delivery text","textarea"),F("payment","Payment text","textarea"),F("bandImage","Banner image","image"),F("bandTitle","Banner heading","textarea")],listKey:"productSpecs",list:{label:"Detail",max:10,fields:[F("k","Name"),F("v","Value")],blank:{k:"Detail",v:"Value"}}},
+  about:{name:"About page",fields:[F("eyebrow","Small heading"),F("title","Heading"),F("image","Image","image"),F("manifesto","Statement","textarea"),F("bandImage","Banner image","image"),F("bandTitle","Banner heading"),F("bandBtn","Banner button label")],listKey:"aboutPillars",list:{label:"Point",max:6,fields:[F("label","Small label"),F("title","Heading"),F("text","Text","textarea")],blank:{label:"0X · Label",title:"Heading",text:"Text"}}},
+  shop:{name:"Shop page",fields:[F("title","Heading"),F("text","Text","textarea")]},
+  global:{name:"Announcement bar and footer",fields:[F("footerTitle","Footer heading"),F("footerText","Footer text","textarea"),F("instagram","Instagram link")],listKey:"ticker",list:{label:"Announcement",max:8,plain:true,fields:[F("t","Message")],blank:"New message"}}
+};
+const clone=o=>JSON.parse(JSON.stringify(o));
+function readSite(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
+function mergeSite(x){const d=clone(DEFAULT_SITE);if(!x)return d;return {...d,...x,theme:{...d.theme,...(x.theme||{})},global:{...d.global,...(x.global||{})},product:{...d.product,...(x.product||{})},about:{...d.about,...(x.about||{})},shop:{...d.shop,...(x.shop||{})}}}
+let PUB=mergeSite(readSite("ombre-site-pub")), SITE=PUB;
+let MEDIA={};try{MEDIA=JSON.parse(localStorage.getItem("ombre-media")||"{}")}catch(e){}
+const IMG=src=>String(src||"").startsWith("media:")?(MEDIA[src.slice(6)]||""):src;
+function T(t){return esc(String(t??"")).replace(/\{fee\}/g,money(DELIVERY)).replace(/\{price\}/g,money(PRICE)).replace(/\{whatsapp\}/g,waFmt()).replace(/\*([^*]+)\*/g,'<span class="it">$1</span>').replace(/\n/g,"<br>")}
+const HREF=l=>l==="faq"?"#home":"#"+(LINKS.some(([k])=>k===l)?l:"home");
+const ANCH=l=>l==="faq"?' data-anchor="faq"':"";
+
+const R={
+hero:(s)=>`<section class="hero h-${s.height||"full"}">
+  ${IMG(s.image)?`<img src="${IMG(s.image)}" alt="">`:""}
+  ${s.badge?`<div class="badge"><div><b>${T(s.badgeTop)}</b>${T(s.badgeText)}</div></div>`:""}
+  <div class="wrap in">
+    <h1 class="rv">${s.eyebrow?`<span class="up">${T(s.eyebrow)}</span>`:""}${T(s.title)}</h1>
+    <div class="row rv" style="animation-delay:.12s">
+      <p>${T(s.text)}</p>
+      <div class="ctas">${s.btn1?`<a href="${HREF(s.link1)}"${ANCH(s.link1)} class="btn light">${T(s.btn1)} ${ARW}</a>`:""}${s.btn2?`<a href="${HREF(s.link2)}"${ANCH(s.link2)} class="btn ghost-light">${T(s.btn2)}</a>`:""}</div>
+    </div>
+  </div></section>`,
+usps:(s,it)=>`<div class="wrap"><div class="usps" style="--cols:${Math.min(4,Math.max(1,it.length))}">${it.map(u=>`<div class="usp">${ICON[u.icon]||ICON.check}<div><b>${T(u.title)}</b><span>${T(u.text)}</span></div></div>`).join("")}</div></div>`,
+featured:(s)=>`<section class="sec wrap"><div class="feat">
+    <div class="stage" id="fstage"><div class="tagc"><p class="lbl">Studio · ${COLORS[sel].name}</p></div>
+      ${VIS().map(([id,c])=>`<img src="${c.imgs[0]}" data-c="${id}" class="${id===sel?"":"off"}" alt="Ombre in ${c.name}">`).join("")}
+      <div class="cap" id="fcap">No. ${sel==="beige"?"01":"02"} — ${COLORS[sel].name}</div></div>
+    <div><p class="lbl">${T(s.eyebrow)}</p><h2 style="margin-top:16px">${T(s.title)}</h2><p class="lead">${T(s.text)}</p>
+      <div class="pricerow"><span class="price">${money(PRICE)}</span><span class="muted" style="font-size:13px">+ ${money(DELIVERY)} delivery · cash on delivery</span></div>
+      <div class="sw" id="fsw">${swatches(sel,"data-fsel")}</div>
+      <div class="buyrow">${qtyHTML()}<button class="btn" data-addsel>Add to cart</button></div>
+      <div id="fstock">${stockHTML(sel)}</div>
+      ${s.link?`<a href="#product" class="ulink" style="display:inline-block;margin-top:28px">${T(s.link)}</a>`:""}</div></div></section>`,
+editorial:(s)=>`<section class="wrap" style="padding-bottom:clamp(72px,10vw,150px)"><div class="ed">
+    <div class="a">${IMG(s.image1)?`<img src="${IMG(s.image1)}" alt="">`:""}</div>
+    <div class="b"><p class="lbl">${T(s.eyebrow)}</p><blockquote>${T(s.quote)}</blockquote><div class="sm">${IMG(s.image2)?`<img src="${IMG(s.image2)}" alt="">`:""}</div></div></div></section>`,
+colours:(s)=>`<section class="sec tight wrap"><div class="sechead"><h2>${T(s.title)}</h2>${s.link?`<a class="ulink" href="#shop">${T(s.link)}</a>`:""}</div>
+  <div class="duo">${VIS().map(([id,c])=>`<a class="tile" href="#product" data-color="${id}"><img src="${c.imgs[0]}" alt="Ombre ${c.name} in the studio"><img class="alt" src="${c.alt}" alt=""><div class="meta"><h3>Ombre <span class="it">${c.name}</span></h3><span class="go">${money(PRICE)} ${ARW}</span></div></a>`).join("")}</div></section>`,
+steps:(s,it)=>`<section class="sec wrap"><div class="sechead"><h2>${T(s.title)}</h2><p class="muted" style="max-width:38ch">${T(s.text)}</p></div>
+  <div class="steps" style="grid-template-columns:repeat(${Math.max(1,Math.min(it.length,4))},1fr)">${it.map((x,i)=>`<div class="step"><span class="n">${["i.","ii.","iii.","iv.","v."][i]||i+1}</span><h3>${T(x.title)}</h3><p>${T(x.text)}</p></div>`).join("")}</div></section>`,
+band:(s)=>`<section class="band">${IMG(s.image)?`<img src="${IMG(s.image)}" alt="">`:""}<div class="wrap in">${s.eyebrow?`<p class="lbl" style="color:#f6f4ea;opacity:.85">${T(s.eyebrow)}</p>`:""}<h2>${T(s.title)}</h2>${s.btn?`<a href="${HREF(s.link)}"${ANCH(s.link)} class="btn light">${T(s.btn)} ${ARW}</a>`:""}</div></section>`,
+faq:(s,it)=>`<section class="sec wrap" id="faq"><div class="faq">
+    <div><p class="lbl">${T(s.eyebrow)}</p><h2 style="font-size:clamp(40px,5vw,72px);margin-top:16px">${T(s.title)}</h2><p class="muted" style="margin-top:20px;max-width:34ch">${T(s.text)}</p></div>
+    <div>${it.map((x,i)=>`<details class="acc" ${i===0?"open":""}><summary>${T(x.q)}<i></i></summary><div class="body">${T(x.a)}</div></details>`).join("")}</div></div></section>`,
+gallery:(s,it)=>`<section class="wrap" style="padding-bottom:clamp(72px,10vw,120px)"><div class="sechead"><h2 style="font-size:clamp(32px,4vw,56px)">${T(s.title)}</h2>${s.link?`<a class="ulink" href="${esc(SITE.global.instagram)}" target="_blank" rel="noopener">${T(s.link)}</a>`:""}</div>
+  <div class="gal">${it.map(x=>`<a href="${esc(SITE.global.instagram)}" target="_blank" rel="noopener"><img src="${IMG(x.image)}" alt="" loading="lazy"></a>`).join("")}</div></section>`,
+imagetext:(s)=>`<section class="sec wrap"><div class="itx ${s.side==="right"?"rev":""}"><div class="im">${IMG(s.image)?`<img src="${IMG(s.image)}" alt="">`:""}</div>
+  <div class="tx">${s.eyebrow?`<p class="lbl">${T(s.eyebrow)}</p>`:""}<h2>${T(s.title)}</h2><p class="muted">${T(s.text)}</p>${s.btn?`<a href="${HREF(s.link)}"${ANCH(s.link)} class="btn">${T(s.btn)} ${ARW}</a>`:""}</div></div></section>`,
+richtext:(s)=>`<section class="sec wrap"><div class="rtx ${s.align==="left"?"l":""}">${s.eyebrow?`<p class="lbl">${T(s.eyebrow)}</p>`:""}<h2>${T(s.title)}</h2>${s.text?`<p class="muted">${T(s.text)}</p>`:""}${s.btn?`<a href="${HREF(s.link)}"${ANCH(s.link)} class="btn line">${T(s.btn)}</a>`:""}</div></section>`,
+testimonials:(s,it)=>`<section class="sec wrap"><div class="sechead"><h2>${T(s.title)}</h2></div><div class="tms">${it.map(x=>`<figure><blockquote>“${T(x.quote)}”</blockquote><figcaption>${T(x.name)}</figcaption></figure>`).join("")}</div></section>`
+};
+function renderHome(){const vis=SITE.home.filter(x=>!x.hidden);
+  return vis.map(x=>`<div class="sw-sec" data-sid="${x.id}">${(R[x.type]||(()=>""))(x.s||{},x.items||[])}</div>`).join("")||`<section class="sec wrap"><p class="muted">This page has no visible sections.</p></section>`}
+function applyTheme(){const t=SITE.theme;let st=$("#theme-vars");if(!st){st=document.createElement("style");st.id="theme-vars";document.head.appendChild(st)}
+  const fams=[t.display,t.body].filter(f=>!["Bodoni Moda","Manrope"].includes(f));
+  fams.forEach(f=>{const id="gf-"+f.replace(/\W/g,"");if(!document.getElementById(id)){const l=document.createElement("link");l.id=id;l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+f.replace(/ /g,"+")+":ital,wght@0,400;0,500;0,600;1,400&display=swap";document.head.appendChild(l)}});
+  st.textContent=`:root{--sand:${t.bg};--ink:${t.text};--sea:${t.accent};--paper:color-mix(in srgb,${t.bg} 60%,#fff);--stone:color-mix(in srgb,${t.bg} 85%,${t.text});--line:color-mix(in srgb,${t.text} 14%,transparent);--line-2:color-mix(in srgb,${t.text} 28%,transparent);--ink-2:color-mix(in srgb,${t.text} 72%,${t.bg});--display:"${t.display}","Didot",Georgia,serif;--body:"${t.body}","Helvetica Neue",system-ui,sans-serif}
+  ${t.buttons==="rounded"?".btn,.qty,.radio{border-radius:40px}.btn{padding:0 32px}":""}`}
+
+function fillStatic(){const m=(SITE.global.ticker||[]).filter(Boolean);const ft=$("#ft-title");if(ft){ft.innerHTML=T(SITE.global.footerTitle);$("#ft-text").innerHTML=T(SITE.global.footerText)}$$('a[href*="instagram.com"]').forEach(a=>a.href=SITE.global.instagram);const h=m.map(x=>`<span>${esc(x).replace(/\{fee\}/g,money(DELIVERY))}</span>`).join("");$("#tick").innerHTML=h+h;$$(".wa-num").forEach(e=>e.textContent=waFmt());$$(".wa-link").forEach(e=>e.href="https://wa.me/"+WA);$$(".del-fee").forEach(e=>e.textContent=money(DELIVERY))}
 fillStatic();
 
 function save(pop){store.set("ombre-cart2",cart);const c=$("#count");c.textContent=nItems();if(pop){c.classList.remove("pop");void c.offsetWidth;c.classList.add("pop")}renderDrawer()}
@@ -589,96 +813,7 @@ function swatches(cur,attr){return VIS().map(([id,c])=>`<button class="swb" ${at
 function qtyHTML(id){return `<span class="qty" data-q><button data-qd="-1" aria-label="Decrease quantity">−</button><output>1</output><button data-qd="1" aria-label="Increase quantity">+</button></span>`}
 
 const V={
-home(){return `
-<section class="hero">
-  <img src="img/inuse-wide.jpg" alt="Two people lying on the sand under Ombre shades in blue and beige">
-  <div class="badge"><div><b>$80</b>Cash on<br>delivery</div></div>
-  <div class="wrap in">
-    <h1 class="rv"><span class="up">Ombre</span>Sun<span style="margin-left:-.1em">?</span> Blocked.</h1>
-    <div class="row rv" style="animation-delay:.12s">
-      <p>The square folding shade you carry to the beach, set on the sand and lie back under. In Beige and Blue.</p>
-      <div class="ctas"><a href="#product" class="btn light">Shop the Ombre ${ARW}</a><a href="#about" class="btn ghost-light">Our story</a></div>
-    </div>
-  </div>
-</section>
-<div class="wrap"><div class="usps">
-  <div class="usp">${ICON.size}<div><b>50 × 50 cm</b><span>Square shade</span></div></div>
-  <div class="usp">${ICON.frame}<div><b>Folding frame</b><span>Wood, carried by hand</span></div></div>
-  <div class="usp">${ICON.cash}<div><b>Cash on delivery</b><span>Pay when it arrives</span></div></div>
-  <div class="usp">${ICON.truck}<div><b>${money(DELIVERY)} delivery</b><span>Anywhere in Lebanon</span></div></div>
-</div></div>
-
-<section class="sec wrap">
-  <div class="feat">
-    <div class="stage" id="fstage">
-      <div class="tagc"><p class="lbl">Studio · ${COLORS[sel].name}</p></div>
-      ${VIS().map(([id,c])=>`<img src="${c.imgs[0]}" data-c="${id}" class="${id===sel?"":"off"}" alt="Ombre in ${c.name}">`).join("")}
-      <div class="cap" id="fcap">No. ${sel==="beige"?"01":"02"} — ${COLORS[sel].name}</div>
-    </div>
-    <div>
-      <p class="lbl">The product</p>
-      <h2 style="margin-top:16px">The <span class="it">Ombre</span></h2>
-      <p class="lead">A square of canvas on a folding wooden frame. Set it on the sand, tilt it over your head and stay in the shade while you lie in the sun.</p>
-      <div class="pricerow"><span class="price">${money(PRICE)}</span><span class="muted" style="font-size:13px">+ ${money(DELIVERY)} delivery · cash on delivery</span></div>
-      <div class="sw" id="fsw">${swatches(sel,"data-fsel")}</div>
-      <div class="buyrow">${qtyHTML()}<button class="btn" data-addsel>Add to cart</button></div>
-      <div id="fstock">${stockHTML(sel)}</div>
-      <a href="#product" class="ulink" style="display:inline-block;margin-top:28px">View full details</a>
-    </div>
-  </div>
-</section>
-
-<section class="wrap" style="padding-bottom:clamp(72px,10vw,150px)">
-  <div class="ed">
-    <div class="a"><img src="img/couple.jpg" alt="Two people sunbathing on towels at the shore"></div>
-    <div class="b">
-      <p class="lbl">On the sand</p>
-      <blockquote>Hand up, squint, shift. Or bring your own shade.</blockquote>
-      <div class="sm"><img src="img/hands.jpg" alt="A woman shading her eyes with her hands on a beach towel"></div>
-    </div>
-  </div>
-</section>
-
-<section class="sec tight wrap" style="padding-top:0">
-  <div class="sechead"><h2>Pick a colour</h2><a class="ulink" href="#shop">Shop all</a></div>
-  <div class="duo">
-    ${VIS().map(([id,c])=>`<a class="tile" href="#product" data-color="${id}">
-      <img src="${c.imgs[0]}" alt="Ombre ${c.name} in the studio"><img class="alt" src="${c.alt}" alt="">
-      <div class="meta"><h3>Ombre <span class="it">${c.name}</span></h3><span class="go">${money(PRICE)} ${ARW}</span></div></a>`).join("")}
-  </div>
-</section>
-
-<section class="sec wrap">
-  <div class="sechead"><h2>How ordering <span class="it">works</span></h2><p class="muted" style="max-width:38ch">No card, no account. Order in a minute and pay the driver.</p></div>
-  <div class="steps">
-    <div class="step"><span class="n">i.</span><h3>Choose your colour</h3><p>Beige or Blue, as many as you like. Add them to your cart.</p></div>
-    <div class="step"><span class="n">ii.</span><h3>We confirm on WhatsApp</h3><p>Leave your name, phone and address. We message you to confirm the order.</p></div>
-    <div class="step"><span class="n">iii.</span><h3>Pay on delivery</h3><p>We deliver anywhere in Lebanon for ${money(DELIVERY)}. You pay in cash when it arrives.</p></div>
-  </div>
-</section>
-
-<section class="band">
-  <img src="img/shore.jpg" alt="The shoreline with sunbathers on the sand">
-  <div class="wrap in"><p class="lbl" style="color:#f6f4ea;opacity:.85">Ombre · Lebanon</p><h2>Shade, carried.</h2><a href="#shop" class="btn light">Shop now ${ARW}</a></div>
-</section>
-
-<section class="sec wrap" id="faq">
-  <div class="faq">
-    <div><p class="lbl">Questions</p><h2 style="font-size:clamp(40px,5vw,72px);margin-top:16px">Good to <span class="it">know</span></h2><p class="muted" style="margin-top:20px;max-width:34ch">Anything else? Message us on WhatsApp at <span style="user-select:all;color:var(--ink)">${waFmt()}</span>.</p></div>
-    <div>
-      <details class="acc" open><summary>How much is delivery?<i></i></summary><div class="body">${money(DELIVERY)}, anywhere in Lebanon.</div></details>
-      <details class="acc"><summary>How do I pay?<i></i></summary><div class="body">Cash on delivery. You pay the driver when your Ombre arrives. No card needed.</div></details>
-      <details class="acc"><summary>How big is it?<i></i></summary><div class="body">Ombre is square, 50 × 50 cm.</div></details>
-      <details class="acc"><summary>Which colours are there?<i></i></summary><div class="body">Two: Beige and Blue.</div></details>
-      <details class="acc"><summary>What happens after I order?<i></i></summary><div class="body">You get an order number straight away, and we contact you on WhatsApp to confirm before we deliver.</div></details>
-    </div>
-  </div>
-</section>
-
-<section class="wrap" style="padding-bottom:clamp(72px,10vw,120px)">
-  <div class="sechead"><h2 style="font-size:clamp(32px,4vw,56px)">@weareombre</h2><a class="ulink" href="https://www.instagram.com/weareombre/" target="_blank" rel="noopener">Follow on Instagram</a></div>
-  <div class="gal">${["inuse.jpg","blue-detail.jpg","hands.jpg","beige-detail.jpg","couple.jpg"].map(s=>`<a href="https://www.instagram.com/weareombre/" target="_blank" rel="noopener"><img src="img/${s}" alt="" loading="lazy"></a>`).join("")}</div>
-</section>`},
+home(){return renderHome()},
 
 product(){const c=COLORS[sel];return `
 <section class="wrap phead" style="padding-bottom:0;padding-top:28px"><div class="crumbs"><a href="#home">Home</a>/<a href="#shop">Shop</a>/<span>Ombre ${c.name}</span></div></section>
@@ -694,28 +829,28 @@ product(){const c=COLORS[sel];return `
     <div class="buybox">
       <p class="lbl">Ombre · No. ${sel==="beige"?"01":"02"}</p>
       <h1 style="margin-top:14px">Ombre <span class="it">${c.name}</span></h1>
-      <p class="sub">Square folding beach shade, 50 × 50 cm</p>
+      <p class="sub">${T(SITE.product.subtitle)}</p>
       <div class="pricerow"><span class="price">${money(PRICE)}</span><span class="tax">Delivery ${money(DELIVERY)} · Cash on delivery</span></div>
       <div class="optlbl"><span>Colour: <b>${c.name}</b></span></div>
       <div class="sw" style="margin:14px 0 22px">${swatches(sel,"data-psel")}</div>
       <div class="optlbl" style="margin:0 0 10px"><span>Quantity</span></div>
       <div class="buyrow">${qtyHTML()}<button class="btn" data-addsel ${avail(sel)<=0?"disabled":""}>${avail(sel)<=0?"Sold out":"Add to cart"}</button></div>
-      <a class="btn line block alt-btn" href="https://wa.me/${WA}?text=${encodeURIComponent("Hi Ombre, I'd like to order the Ombre in "+c.name+".")}" target="_blank" rel="noopener">${ICON.chat.replace('<svg','<svg width="18" height="18"')} Order on WhatsApp</a>
+      <a class="btn line block alt-btn" href="https://wa.me/${WA}?text=${encodeURIComponent("Hi Ombre, I'd like to order the Ombre in "+c.name+".")}" target="_blank" rel="noopener">${ICON.chat.replace('<svg','<svg width="18" height="18"')} ${T(SITE.product.waBtn)}</a>
       ${stockHTML(sel)}
       <div class="trust">
-        <div>${ICON.cash}Cash on delivery</div><div>${ICON.truck}${money(DELIVERY)} across Lebanon</div><div>${ICON.chat}Confirmed on WhatsApp</div>
+        <div>${ICON.cash}${T(SITE.product.trust1)}</div><div>${ICON.truck}${T(SITE.product.trust2)}</div><div>${ICON.chat}${T(SITE.product.trust3)}</div>
       </div>
       <div class="accs">
-        <details class="acc" open><summary>Details<i></i></summary><div class="body"><table class="spec"><tr><td>Shape</td><td>Square</td></tr><tr><td>Size</td><td>50 × 50 cm</td></tr><tr><td>Frame</td><td>Folding, wood</td></tr><tr><td>Colours</td><td>Beige, Blue</td></tr></table></div></details>
-        <details class="acc"><summary>Delivery<i></i></summary><div class="body">We deliver to all eight governorates of Lebanon for a flat ${money(DELIVERY)}. We contact you on WhatsApp to confirm your order and arrange delivery.</div></details>
-        <details class="acc"><summary>Payment<i></i></summary><div class="body">Cash on delivery only for now. You pay the driver when your order arrives.</div></details>
+        <details class="acc" open><summary>Details<i></i></summary><div class="body"><table class="spec">${SITE.productSpecs.map(r=>`<tr><td>${T(r.k)}</td><td>${T(r.v)}</td></tr>`).join("")}</table></div></details>
+        <details class="acc"><summary>Delivery<i></i></summary><div class="body">${T(SITE.product.delivery)}</div></details>
+        <details class="acc"><summary>Payment<i></i></summary><div class="body">${T(SITE.product.payment)}</div></details>
       </div>
     </div>
   </div>
 </section>
 <section class="band" style="min-height:min(70vh,640px)">
-  <img src="${sel==="beige"?"img/inuse.jpg":"img/inuse-wide.jpg"}" alt="Ombre in use on the beach" style="object-position:50% 50%">
-  <div class="wrap in"><h2>Lie back.<br>Sun? Blocked.</h2></div>
+  ${IMG(SITE.product.bandImage)?`<img src="${IMG(SITE.product.bandImage)}" alt="" style="object-position:50% 50%">`:""}
+  <div class="wrap in"><h2>${T(SITE.product.bandTitle)}</h2></div>
 </section>
 <section class="sec wrap">
   <div class="sechead"><h2>Also in <span class="it">${COLORS[sel==="beige"?"blue":"beige"].name}</span></h2></div>
@@ -724,7 +859,7 @@ product(){const c=COLORS[sel];return `
 <div class="sticky-atc" id="satc"><img src="${c.imgs[0]}" alt=""><div class="t"><b>Ombre ${c.name}</b>${money(PRICE)} · Cash on delivery</div><button class="btn" data-addone="${sel}">Add to cart</button></div>`},
 
 shop(){const f=V._f||"all";const ids=VIS().map(([id])=>id).filter(id=>f==="all"||f===id);return `
-<section class="wrap phead"><div class="crumbs"><a href="#home">Home</a>/<span>Shop</span></div><h1>The <span class="it">Collection</span></h1><p class="muted" style="margin-top:18px;max-width:46ch">One shade, two colours. Every order ships across Lebanon for ${money(DELIVERY)}, paid in cash on delivery.</p></section>
+<section class="wrap phead"><div class="crumbs"><a href="#home">Home</a>/<span>Shop</span></div><h1>${T(SITE.shop.title)}</h1><p class="muted" style="margin-top:18px;max-width:46ch">${T(SITE.shop.text)}</p></section>
 <section class="wrap" style="padding-bottom:clamp(72px,10vw,140px)">
   <div class="toolbar"><div class="chips"><button class="chip" data-filter="all" aria-pressed="${f==="all"}">All</button>${VIS().map(([id,c])=>`<button class="chip" data-filter="${id}" aria-pressed="${f===id}">${c.name}</button>`).join("")}</div><span class="muted">${ids.length} product${ids.length>1?"s":""}</span></div>
   <div class="grid">${ids.map(id=>{const c=COLORS[id];const so=avail(id)<=0;return `<div class="card">
@@ -736,19 +871,17 @@ shop(){const f=V._f||"all";const ids=VIS().map(([id])=>id).filter(id=>f==="all"|
 
 about(){return `
 <section class="wrap phead"><div class="crumbs"><a href="#home">Home</a>/<span>About</span></div>
-  <div class="ab-hero"><div class="t"><p class="lbl">Our story</p><h1 style="margin-top:20px">Made for <span class="it">the sand.</span></h1></div><div class="p"><img src="img/hands.jpg" alt="A woman shading her face with her hands on the beach"></div></div>
+  <div class="ab-hero"><div class="t"><p class="lbl">${T(SITE.about.eyebrow)}</p><h1 style="margin-top:20px">${T(SITE.about.title)}</h1></div><div class="p">${IMG(SITE.about.image)?`<img src="${IMG(SITE.about.image)}" alt="">`:""}</div></div>
 </section>
 <section class="sec wrap">
-  <p class="manifesto">Ombre began with a simple wish: <em>a little shade</em>, exactly where you lie, that you can carry to the beach and fold away after.</p>
+  <p class="manifesto">${T(SITE.about.manifesto)}</p>
 </section>
 <section class="wrap" style="padding-bottom:clamp(72px,10vw,140px)">
   <div class="pillars">
-    <div class="pillar"><span class="lbl">01 · Shape</span><h3>A square of shade</h3><p>50 × 50 cm of canvas, the right size to cover your head and shoulders.</p></div>
-    <div class="pillar"><span class="lbl">02 · Frame</span><h3>Wood that folds</h3><p>A folding wooden frame, marked with the Ombre name.</p></div>
-    <div class="pillar"><span class="lbl">03 · Colour</span><h3>Beige and Blue</h3><p>Two colours, picked for the beach.</p></div>
+${SITE.aboutPillars.map(p=>`<div class="pillar"><span class="lbl">${T(p.label)}</span><h3>${T(p.title)}</h3><p>${T(p.text)}</p></div>`).join("")}
   </div>
 </section>
-<section class="band"><img src="img/couple.jpg" alt="" style="object-position:50% 70%"><div class="wrap in"><h2>Sun? Blocked.</h2><a href="#shop" class="btn light">Shop the Ombre ${ARW}</a></div></section>`},
+<section class="band">${IMG(SITE.about.bandImage)?`<img src="${IMG(SITE.about.bandImage)}" alt="" style="object-position:50% 70%">`:""}<div class="wrap in"><h2>${T(SITE.about.bandTitle)}</h2>${SITE.about.bandBtn?`<a href="#shop" class="btn light">${T(SITE.about.bandBtn)} ${ARW}</a>`:""}</div></section>`},
 
 cart(){setTimeout(openDrawer,30);return V.shop()},
 
@@ -813,10 +946,15 @@ function closeDrawer(){$("#drawer").classList.remove("open");$("#drawer").setAtt
 
 /* router */
 function render(){
-  let r=(location.hash||"#home").slice(1).split("?")[0];if(!V[r]||r[0]==="_")r="home";
+  let r=(location.hash||"#home").slice(1).split("?")[0];
+  const editing=r==="editor";document.body.classList.toggle("editing",editing);$("#editor").hidden=!editing||document.body.classList.contains("ed-hidden");
+  if(editing){document.body.classList.remove("admin");closeMenu();closeDrawer();panelRender();previewRender();window.scrollTo({top:0,behavior:"instant"});return}
+  document.body.classList.remove("ed-hidden");
+  if(!V[r]||r[0]==="_")r="home";
+  SITE=PUB;applyTheme();fillStatic();
   const html=V[r]();if(html===null)return;
   app.innerHTML=html;
-  document.body.classList.toggle("over",r==="home");document.body.classList.toggle("admin",r==="admin");
+  document.body.classList.toggle("over",r==="home"&&firstHero());document.body.classList.toggle("admin",r==="admin");
   $$("[data-r]").forEach(a=>a.dataset.r===r?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
   closeMenu();
   const an=window._anchor;window._anchor=null;
@@ -892,7 +1030,7 @@ const stCls=s=>s.split(" ")[0];
 const fmtD=iso=>{const d=new Date(iso);return d.toLocaleDateString("en-GB",{day:"numeric",month:"short"})+" · "+d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})};
 const oItems=o=>o.lines.map(([id,q])=>q+" × "+(COLORS[id]?COLORS[id].name:id)).join(", ");
 function aShell(inner){const os=getOrders();const nw=os.filter(o=>o.status==="New").length;
-  const tabs=[["dash","Dashboard"],["orders","Orders"],["products","Products"],["settings","Settings"]];
+  const tabs=[["dash","Dashboard"],["orders","Orders"],["products","Products"],["customize","Customize site"],["settings","Settings"]];
   return `<div class="adm"><aside class="aside"><span class="wm" aria-hidden="true"></span><span class="tag">Store admin</span>
   ${tabs.map(([k,l])=>`<button data-atab="${k}" aria-current="${A.tab===k}"><span>${l}</span>${k==="orders"&&nw?`<span class="cnt">${nw}</span>`:""}</button>`).join("")}
   <a class="back" href="#home">← View store</a></aside><div class="amain">
@@ -938,7 +1076,7 @@ function aProducts(){return `<div class="atop"><h1>Products</h1><button class="a
   <p class="muted" style="font-size:12px;margin-top:12px">Stock goes down when an order is placed and back up when one is cancelled. Hidden colours disappear from the store.</p></div>`}
 function aSettings(){return `<div class="atop"><h1>Settings</h1><button class="abtn pri" data-asave="settings">Save changes</button></div>
   <div class="panel"><h2>Delivery and contact</h2><div class="ag"><div class="af"><label for="a-del">Delivery fee (USD)</label><input id="a-del" type="number" min="0" step="1" value="${DELIVERY}"></div><div class="af"><label for="a-wa">WhatsApp number</label><input id="a-wa" value="${waFmt()}"></div></div></div>
-  <div class="panel"><h2>Announcement bar</h2><div class="af"><label for="a-tick">One message per line. Write {fee} to show the delivery fee.</label><textarea id="a-tick">${esc(CFG.ticker.join("\n"))}</textarea></div></div>
+  <div class="panel"><h2>Website text, photos and colours</h2><p class="muted" style="font-size:13px;margin-bottom:12px">Edit the announcement bar, every page section, photos, colours and fonts in the site editor.</p><a class="abtn pri" href="#editor">Open Customize</a></div>
   <div class="panel"><h2>Preview data</h2><p class="muted" style="font-size:13px;margin-bottom:12px">Clear the orders, stock and settings saved in this browser and start again.</p>
     ${A.ask==="reset"?`<div class="confirm">Delete all preview orders and reset stock and settings?<button class="abtn danger" data-areset="yes">Reset everything</button><button class="abtn" data-areset="no">Keep</button></div>`:`<button class="abtn danger" data-areset="ask">Reset preview data</button>`}</div>`}
 V._admin=()=>aShell({dash:aDash,orders:aOrders,products:aProducts,settings:aSettings}[A.tab]());
@@ -950,6 +1088,7 @@ function restock(o,sign){o.lines.forEach(([id,q])=>{if(CFG.colors[id])CFG.colors
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-atab],[data-aopen],[data-aback],[data-afilter],[data-astatus],[data-acancel],[data-asave],[data-areset],[data-asample]");if(!b)return;
   const d=b.dataset;
+  if(d.atab==="customize"){location.hash="#editor";return}
   if(d.atab){A.tab=d.atab;A.open=null;A.ask=null}
   if(d.aopen){A.tab="orders";A.open=d.aopen;A.ask=null}
   if(d.aback!==undefined){A.open=null;A.ask=null}
@@ -958,10 +1097,124 @@ document.addEventListener("click",e=>{
   if(d.astatus){if(d.astatus==="Cancelled"){A.ask="cancel"}else{const os=getOrders(),o=os.find(x=>x.no===A.open);if(o.status==="Cancelled")restock(o,-1);o.status=d.astatus;setOrders(os);A.ask=null;toast(o.no+" marked "+d.astatus)}}
   if(d.acancel){if(d.acancel==="yes"){const os=getOrders(),o=os.find(x=>x.no===A.open);if(o.status!=="Cancelled"){restock(o,1);o.status="Cancelled";setOrders(os);toast(o.no+" cancelled, stock returned")}}A.ask=null}
   if(d.asave==="products"){const p=+$("#a-price").value;if(!(p>0)){toast("Enter a price above 0");return}CFG.price=p;Object.keys(COLORS).forEach(id=>{CFG.colors[id]={stock:Math.max(0,Math.floor(+$("#a-stock-"+id).value||0)),visible:$("#a-vis-"+id).checked}});if(!Object.values(CFG.colors).some(c=>c.visible)){toast("Keep at least one colour visible");return}saveCfg();toast("Products saved")}
-  if(d.asave==="settings"){const w=$("#a-wa").value.replace(/\D/g,"");if(w.length<10){toast("Enter the full WhatsApp number with 961");return}CFG.delivery=Math.max(0,+$("#a-del").value||0);CFG.wa=w;CFG.ticker=$("#a-tick").value.split("\n").map(x=>x.trim()).filter(Boolean);saveCfg();fillStatic();toast("Settings saved")}
-  if(d.areset){if(d.areset==="ask")A.ask="reset";else{if(d.areset==="yes"){["ombre-cfg","ombre-orders","ombre-last2","ombre-cart2"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});loadCfg();cart={};save();fillStatic();toast("Preview data reset")}A.ask=null}}
+  if(d.asave==="settings"){const w=$("#a-wa").value.replace(/\D/g,"");if(w.length<10){toast("Enter the full WhatsApp number with 961");return}CFG.delivery=Math.max(0,+$("#a-del").value||0);CFG.wa=w;saveCfg();fillStatic();toast("Settings saved")}
+  if(d.areset){if(d.areset==="ask")A.ask="reset";else{if(d.areset==="yes"){["ombre-cfg","ombre-orders","ombre-last2","ombre-cart2","ombre-site-pub","ombre-site-draft","ombre-media"].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});loadCfg();PUB=mergeSite(null);DRAFT=clone(PUB);MEDIA={};SITE=PUB;applyTheme();cart={};save();fillStatic();toast("Preview data reset")}A.ask=null}}
   aRender();
 });
+
+
+/* ---------- theme editor (Customize) ---------- */
+const DISPLAY_FONTS=["Bodoni Moda","Cormorant Garamond","Playfair Display","DM Serif Display","Italiana","Fraunces"];
+const BODY_FONTS=["Manrope","Jost","DM Sans","Work Sans","Outfit","Karla"];
+const PAGES=[["home","Home page"],["product","Product page"],["shop","Shop page"],["about","About page"],["global","Announcement bar and footer"],["theme","Theme: colours and fonts"]];
+let DRAFT=mergeSite(readSite("ombre-site-draft")||clone(PUB));
+const ED={page:"home",sel:null,adding:false,ask:null,hidden:false};
+const sameAsPub=()=>JSON.stringify(DRAFT)===JSON.stringify(PUB);
+function getP(o,p){return p.split(".").reduce((a,k)=>a==null?a:a[k],o)}
+function setP(o,p,v){const ks=p.split(".");const last=ks.pop();const t=ks.reduce((a,k)=>a[k],o);t[last]=v}
+let _dt;function draftChanged(full){try{localStorage.setItem("ombre-site-draft",JSON.stringify(DRAFT))}catch(e){toast("Couldn't save the draft: browser storage is full")}
+  clearTimeout(_dt);_dt=setTimeout(()=>{previewRender();if(full)panelRender();else panelStatus()},full?0:120)}
+const pageOf=()=>["global","theme"].includes(ED.page)?"home":ED.page;
+function previewRender(){SITE=DRAFT;applyTheme();fillStatic();const pg=pageOf();const y=window.scrollY;app.innerHTML=V[pg]();
+  document.body.classList.toggle("over",pg==="home"&&firstHero());if(pg==="product")bindGallery();markSel();window.scrollTo({top:y,behavior:"instant"});onScroll()}
+function firstHero(){const v=SITE.home.filter(x=>!x.hidden);return !!(v[0]&&v[0].type==="hero")}
+function markSel(){$$(".sw-sec").forEach(e=>{const s=DRAFT.home.find(x=>x.id===e.dataset.sid);e.dataset.name=s?(SCHEMA[s.type]||{}).name||"":"";e.classList.toggle("sel",e.dataset.sid===ED.sel)})}
+function secSummary(x){const s=x.s||{};return T(s.title||s.quote||s.eyebrow||(x.items&&x.items[0]&&(x.items[0].title||x.items[0].q))||"").replace(/<[^>]+>/g,"")}
+
+function fieldHTML(f,path){const v=getP(DRAFT,path);const id="ef-"+path.replace(/\./g,"-");
+  if(f.type==="toggle")return `<label class="etog">${f.label}<input type="checkbox" id="${id}" data-p="${path}" data-t="toggle" ${v?"checked":""}></label>`;
+  if(f.type==="image")return `<div class="efld"><label>${f.label}</label><div class="eimg"><span class="th" style="background-image:url('${IMG(v)}')"></span><div class="acts"><button class="eb" data-pick="${path}">${v?"Change image":"Select image"}</button>${v?`<button class="eb" data-clear="${path}">Remove</button>`:""}</div></div></div>`;
+  if(f.type==="select"||f.type==="link"){const opts=f.type==="link"?LINKS:f.options;return `<div class="efld"><label for="${id}">${f.label}</label><select id="${id}" data-p="${path}">${opts.map(([k,l])=>`<option value="${k}" ${k===v?"selected":""}>${l}</option>`).join("")}</select></div>`}
+  if(f.type==="textarea")return `<div class="efld"><label for="${id}">${f.label}</label><textarea id="${id}" data-p="${path}">${esc(v??"")}</textarea></div>`;
+  return `<div class="efld"><label for="${id}">${f.label}</label><input type="text" id="${id}" data-p="${path}" value="${esc(v??"")}"></div>`}
+function listHTML(L,path,items){return `<p class="elbl">${L.label}s</p>${items.map((it,i)=>`<details class="eitem" ${ED.openItem===path+"."+i?"open":""} data-item="${path}.${i}"><summary><span>${esc(L.plain?it:(it.title||it.q||it.k||it.label||it.quote||it.name||L.label+" "+(i+1)))}</span>
+    <button class="eb ic" data-imove="${path}|${i}|-1" title="Move up" ${i===0?"disabled":""}>↑</button><button class="eb ic" data-imove="${path}|${i}|1" title="Move down" ${i===items.length-1?"disabled":""}>↓</button><button class="eb ic" data-idel="${path}|${i}" title="Delete">✕</button></summary>
+    <div class="in">${L.plain?fieldHTML({...L.fields[0],label:L.fields[0].label},path+"."+i):L.fields.map(f=>fieldHTML(f,path+"."+i+"."+f.k)).join("")}</div></details>`).join("")}
+  ${items.length<L.max?`<button class="eb" data-iadd="${path}" style="width:100%">+ Add ${L.label.toLowerCase()}</button>`:""}`}
+
+function panelBody(){
+  if(ED.page==="home"){
+    if(ED.sel){const i=DRAFT.home.findIndex(x=>x.id===ED.sel);const x=DRAFT.home[i];if(!x){ED.sel=null;return panelBody()}const S=SCHEMA[x.type];
+      return `<button class="eb" data-esel="" style="margin-bottom:10px">← All sections</button><p style="font-size:15px;font-weight:700;margin:4px 0 12px">${S.name}</p>
+      <div class="etip">Write *word* to show a word in italics. {price}, {fee} and {whatsapp} fill in automatically.</div>
+      ${S.fields.map(f=>fieldHTML(f,`home.${i}.s.${f.k}`)).join("")}
+      ${S.list?listHTML(S.list,`home.${i}.items`,x.items||[]):""}
+      <p class="elbl">Section</p><label class="etog">Show on the page<input type="checkbox" data-p="home.${i}.hidden" data-t="untoggle" ${x.hidden?"":"checked"}></label>
+      ${ED.ask==="delsec"?`<div class="econf">Delete this section? You can undo by discarding changes before publishing.<div class="row"><button class="eb danger" data-sdel="yes">Delete section</button><button class="eb" data-sdel="no">Keep</button></div></div>`:`<button class="eb danger" data-sdel="ask" style="width:100%">Delete section</button>`}`}
+    const add=ED.adding?`<p class="elbl">Add a section</p><div class="eadd">${Object.entries(SCHEMA).filter(([k,S])=>!(S.single&&DRAFT.home.some(x=>x.type===k))).map(([k,S])=>`<button data-sadd="${k}"><b>${S.name}</b></button>`).join("")}</div><button class="eb" data-sadding="0" style="width:100%;margin-top:8px">Cancel</button>`:`<button class="eb pri" data-sadding="1" style="width:100%;margin-top:10px">+ Add section</button>`;
+    return `<p class="elbl">Sections</p>${DRAFT.home.map((x,i)=>`<div class="esec ${x.hidden?"off":""}" data-esel="${x.id}"><div class="nm"><b>${(SCHEMA[x.type]||{}).name||x.type}</b><span>${esc(secSummary(x))||"&nbsp;"}</span></div>
+      <button class="eb ic" data-smove="${i}|-1" title="Move up" ${i===0?"disabled":""}>↑</button><button class="eb ic" data-smove="${i}|1" title="Move down" ${i===DRAFT.home.length-1?"disabled":""}>↓</button><button class="eb ic" data-shide="${i}" title="${x.hidden?"Show":"Hide"}">${x.hidden?"◌":"◉"}</button></div>`).join("")}${add}
+      <div class="etip" style="margin-top:14px">Click a section in the preview to edit it.</div>`}
+  if(ED.page==="theme"){const t=DRAFT.theme;return `<p class="elbl">Colours</p>
+    ${[["bg","Background"],["text","Text"],["accent","Buttons and accents"]].map(([k,l])=>`<div class="ecol"><input type="color" id="ec-${k}" data-p="theme.${k}" value="${t[k]}"><label for="ec-${k}">${l}</label><code>${t[k]}</code></div>`).join("")}
+    <p class="elbl">Fonts</p>
+    <div class="efld"><label for="ef-disp">Headings</label><select id="ef-disp" data-p="theme.display">${DISPLAY_FONTS.map(f=>`<option ${f===t.display?"selected":""}>${f}</option>`).join("")}</select></div>
+    <div class="efld"><label for="ef-body">Body text</label><select id="ef-body" data-p="theme.body">${BODY_FONTS.map(f=>`<option ${f===t.body?"selected":""}>${f}</option>`).join("")}</select></div>
+    <p class="elbl">Buttons</p>
+    <div class="efld"><select data-p="theme.buttons" id="ef-btn"><option value="square" ${t.buttons==="square"?"selected":""}>Square corners</option><option value="rounded" ${t.buttons==="rounded"?"selected":""}>Rounded</option></select></div>
+    <button class="eb" data-treset style="width:100%;margin-top:6px">Restore Ombre colours and fonts</button>
+    <div class="etip">Dark mode keeps its own colours so text stays readable.</div>`}
+  const P=PAGE_FORMS[ED.page];const base=ED.page;
+  const lk=P.listKey;const items=lk?getP(DRAFT,lk)||[]:[];
+  return `<p style="font-size:15px;font-weight:700;margin:4px 0 12px">${P.name}</p><div class="etip">Write *word* to show a word in italics. {price}, {fee} and {whatsapp} fill in automatically.</div>
+    ${P.fields.map(f=>fieldHTML(f,base+"."+f.k)).join("")}${lk?listHTML(P.list,lk,items):""}`}
+function panelStatus(){const d=!sameAsPub();const e=$("#est");if(!e)return;e.className="est"+(d?" dirty":"");e.innerHTML=`<i></i>${d?"Draft saved · not published yet":"Everything is published"}`;$("#epub").disabled=!d;$("#edisc").disabled=!d}
+function panelRender(){const el=$("#editor");const sc=$(".ebody")?$(".ebody").scrollTop:0;
+  el.innerHTML=`<div class="ehd"><b>Customize</b><button class="eb" data-ehide title="Hide panel">Hide</button><button class="eb" data-eexit>Exit</button></div>
+  <div class="epg"><select id="epage" aria-label="Page to edit">${PAGES.map(([k,l])=>`<option value="${k}" ${k===ED.page?"selected":""}>${l}</option>`).join("")}</select></div>
+  <div class="ebody">${panelBody()}</div>
+  <div class="eft"><span class="est" id="est"></span>
+    ${ED.ask==="discard"?`<div class="econf">Throw away all changes since the last publish?<div class="row"><button class="eb danger" data-edisc="yes">Discard changes</button><button class="eb" data-edisc="no">Keep editing</button></div></div>`:""}
+    <div class="row"><button class="eb" id="edisc" data-edisc="ask">Discard</button><button class="eb pri" id="epub" data-epub>Publish</button></div></div>`;
+  $(".ebody").scrollTop=sc;panelStatus()}
+
+/* picker */
+function openPicker(path){const cur=getP(DRAFT,path);const all=[...LIB,...Object.keys(MEDIA).map(k=>"media:"+k)];
+  const d=document.createElement("div");d.className="picker";d.innerHTML=`<div class="box" role="dialog" aria-label="Choose an image"><div class="hd"><b>Choose an image</b><label class="eb pri" style="cursor:pointer">Upload<input type="file" accept="image/*" id="pkfile" hidden></label><button class="eb" data-pkclose>Close</button></div>
+  <div class="grid2">${all.map(s=>`<button data-pkset="${s}" aria-pressed="${s===cur}" style="background-image:url('${IMG(s)}')" aria-label="Image"></button>`).join("")}</div></div>`;
+  document.body.appendChild(d);
+  d.addEventListener("click",e=>{const b=e.target.closest("[data-pkset],[data-pkclose]");if(e.target===d||b&&b.dataset.pkclose!==undefined){d.remove();return}if(b&&b.dataset.pkset){setP(DRAFT,path,b.dataset.pkset);d.remove();draftChanged(true)}});
+  d.querySelector("#pkfile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const sc=Math.min(1,1600/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+      const id=uid();MEDIA[id]=c.toDataURL("image/jpeg",.85);try{localStorage.setItem("ombre-media",JSON.stringify(MEDIA))}catch(err){delete MEDIA[id];toast("Not enough browser storage for this photo. Try a smaller one.");return}
+      setP(DRAFT,path,"media:"+id);d.remove();draftChanged(true);toast("Photo uploaded")};im.src=rd.result};rd.readAsDataURL(f)})}
+
+/* events */
+document.addEventListener("input",e=>{const el=e.target;if(!el.closest||!el.closest("#editor")||!el.dataset.p)return;
+  let v=el.type==="checkbox"?(el.dataset.t==="untoggle"?!el.checked:el.checked):el.value;setP(DRAFT,el.dataset.p,v);
+  if(el.type==="color"){const c=el.parentElement.querySelector("code");if(c)c.textContent=v}
+  draftChanged(el.tagName==="SELECT"||el.type==="checkbox")});
+document.addEventListener("change",e=>{if(e.target.id==="epage"){ED.page=e.target.value;ED.sel=null;ED.adding=false;ED.ask=null;panelRender();previewRender();window.scrollTo({top:0,behavior:"instant"})}});
+document.addEventListener("click",e=>{const ed=e.target.closest("#editor");if(!ed)return;const b=e.target.closest("button,[data-esel]");if(!b)return;const d=b.dataset;
+  if(b.tagName==="BUTTON"&&b.closest("summary"))e.preventDefault();
+  if(d.esel!==undefined){ED.sel=d.esel||null;ED.ask=null;ED.adding=false;panelRender();markSel();if(ED.sel){const el=document.querySelector(`.sw-sec[data-sid="${ED.sel}"]`);if(el)el.scrollIntoView({behavior:"smooth",block:"start"})}return}
+  if(d.smove){const [i,dir]=d.smove.split("|").map(Number);const a=DRAFT.home;const j=i+dir;[a[i],a[j]]=[a[j],a[i]];e.stopPropagation();draftChanged(true);return}
+  if(d.shide){const x=DRAFT.home[+d.shide];x.hidden=!x.hidden;e.stopPropagation();draftChanged(true);return}
+  if(d.sadding!==undefined){ED.adding=d.sadding==="1";panelRender();return}
+  if(d.sadd){const S=SCHEMA[d.sadd];const x={id:d.sadd+"-"+uid(),type:d.sadd,s:clone(S.blank||Object.fromEntries(S.fields.map(f=>[f.k,f.type==="image"?"img/inuse.jpg":f.type==="toggle"?false:f.type==="select"?f.options[0][0]:f.type==="link"?"shop":f.label]))),items:clone(S.blankItems||[])};
+    DRAFT.home.push(x);ED.sel=x.id;ED.adding=false;draftChanged(true);setTimeout(()=>{const el=document.querySelector(`.sw-sec[data-sid="${x.id}"]`);if(el)el.scrollIntoView({behavior:"smooth"})},60);return}
+  if(d.sdel){if(d.sdel==="ask"){ED.ask="delsec";panelRender();return}if(d.sdel==="yes"){DRAFT.home=DRAFT.home.filter(x=>x.id!==ED.sel);ED.sel=null}ED.ask=null;draftChanged(true);return}
+  if(d.pick){openPicker(d.pick);return}
+  if(d.clear){setP(DRAFT,d.clear,"");draftChanged(true);return}
+  if(d.iadd){const arr=getP(DRAFT,d.iadd);const L=listDef(d.iadd);arr.push(clone(L.blank));ED.openItem=d.iadd+"."+(arr.length-1);draftChanged(true);return}
+  if(d.idel){const [p,i]=d.idel.split("|");getP(DRAFT,p).splice(+i,1);draftChanged(true);return}
+  if(d.imove){const [p,i,dir]=d.imove.split("|");const a=getP(DRAFT,p),x=+i,y=x+ +dir;[a[x],a[y]]=[a[y],a[x]];draftChanged(true);return}
+  if(d.treset!==undefined){DRAFT.theme=clone(DEFAULT_SITE.theme);draftChanged(true);return}
+  if(d.edisc){if(d.edisc==="ask"){ED.ask="discard"}else{if(d.edisc==="yes"){DRAFT=clone(PUB);try{localStorage.removeItem("ombre-site-draft")}catch(e){}ED.sel=null;previewRender();toast("Changes discarded")}ED.ask=null}panelRender();return}
+  if(d.epub!==undefined){PUB=clone(DRAFT);try{localStorage.setItem("ombre-site-pub",JSON.stringify(PUB))}catch(e){toast("Couldn't publish: browser storage is full");return}panelRender();toast("Published. Your store now shows these changes.");return}
+  if(d.ehide!==undefined){document.body.classList.add("ed-hidden");$("#editor").hidden=true;return}
+  if(d.eexit!==undefined){location.hash="#admin";return}
+});
+function listDef(path){if(path.startsWith("home.")){const x=DRAFT.home[+path.split(".")[1]];return SCHEMA[x.type].list}return Object.values(PAGE_FORMS).find(P=>P.listKey===path).list}
+/* clicks inside the preview while editing */
+document.addEventListener("click",e=>{if(!document.body.classList.contains("editing"))return;if(e.target.closest("#editor,.picker,#edshow"))return;
+  const a=e.target.closest("a");
+  if(a){const h=a.getAttribute("href")||"";e.preventDefault();
+    if(h.startsWith("#")){const pg=h.slice(1);if(["home","product","shop","about"].includes(pg)){setTimeout(()=>{ED.page=pg;ED.sel=null;panelRender();previewRender();if(!a.dataset.anchor)window.scrollTo({top:0,behavior:"instant"})},0)}else if(pg==="checkout")toast("Checkout is turned off while you edit")}
+    return}
+  const sec=e.target.closest(".sw-sec");
+  if(sec&&!e.target.closest("button,input,summary,select,label")&&ED.page==="home"){ED.sel=sec.dataset.sid;ED.adding=false;ED.ask=null;panelRender();markSel()}
+},true);
+document.addEventListener("click",e=>{if(e.target.closest("#edshow")){document.body.classList.remove("ed-hidden");$("#editor").hidden=false}});
 
 window.addEventListener("hashchange",render);
 save();render();
