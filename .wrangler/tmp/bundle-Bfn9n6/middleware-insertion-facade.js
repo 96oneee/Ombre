@@ -1,0 +1,11 @@
+				import worker, * as OTHER_EXPORTS from "/home/claude/ombre/.wrangler/tmp/pages-d9zyta/functionsWorker-0.8380203727492197.mjs";
+				import * as __MIDDLEWARE_0__ from "/tmp/claude-0/-home-claude/aa682a1f-ff53-5637-a7cf-a8fa25e23743/scratchpad/ncli/node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts";
+import * as __MIDDLEWARE_1__ from "/tmp/claude-0/-home-claude/aa682a1f-ff53-5637-a7cf-a8fa25e23743/scratchpad/ncli/node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts";
+
+				export * from "/home/claude/ombre/.wrangler/tmp/pages-d9zyta/functionsWorker-0.8380203727492197.mjs";
+
+				export const __INTERNAL_WRANGLER_MIDDLEWARE__ = [
+					
+					__MIDDLEWARE_0__.default,__MIDDLEWARE_1__.default
+				]
+				export default worker;

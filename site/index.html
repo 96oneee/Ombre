@@ -686,7 +686,7 @@ body.editing .toast{z-index:200}
   .ectr select{max-width:150px}
 }
 @media (max-width:560px){.ebrand,.eundo{display:none}.etop{gap:6px;padding:0 8px}.eb{padding:0 10px}}
-body.live .pv-only,body.live .demo,body.live [data-asample]{display:none!important}
+body.live .pv-only,body.live .demo,body.live [data-asample],body.pwauth .id-only{display:none!important}
 </style>
 
 <div class="ticker" aria-label="Store announcements"><div class="run" id="tick"></div></div>
@@ -742,7 +742,7 @@ body.live .pv-only,body.live .demo,body.live [data-asample]{display:none!importa
 <script>
 const BOOT_HTML=document.documentElement.outerHTML;const PREVIEW=window.name==="ombre-preview";
 /* ---------- live store: Netlify Functions + Netlify Identity (falls back to this browser when offline) ---------- */
-let LIVE=false,LIVE_CFG=null,LIVE_MEDIA=[],ID_FLOW=null;
+let LIVE=false,LIVE_CFG=null,LIVE_MEDIA=[],ID_FLOW=null,AUTH="identity";
 const ID={tok:null};
 const ADM={orders:[],subs:[],at:0};
 function idLoad(){try{ID.tok=JSON.parse(localStorage.getItem("ombre-id")||"null")}catch(e){ID.tok=null}}
@@ -751,6 +751,7 @@ async function idFetch(path,opt){const r=await fetch("/.netlify/identity/"+path,
   if(!r.ok)throw new Error(j.error_description||j.msg||j.error||"Something went wrong. Please try again.");return j}
 const formBody=o=>({method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(o).toString()});
 async function idToken(){if(!ID.tok)return null;
+  if(AUTH==="password"){if(ID.tok.exp&&Date.now()/1000>ID.tok.exp){idSet(null);return null}return ID.tok.access_token}
   if(!ID.tok.exp||Date.now()/1000>ID.tok.exp-60){try{idSet(await idFetch("token",formBody({grant_type:"refresh_token",refresh_token:ID.tok.refresh_token})))}catch(e){idSet(null);return null}}
   return ID.tok.access_token}
 async function idLogin(email,pw){try{idSet(await idFetch("token",formBody({grant_type:"password",username:email,password:pw})))}catch(e){throw new Error("Wrong email or password.")}}
@@ -763,6 +764,8 @@ async function api(path,opt={}){const h={...(opt.headers||{})};const t=await idT
   if(!r.ok)throw new Error(j.error||"Something went wrong. Please try again.");return j}
 const pwf=(n,l,ac,id)=>`<div class="af"><label for="${id||"a-"+n}">${l}</label><input id="${id||"a-"+n}" name="${n}" type="password" required minlength="8" autocomplete="${ac}"></div>`;
 function liveLoginHTML(){const f=ID_FLOW;let h,btn;
+  if(AUTH==="password")return `<div class="alog"><form id="alive"><span class="wm" aria-hidden="true"></span><div><h1>Log in to your store admin</h1><p style="margin-top:6px">Enter the admin password.</p></div>
+    <div class="af"><label for="apw1">Password</label><input id="apw1" name="pw" type="password" required autocomplete="current-password"></div><p class="msg" role="alert"></p><button class="abtn pri" type="submit">Log in</button><a href="#home" class="muted" style="font-size:13px;text-align:center">← Back to the store</a></form></div>`;
   if(f&&f.type==="invite_token"){h=`<h1>Welcome to the Ombre admin</h1><p style="margin-top:6px">Choose a password for your account.</p></div>${pwf("pw","New password","new-password","apw1")}${pwf("pw2","Repeat password","new-password")}`;btn="Save password and continue"}
   else if(f&&f.type==="recovery_token"){h=`<h1>Choose a new password</h1><p style="margin-top:6px">Enter a new password for your admin account.</p></div>${pwf("pw","New password","new-password","apw1")}${pwf("pw2","Repeat password","new-password")}`;btn="Save new password"}
   else{h=`<h1>Log in to your store admin</h1><p style="margin-top:6px">Use the email address your invitation was sent to.</p></div><div class="af"><label for="apw1">Email</label><input id="apw1" name="email" type="email" required autocomplete="username"></div>${pwf("pw","Password","current-password")}`;btn="Log in"}
@@ -773,6 +776,7 @@ document.addEventListener("submit",async e=>{const f=e.target;if(f.id!=="alive")
   try{if(ID_FLOW){if(v("pw")!==v("pw2"))throw new Error("The two passwords don't match.");
       if(ID_FLOW.type==="invite_token")await idVerify(ID_FLOW.token,"signup",v("pw"));else{await idVerify(ID_FLOW.token,"recovery");await idSetPassword(v("pw"))}
       ID_FLOW=null;toast("Password saved")}
+    else if(AUTH==="password"){const r=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:v("pw")})});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||"Wrong password.");idSet({access_token:j.token,exp:+String(j.token).split(".")[0]})}
     else await idLogin(v("email").trim(),v("pw"));
     ADM.at=0;render()}catch(err){msg.textContent=err.message;btn.disabled=false}});
 document.addEventListener("click",async e=>{if(!e.target.closest("[data-forgot]"))return;const em=($("#apw1")||{}).value||"";const msg=$("#alive .msg");
@@ -795,7 +799,7 @@ async function boot(){
   if(fm&&!PREVIEW){ID_FLOW={type:fm[1],token:decodeURIComponent(fm[2])};history.replaceState(null,"",location.pathname+"#admin")}
   if(/^https?:$/.test(new URL(document.baseURI).protocol)){try{const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),5000);
     const r=await fetch("/api/site",{signal:ctl.signal,cache:"no-store"});clearTimeout(tm);
-    if(r.ok&&(r.headers.get("content-type")||"").includes("json")){const j=await r.json();if(j&&j.ok){LIVE=true;document.body.classList.add("live");LIVE_CFG=j.cfg;loadCfg();PUB=mergeSite(j.site);SITE=PUB;if(!PREVIEW)DRAFT=clone(PUB)}}}catch(e){}}
+    if(r.ok&&(r.headers.get("content-type")||"").includes("json")){const j=await r.json();if(j&&j.ok){LIVE=true;AUTH=j.auth||"identity";document.body.classList.toggle("pwauth",AUTH==="password");document.body.classList.add("live");LIVE_CFG=j.cfg;loadCfg();PUB=mergeSite(j.site);SITE=PUB;if(!PREVIEW)DRAFT=clone(PUB)}}}catch(e){}}
   idLoad();render();if(PREVIEW)parent.postMessage({om:1,t:"ready"},"*")}
 
 const DEF={price:80,delivery:5,wa:"96171964944",ticker:["Cash on delivery across Lebanon","Delivery {fee}, anywhere in Lebanon","Two colours: Beige and Blue","Sun? Blocked.","Follow @weareombre"],colors:{beige:{stock:50,visible:true},blue:{stock:50,visible:true}}};
@@ -1226,7 +1230,7 @@ function aProducts(){return `<div class="atop"><h1>Products</h1><button class="a
 function aSettings(){return `<div class="atop"><h1>Settings</h1><button class="abtn pri" data-asave="settings">Save changes</button></div>
   <div class="panel"><h2>Delivery and contact</h2><div class="ag"><div class="af"><label for="a-del">Delivery fee (USD)</label><input id="a-del" type="number" min="0" step="1" value="${DELIVERY}"></div><div class="af"><label for="a-wa">WhatsApp number</label><input id="a-wa" value="${waFmt()}"></div></div></div>
   <div class="panel"><h2>Website text, photos and colours</h2><p class="muted" style="font-size:13px;margin-bottom:12px">Edit the announcement bar, every page section, photos, colours and fonts in the site editor.</p><a class="abtn pri" href="#editor">Open Customize</a></div>
-  <div class="panel"><h2>Admin password</h2><form id="apwc"><div class="ag"><div class="af pv-only"><label for="a-cur">Current password</label><input id="a-cur" name="cur" type="password" ${LIVE?"":"required"} autocomplete="current-password"></div><div class="af"><label for="a-n1">New password</label><input id="a-n1" name="n1" type="password" required autocomplete="new-password"></div><div class="af"><label for="a-n2">Repeat new password</label><input id="a-n2" name="n2" type="password" required autocomplete="new-password"></div></div><p class="msg" role="alert" style="color:#b2422b;font-size:13px;margin:10px 0"></p><button class="abtn pri" type="submit">Change password</button></form></div>
+  <div class="panel id-only"><h2>Admin password</h2><form id="apwc"><div class="ag"><div class="af pv-only"><label for="a-cur">Current password</label><input id="a-cur" name="cur" type="password" ${LIVE?"":"required"} autocomplete="current-password"></div><div class="af"><label for="a-n1">New password</label><input id="a-n1" name="n1" type="password" required autocomplete="new-password"></div><div class="af"><label for="a-n2">Repeat new password</label><input id="a-n2" name="n2" type="password" required autocomplete="new-password"></div></div><p class="msg" role="alert" style="color:#b2422b;font-size:13px;margin:10px 0"></p><button class="abtn pri" type="submit">Change password</button></form></div>
   <div class="panel"><h2>Email subscribers</h2>${(()=>{const a=LIVE?ADM.subs:store.get("ombre-subs",[]);return a.length?`<p class="muted" style="font-size:13px;margin-bottom:8px">${a.length} from the Email signup section</p><p style="font-size:13px;user-select:all;word-break:break-all">${a.map(esc).join(", ")}</p>`:`<p class="muted" style="font-size:13px">No subscribers yet. Add an Email signup section in Customize site to collect them.</p>`})()}</div>
   <div class="panel pv-only"><h2>Preview data</h2><p class="muted" style="font-size:13px;margin-bottom:12px">Clear the orders, stock and settings saved in this browser and start again.</p>
     ${A.ask==="reset"?`<div class="confirm">Delete all preview orders and reset stock and settings?<button class="abtn danger" data-areset="yes">Reset everything</button><button class="abtn" data-areset="no">Keep</button></div>`:`<button class="abtn danger" data-areset="ask">Reset preview data</button>`}</div>`}
