@@ -12,7 +12,7 @@ The same code runs on **Cloudflare Pages** (free, recommended) or **Netlify**. O
 
 1. **Create the storage.** In the Cloudflare dashboard: *Storage & databases → KV → Create* a namespace named `ombre`.
 2. **Connect the repository.** *Workers & Pages → Create → Pages → Connect to Git* → GitHub → `96oneee/Ombre`. Framework preset: **None**. Build command: leave empty. Build output directory: **site**. Save and deploy.
-3. **Link the storage and set your password.** In the new Pages project: *Settings → Bindings → Add → KV namespace*, variable name **DATA**, namespace `ombre`. Then *Settings → Variables and secrets → Add*, type **Secret**, name **ADMIN_PASSWORD**, value = the admin password you want. Then *Deployments → Retry deployment* so the changes apply.
+3. **Link the storage and set your password.** In the new Pages project: *Settings → Bindings → Add → KV namespace*, variable name **DATA**, namespace `ombre`. Then *Settings → Variables and secrets → Add*, type **Secret**, name **ADMIN_PASSWORD**, value = the admin password you want. Then *Deployments → Retry deployment* so the changes apply (any new commit pushed to `main` also redeploys).
 
 The store is then at `https://<project>.pages.dev` and the admin at `https://<project>.pages.dev/admin`. To change the admin password, change the `ADMIN_PASSWORD` secret and redeploy.
 
