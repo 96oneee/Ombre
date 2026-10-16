@@ -722,7 +722,7 @@ body.editing .toast{z-index:200}
       <div><h4>Help</h4><ul><li><a href="#home" data-anchor="faq">Delivery</a></li><li><a href="#home" data-anchor="faq">Payment</a></li><li><a href="#about">About Ombre</a></li></ul></div>
       <div><h4>Contact</h4><ul><li><a href="https://www.instagram.com/weareombre/" target="_blank" rel="noopener">Instagram</a></li><li><a class="wa-link" href="https://wa.me/96171964944" target="_blank" rel="noopener">WhatsApp</a></li><li style="user-select:all;opacity:.7"><span class="wa-num">+961 71 964 944</span></li></ul></div>
     </div>
-    <div class="fbot"><span>© 2026 Ombre. All rights reserved.</span><span>Cash on delivery · Lebanon</span></div>
+    <div class="fbot"><span id="copy">© 2026 Ombre. All rights reserved.</span><span>Cash on delivery · Lebanon</span></div>
     <div class="fwm" aria-hidden="true"></div>
   </div>
 </footer>
@@ -1442,6 +1442,7 @@ if(PREVIEW){document.documentElement.classList.add("pv");SITE=mergeSite(readSite
 }
 
 window.addEventListener("hashchange",render);
+let _ct=[];document.addEventListener("click",e=>{if(PREVIEW||!e.target.closest("#copy"))return;const n=Date.now();_ct=_ct.filter(t=>n-t<2500);_ct.push(n);if(_ct.length>=5){_ct=[];location.hash="#admin"}});
 save();render();if(PREVIEW)parent.postMessage({om:1,t:"ready"},"*");
 </script>
 
