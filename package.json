@@ -1,0 +1,10 @@
+{
+  "name": "ombre-site",
+  "private": true,
+  "type": "module",
+  "description": "Ombre store website: static page in site/, server functions in netlify/functions/",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.4",
+    "@netlify/functions": "^6.0.2"
+  }
+}
