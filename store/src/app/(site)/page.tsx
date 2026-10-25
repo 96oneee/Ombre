@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const { content, settings, product, delivery } = await getHome();
   const currency = currencyOf(settings);
-  // the intro and demo use the colour of the first variant (Blue reads best on sand), else the brand sea
+  // the fly-through into the shade uses the Blue variant's colour, else the brand sea
   const fabric = product?.variants.find((v) => v.name.toLowerCase() === "blue")?.hex_color ?? product?.variants[0]?.hex_color ?? "#0E3A48";
   const productHref = product ? `/product/${product.slug}` : "/shop";
 
@@ -28,7 +28,7 @@ export default async function HomePage() {
       <Entrance intro={content.intro} hero={content.hero} fabric={fabric} />
       <Discovery c={content.discovery} />
       <ChooseShade c={content.shade} product={product} currency={currency} />
-      <HowItWorks c={content.how} fabric={fabric} photo="/img/inuse-wide.jpg" />
+      <HowItWorks c={content.how} />
       <Shopping c={content.shopping} fee={formatMoney(delivery.flat_fee, currency)} productHref={productHref} />
     </>
   );

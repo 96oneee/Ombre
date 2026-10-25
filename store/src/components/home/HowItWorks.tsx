@@ -1,66 +1,36 @@
 "use client";
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { useEffect, useRef, useState } from "react";
+import { ScrollTrigger } from "@/lib/gsap";
 import type { HomeContent } from "@/lib/home";
 import { cn } from "@/lib/utils";
 import { Em } from "./Em";
-import { OmbreFigure, type OmbreHandle } from "./OmbreFigure";
 
-// Where each step sits on the 0..100 opening scale.
-const STOPS = [0, 50, 100, 100];
+const STEP_MS = 4200;
 
 /**
- * Chapter 4 · How it works. An interactive demonstration: steps and a slider open the drawn Ombre.
- * When real footage is added, the video takes the drawing's place and the steps seek to its moments.
+ * Chapter 4 · How it works, with real photos of the Ombre.
+ * Steps play on their own while the chapter is in view; pressing one jumps to it.
+ * When a video is set in the admin, it plays in place of the photos.
  */
-export function HowItWorks({ c, fabric, photo }: { c: HomeContent["how"]; fabric: string; photo: string }) {
+export function HowItWorks({ c }: { c: HomeContent["how"] }) {
   const root = useRef<HTMLElement>(null);
-  const figure = useRef<OmbreHandle>(null);
-  const state = useRef({ value: 0 });
-  const [value, setValue] = useState(0);
   const [step, setStep] = useState(0);
-
-  const draw = useCallback((v: number) => {
-    figure.current?.set(Math.min(1, v / 50), Math.max(0, (v - 50) / 50));
-    setValue(Math.round(v));
-  }, []);
-
-  const goTo = useCallback(
-    (v: number, duration = 1.4) => {
-      gsap.killTweensOf(state.current);
-      gsap.to(state.current, { value: v, duration, ease: "power2.inOut", onUpdate: () => draw(state.current.value) });
-    },
-    [draw],
-  );
+  const [playing, setPlaying] = useState(false);
+  const steps = c.steps;
 
   useEffect(() => {
     const el = root.current;
     if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // play the opening once, the first time the chapter comes into view
-    const st = ScrollTrigger.create({
-      trigger: el,
-      start: "top 55%",
-      once: true,
-      onEnter: () => {
-        setStep(2);
-        goTo(100, 3);
-      },
-    });
+    const st = ScrollTrigger.create({ trigger: el, start: "top 60%", end: "bottom 40%", onToggle: (s) => setPlaying(s.isActive) });
     return () => st.kill();
-  }, [goTo]);
+  }, []);
 
-  const choose = (k: number) => {
-    setStep(k);
-    goTo(STOPS[k]);
-  };
-
-  const onSlide = (v: number) => {
-    gsap.killTweensOf(state.current);
-    state.current.value = v;
-    draw(v);
-    setStep(v < 25 ? 0 : v < 75 ? 1 : 2);
-  };
+  useEffect(() => {
+    if (!playing || c.video) return;
+    const t = window.setTimeout(() => setStep((s) => (s + 1) % steps.length), STEP_MS);
+    return () => window.clearTimeout(t);
+  }, [playing, step, steps.length, c.video]);
 
   return (
     <section id="how" ref={root} className="scroll-mt-16 bg-shell py-24 md:py-40" aria-labelledby="how-title">
@@ -76,40 +46,54 @@ export function HowItWorks({ c, fabric, photo }: { c: HomeContent["how"]; fabric
         </div>
 
         <div className="mt-14 grid gap-10 md:mt-20 md:grid-cols-12">
-          <div className="relative overflow-hidden bg-sand md:col-span-8">
-            <OmbreFigure ref={figure} fabric={fabric} className="relative z-0 h-auto w-full" title="Drawing of the Ombre opening" />
-            <div className={cn("absolute inset-0 transition-opacity duration-700", step === 3 ? "opacity-100" : "pointer-events-none opacity-0")} aria-hidden={step !== 3}>
-              <Image src={photo} alt="The Ombre in use on the beach" fill sizes="(min-width: 768px) 66vw, 100vw" className="object-cover" />
-            </div>
-            <label className="absolute inset-x-4 bottom-4 flex items-center gap-4 bg-shell/90 px-4 py-3 backdrop-blur md:inset-x-6 md:bottom-6">
-              <span className="eyebrow shrink-0">Open</span>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={value}
-                onChange={(e) => onSlide(Number(e.target.value))}
-                className="h-1 w-full cursor-pointer accent-sea"
-                aria-label="Drag to open the Ombre"
-              />
-            </label>
+          <div className="relative aspect-[4/5] overflow-hidden bg-dune md:col-span-7 md:aspect-[5/4]">
+            {c.video ? (
+              <video src={c.video} className="absolute inset-0 h-full w-full object-cover" autoPlay muted loop playsInline />
+            ) : (
+              steps.map((s, k) => (
+                <Image
+                  key={s.image + k}
+                  src={s.image}
+                  alt={k === step ? s.alt : ""}
+                  aria-hidden={k !== step}
+                  fill
+                  sizes="(min-width: 768px) 58vw, 100vw"
+                  className={cn(
+                    "object-cover transition-[opacity,transform] ease-shade",
+                    k === step ? "scale-100 opacity-100 duration-[1400ms]" : "scale-[1.08] opacity-0 duration-[900ms]",
+                  )}
+                />
+              ))
+            )}
+            {!c.video && (
+              <div className="absolute inset-x-0 bottom-0 flex gap-1.5 p-4 md:p-6" aria-hidden>
+                {steps.map((_, k) => (
+                  <span key={k} className="h-[2px] flex-1 overflow-hidden bg-shell/40">
+                    <span
+                      key={`${k}-${step}-${playing}`}
+                      className={cn("block h-full bg-shell", k < step ? "w-full" : k === step && playing ? "animate-[fill_linear_forwards]" : "w-0")}
+                      style={k === step && playing ? { animationDuration: `${STEP_MS}ms` } : undefined}
+                    />
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
-          <ol className="flex snap-x gap-3 overflow-x-auto pb-2 md:col-span-4 md:flex-col md:gap-0 md:overflow-visible md:pb-0">
-            {c.steps.map((s, k) => (
-              <li key={s.title + k} className="min-w-[72%] snap-start md:min-w-0">
+          <ol className="flex flex-col md:col-span-5 md:justify-center md:pl-6">
+            {steps.map((s, k) => (
+              <li key={s.title + k}>
                 <button
                   type="button"
-                  onClick={() => choose(k)}
+                  onClick={() => setStep(k)}
                   aria-pressed={step === k}
-                  className={cn(
-                    "h-full w-full border-t py-6 text-left transition-colors md:py-7",
-                    step === k ? "border-charcoal" : "border-charcoal/15 text-mist hover:text-charcoal",
-                  )}
+                  className={cn("w-full border-t py-6 text-left transition-colors md:py-8", step === k ? "border-charcoal" : "border-charcoal/15 text-mist hover:text-charcoal")}
                 >
-                  <span className={cn("font-display text-[20px] italic", step === k ? "text-wood" : "")}>{String(k + 1).padStart(2, "0")}</span>
-                  <span className="mt-2 block font-display text-[28px] leading-tight text-charcoal md:text-[32px]">{s.title}</span>
-                  <span className="mt-2 block text-[15px] leading-relaxed">{s.text}</span>
+                  <span className={cn("font-display text-[20px] italic", step === k && "text-wood")}>{String(k + 1).padStart(2, "0")}</span>
+                  <span className="mt-2 block font-display text-[30px] leading-tight text-charcoal md:text-[40px]">{s.title}</span>
+                  <span className={cn("block overflow-hidden text-[15px] leading-relaxed transition-[max-height,opacity,margin] duration-500", step === k ? "mt-2 max-h-24 opacity-100" : "max-h-0 opacity-0")}>
+                    {s.text}
+                  </span>
                 </button>
               </li>
             ))}

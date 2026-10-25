@@ -9,17 +9,25 @@ import { getDelivery, getSettings } from "./settings";
  */
 export interface HomeContent {
   productSlug: string;
-  intro: { eyebrow: string; title: string; hint: string };
+  intro: { eyebrow: string; title: string; hint: string; frontImage: string; frontAlt: string; backImage: string; backAlt: string };
   hero: { eyebrow: string; title: string; text: string; image: string; imageAlt: string; cta: string; cta2: string };
   discovery: { eyebrow: string; title: string; facts: { title: string; text: string; image: string; alt: string }[] };
   shade: { eyebrow: string; title: string; text: string };
-  how: { eyebrow: string; title: string; text: string; steps: { title: string; text: string }[] };
+  how: { eyebrow: string; title: string; text: string; video: string; steps: { title: string; text: string; image: string; alt: string }[] };
   shopping: { eyebrow: string; title: string; steps: { title: string; text: string }[]; bandImage: string; bandTitle: string; bandCta: string };
 }
 
 export const HOME_DEFAULTS: HomeContent = {
   productSlug: "ombre",
-  intro: { eyebrow: "OMBRE", title: "The Art of Shade", hint: "Scroll, or point at the Ombre, to open it" },
+  intro: {
+    eyebrow: "OMBRE",
+    title: "The Art of Shade",
+    hint: "Scroll, or point at the Ombre",
+    frontImage: "/img/blue-cutout.webp",
+    frontAlt: "The Ombre in Blue",
+    backImage: "/img/beige-cutout.webp",
+    backAlt: "The Ombre in Beige",
+  },
   hero: {
     eyebrow: "OMBRE · Lebanon",
     title: "The Art of *Shade*",
@@ -43,12 +51,12 @@ export const HOME_DEFAULTS: HomeContent = {
   how: {
     eyebrow: "How it works",
     title: "Open in *a moment*",
-    text: "Press a step, or drag the slider, to see the Ombre open.",
+    text: "Press a step to see it.",
+    video: "",
     steps: [
-      { title: "Carry it folded", text: "The frame lies flat." },
-      { title: "Lift the frame", text: "Raise it and rest the legs on the sand." },
-      { title: "Open the shade", text: "The shade stretches across the frame." },
-      { title: "Lie back", text: "Settle in under your own square of shade." },
+      { title: "Unfold the frame", text: "The wooden frame folds open.", image: "/img/beige-detail.jpg", alt: "Close-up of the Ombre's wooden frame" },
+      { title: "Set it on the sand", text: "Stand it on the sand where you want your shade.", image: "/img/blue.jpg", alt: "The Blue Ombre standing open" },
+      { title: "Lie back in the shade", text: "Your own square of shade, right where you lie.", image: "/img/inuse-wide.jpg", alt: "Two people lying under their Ombres on the beach" },
     ],
   },
   shopping: {

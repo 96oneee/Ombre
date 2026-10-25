@@ -39,6 +39,11 @@
   .paragraphs > p + p { @apply mt-4; }
 }
 
+@keyframes fill {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
 @keyframes hint {
   0%, 100% { transform: scaleY(0.2); opacity: 0.4; }
   50% { transform: scaleY(1); opacity: 1; }
