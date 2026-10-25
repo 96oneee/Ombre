@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ChooseShade } from "@/components/home/ChooseShade";
 import { Discovery } from "@/components/home/Discovery";
 import { Entrance } from "@/components/home/Entrance";
+import { EntranceSun } from "@/components/home/EntranceSun";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Shopping } from "@/components/home/Shopping";
 import { getHome } from "@/lib/home";
@@ -25,7 +26,11 @@ export default async function HomePage() {
 
   return (
     <>
-      <Entrance intro={content.intro} hero={content.hero} fabric={fabric} />
+      {content.intro.style === "sun" ? (
+        <EntranceSun intro={content.intro} hero={content.hero} />
+      ) : (
+        <Entrance intro={content.intro} hero={content.hero} fabric={fabric} />
+      )}
       <Discovery c={content.discovery} />
       <ChooseShade c={content.shade} product={product} currency={currency} />
       <HowItWorks c={content.how} />

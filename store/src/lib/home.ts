@@ -9,7 +9,7 @@ import { getDelivery, getSettings } from "./settings";
  */
 export interface HomeContent {
   productSlug: string;
-  intro: { eyebrow: string; title: string; hint: string; frontImage: string; frontAlt: string; backImage: string; backAlt: string };
+  intro: { style: "classic" | "sun"; eyebrow: string; title: string; hint: string; frontImage: string; frontAlt: string; backImage: string; backAlt: string };
   hero: { eyebrow: string; title: string; text: string; image: string; imageAlt: string; cta: string; cta2: string };
   discovery: { eyebrow: string; title: string; facts: { title: string; text: string; image: string; alt: string }[] };
   shade: { eyebrow: string; title: string; text: string };
@@ -20,6 +20,8 @@ export interface HomeContent {
 export const HOME_DEFAULTS: HomeContent = {
   productSlug: "ombre",
   intro: {
+    // "classic": fly into the shade · "sun": the sun crosses the sky and the shadow moves
+    style: process.env.NEXT_PUBLIC_INTRO_STYLE === "sun" ? "sun" : "classic",
     eyebrow: "OMBRE",
     title: "The Art of Shade",
     hint: "Scroll, or point at the Ombre",

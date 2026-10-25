@@ -39,6 +39,22 @@
   .paragraphs > p + p { @apply mt-4; }
 }
 
+@keyframes sea {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes glint {
+  0%, 100% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  40% { opacity: 0.9; }
+  70% { transform: translate(18px, -26px) scale(1); opacity: 0.4; }
+}
+
+@keyframes letter {
+  from { transform: translateY(0.6em) rotate(4deg); opacity: 0; filter: blur(6px); }
+  to { transform: none; opacity: 1; filter: blur(0); }
+}
+
 @keyframes fill {
   from { width: 0; }
   to { width: 100%; }
