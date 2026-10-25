@@ -1,4 +1,5 @@
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { hasSupabase } from "@/lib/supabase/env";
 import { NextResponse, type NextRequest } from "next/server";
 
 /**
@@ -6,6 +7,8 @@ import { NextResponse, type NextRequest } from "next/server";
  * (Every admin page and server action re-checks this, and Row Level Security is the final barrier.)
  */
 export async function middleware(request: NextRequest) {
+  // Preview without a database: there is no admin to protect yet, so keep it closed.
+  if (!hasSupabase) return new NextResponse("The admin opens once the database is connected.", { status: 503 });
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -16,7 +19,7 @@ export async function middleware(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(list) {
+        setAll(list: { name: string; value: string; options: CookieOptions }[]) {
           list.forEach(({ name, value }) => request.cookies.set(name, value));
           response = NextResponse.next({ request });
           list.forEach(({ name, value, options }) => response.cookies.set(name, value, options));

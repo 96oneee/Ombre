@@ -3,23 +3,26 @@
 @tailwind utilities;
 
 @layer base {
-  html { scroll-behavior: smooth; }
-  body { @apply bg-sand font-body font-light text-ink antialiased; }
-  h1, h2, h3 { @apply font-display font-medium tracking-tight; }
+  html { scroll-behavior: auto; }
+  body { @apply bg-sand font-body text-charcoal antialiased; }
+  h1, h2, h3 { @apply font-display font-light tracking-tight; }
   :focus-visible { @apply outline outline-2 outline-offset-2 outline-lagoon; }
 }
 
 @layer components {
-  .container-x { @apply mx-auto w-full max-w-7xl px-5 md:px-8; }
+  .container-x { @apply mx-auto w-full max-w-[1440px] px-4 md:px-10; }
+  .eyebrow { @apply font-body text-[11px] font-semibold uppercase tracking-label text-mist; }
+  .link-line { @apply inline-flex items-center gap-2 border-b border-current pb-1 text-[12px] font-semibold uppercase tracking-[0.18em]; }
 
   .btn {
-    @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-transparent px-6 text-[15px] font-normal transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-[52px] items-center justify-center gap-3 border border-transparent px-8 text-[12px] font-semibold uppercase tracking-[0.18em] transition-colors disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-primary { @apply bg-lagoon text-sand hover:bg-lagoon-deep; }
   .btn-outline { @apply border-ink/25 bg-transparent text-ink hover:border-ink; }
   .btn-light { @apply bg-sand text-ink hover:bg-white; }
   .btn-danger { @apply border-red-300 bg-transparent text-red-700 hover:bg-red-50; }
-  .btn-sm { @apply min-h-[36px] px-4 text-sm; }
+  .btn-sm { @apply min-h-[38px] px-4 text-[11px]; }
+  .btn-ghost-light { @apply border-shell/70 bg-transparent text-shell hover:bg-shell hover:text-sea; }
 
   .input {
     @apply min-h-[46px] w-full rounded-lg border border-ink/20 bg-white/70 px-3.5 py-2.5 text-ink placeholder:text-ink/40 focus:border-lagoon focus:outline-none focus:ring-2 focus:ring-lagoon/30;
@@ -34,6 +37,11 @@
   .no-scrollbar::-webkit-scrollbar { display: none; }
 
   .paragraphs > p + p { @apply mt-4; }
+}
+
+@keyframes hint {
+  0%, 100% { transform: scaleY(0.2); opacity: 0.4; }
+  50% { transform: scaleY(1); opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

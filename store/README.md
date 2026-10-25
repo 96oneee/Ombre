@@ -8,6 +8,14 @@ A database-backed online store: public website, cart, checkout (cash on delivery
 
 ---
 
+## Preview without a database
+
+If `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are not set, the storefront runs on the preview data in `src/lib/demo.ts` (only confirmed OMBRE facts: $80, $5 delivery, Beige and Blue, 50 × 50 cm). Orders are refused and the admin stays closed until the database is connected.
+
+## Homepage: The Art of Shade
+
+`src/app/(site)/page.tsx` renders five chapters from `src/components/home/`: the entrance (a drawn Ombre that unfolds on scroll or hover and opens into the hero), product discovery, choose your shade, how it works (interactive demo), and effortless shopping. Their words and images come from `src/lib/home.ts`; a JSON object saved as the `home` row in `site_settings` overrides any of them. Animation uses GSAP and switches off with the reduced-motion setting.
+
 ## 1. Requirements
 
 - Node.js 20 or newer (`node -v`)

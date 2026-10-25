@@ -5,9 +5,8 @@ import { Carousel } from "@/components/site/Carousel";
 import { Price, ProductBuy, StockNote } from "@/components/site/ProductBuy";
 import { getProductBySlug } from "@/lib/catalog";
 import { formatMoney } from "@/lib/pricing";
-import { currencyOf, getDelivery, getSettings } from "@/lib/settings";
+import { currencyOf, getDelivery, getPaymentMethods, getSettings } from "@/lib/settings";
 import { BUCKETS, publicUrl } from "@/lib/storage";
-import { createClient } from "@/lib/supabase/server";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -26,8 +25,7 @@ export default async function ProductPage({ params }: Props) {
   const settings = await getSettings();
   const currency = currencyOf(settings);
   const { settings: delivery } = await getDelivery();
-  const supabase = await createClient();
-  const { data: methods } = await supabase.from("payment_methods").select("key, label, description").eq("is_active", true).order("sort_order");
+  const methods = await getPaymentMethods();
 
   const paragraphs = (product.description ?? "").split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
 

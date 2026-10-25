@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useMemo, useState } from "react";
+import { DEMO_PRODUCT } from "@/lib/demo";
+import { hasSupabase } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/client";
 import { variantPrice } from "@/lib/pricing";
 import type { CartItem } from "./CartProvider";
@@ -34,6 +36,26 @@ export function useCartLines(items: CartItem[], ready: boolean) {
     const ids = key ? key.split(",") : [];
     if (!ids.length) {
       setDetails([]);
+      setLoading(false);
+      return;
+    }
+    if (!hasSupabase) {
+      // preview without a database: the cart reads the demo product
+      setDetails(
+        DEMO_PRODUCT.variants
+          .filter((v) => ids.includes(v.id))
+          .map((v) => ({
+            variantId: v.id,
+            productName: DEMO_PRODUCT.name,
+            slug: DEMO_PRODUCT.slug,
+            variantName: v.name,
+            hex: v.hex_color,
+            unit: v.unit_price,
+            compareAt: v.compare_at,
+            stock: v.stock,
+            imagePath: v.images[0]?.storage_path ?? null,
+          })),
+      );
       setLoading(false);
       return;
     }

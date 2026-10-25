@@ -1,5 +1,6 @@
 "use server";
 import { getPaymentProvider } from "@/lib/payments";
+import { hasSupabase } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
 export interface PlaceOrderInput {
@@ -22,6 +23,8 @@ export type PlaceOrderResult =
 export async function placeOrderAction(input: PlaceOrderInput): Promise<PlaceOrderResult> {
   if (input.website) return { ok: false, error: "We couldn't place your order. Please try again." };
   if (!Array.isArray(input.items) || input.items.length === 0) return { ok: false, error: "Your cart is empty." };
+
+  if (!hasSupabase) return { ok: false, error: "This is a preview: orders open once the store's database is connected." };
 
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("place_order", {
