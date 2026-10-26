@@ -8,14 +8,21 @@ import { Em, plain } from "./Em";
 
 /**
  * Chapter 1 · Cinematic arrival, "sun" version.
- * The real Beige and Blue Ombres stand on the beach; the one you pick unfolds and steps forward while the other folds away.
+ * The real Beige and Blue Ombres stand on the beach; the one you pick unfolds while the other folds away.
  * The sun crosses the sky as you scroll (and leans toward your pointer), each Ombre's own shadow swings around it,
  * and at noon the sun floods the screen and the hero opens out of the light. Only scrolling opens the site.
  */
 type Shade = "beige" | "blue";
 
-// folded: the frame lies low and its two halves close in on the middle, like the real Ombre folded flat
-const FOLDED = { lift: 0.42, close: 74, scale: 0.8, dim: 0.55 };
+// tells the site header (SiteTop) whether the opening is on screen
+function setIntro(active: boolean) {
+  if (window.__ombreIntro === active) return;
+  window.__ombreIntro = active;
+  window.dispatchEvent(new CustomEvent("ombre:intro", { detail: active }));
+}
+
+// folded (and hidden): the frame lies low and its two halves close in on the middle, like the real Ombre folded flat
+const FOLDED = { lift: 0.42, close: 74, scale: 0.9 };
 
 export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero: HomeContent["hero"] }) {
   const root = useRef<HTMLElement>(null);
@@ -36,6 +43,7 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
       },
       (ctx) => {
         if (ctx.conditions?.reduce) {
+          setIntro(false);
           gsap.set(q("[data-hero]"), { clipPath: "none" });
           gsap.set(q("[data-stage]"), { autoAlpha: 0 });
           return;
@@ -49,6 +57,8 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
             end: "+=200%",
             pin: true,
             scrub: 0.8,
+            // the site header stays away until the visitor is almost through the opening
+            onUpdate: (st) => setIntro(st.progress < 0.85),
           },
         });
         tl.to(q("[data-hint]"), { autoAlpha: 0, y: 12, duration: 0.08 }, 0)
@@ -61,7 +71,6 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
           .to(q("[data-shadow]"), { skewX: -48, opacity: 0.24, duration: 0.25 }, 0.25)
           .fromTo(q("[data-product=blue]"), { rotateY: -14, transformPerspective: 1400 }, { rotateY: 12, duration: 0.5 }, 0)
           .fromTo(q("[data-product=beige]"), { rotateY: 14, transformPerspective: 1400 }, { rotateY: -10, duration: 0.5 }, 0)
-          .fromTo(q("[data-giant]"), { xPercent: -8 }, { xPercent: 8, duration: 0.6 }, 0)
           .to(q("[data-intro-title]"), { autoAlpha: 0, y: -30, duration: 0.12 }, 0.36)
           .to(q("[data-picker]"), { autoAlpha: 0, duration: 0.08 }, 0.36)
           // noon: the light floods everything
@@ -91,6 +100,7 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
             0.88,
           );
         trigger.current = tl.scrollTrigger ?? null;
+        setIntro((trigger.current?.progress ?? 1) < 0.85);
 
         // before scrolling, the sun leans toward the pointer and the shadow answers
         const sx = gsap.quickTo(q("[data-sun-lean]")[0], "x", {
@@ -128,6 +138,7 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
           window.removeEventListener("pointermove", onMove);
           breathe.kill();
           trigger.current = null;
+          setIntro(false);
         };
       },
     );
@@ -140,13 +151,14 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
     if (!el) return;
     const q = gsap.utils.selector(el);
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const wait = first.current ? 0.9 : 0;
+    // on load the Ombre unfolds after the title; on a switch, once the other one has folded away
+    const wait = first.current ? 0.9 : 0.45;
     first.current = false;
     const tweens = (["beige", "blue"] as Shade[]).flatMap((k) => {
       const on = k === pick;
       const t = { duration: still ? 0 : on ? 1.4 : 0.8, delay: still ? 0 : on ? wait + 0.25 : 0, overwrite: true };
       return [
-        gsap.to(q(`[data-fig=${k}]`), { scale: on ? 1 : FOLDED.scale, autoAlpha: on ? 1 : FOLDED.dim, zIndex: on ? 10 : 0, ...t, ease: "power3.inOut" }),
+        gsap.to(q(`[data-fig=${k}]`), { scale: on ? 1 : FOLDED.scale, autoAlpha: on ? 1 : 0, zIndex: on ? 10 : 0, ...t, ease: "power3.inOut" }),
         gsap.to(q(`[data-fold=${k}]`), { scaleY: on ? 1 : FOLDED.lift, ...t, ease: on ? "back.out(1.5)" : "power2.inOut" }),
         gsap.to(q(`[data-half=${k}-l]`), { rotateY: on ? 0 : FOLDED.close, ...t, ease: on ? "power3.out" : "power2.in" }),
         gsap.to(q(`[data-half=${k}-r]`), { rotateY: on ? 0 : -FOLDED.close, ...t, ease: on ? "power3.out" : "power2.in" }),
@@ -177,7 +189,7 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
   const letters = Array.from(intro.title);
 
   return (
-    <section ref={root} className="relative h-[100svh] min-h-[600px] overflow-hidden bg-sand" aria-label="Welcome to OMBRE">
+    <section ref={root} data-intro className="relative h-[100svh] min-h-[600px] overflow-hidden bg-sand" aria-label="Welcome to OMBRE">
       <div
         data-stage
         className="absolute inset-0 overflow-hidden"
@@ -215,17 +227,6 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
           </svg>
         </div>
 
-        {/* a giant wordmark behind, drifting the other way */}
-        <div
-          data-giant
-          aria-hidden
-          className="absolute left-1/2 top-[50%] aspect-[830/262] w-[120vw] -translate-x-1/2 -translate-y-1/2 bg-sea/[0.06] md:w-[92vw]"
-          style={{
-            mask: "url(/img/wordmark.svg) no-repeat center / contain",
-            WebkitMask: "url(/img/wordmark.svg) no-repeat center / contain",
-          }}
-        />
-
         {/* drifting glints of light */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
           {Array.from({ length: 14 }, (_, i) => (
@@ -241,12 +242,12 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
           ))}
         </div>
 
-        <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pb-24 pt-16">
+        <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pb-6 pt-10">
           <div data-intro-title className="text-center">
             <h2 className="sr-only">{intro.eyebrow}</h2>
             <div
               aria-hidden
-              className="mx-auto aspect-[828/232] w-[min(80vw,560px)] animate-[letter_1.4s_cubic-bezier(.22,1,.36,1)_both] bg-sea"
+              className="mx-auto aspect-[828/232] w-[min(80vw,560px,calc(100svh*0.55))] animate-[letter_1.4s_cubic-bezier(.22,1,.36,1)_both] bg-sea"
               style={{ mask: "url(/img/wordmark-name.svg) no-repeat center / contain", WebkitMask: "url(/img/wordmark-name.svg) no-repeat center / contain" }}
             />
             <p className="mt-3 font-display text-[24px] font-light italic leading-none tracking-tight text-charcoal/80 md:mt-4 md:text-[34px]" aria-label={intro.title}>
@@ -258,17 +259,17 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
             </p>
           </div>
 
-          {/* the two real Ombres, Beige and Blue, on the sand */}
-          <div className="relative mt-6 grid w-[min(94vw,820px)] grid-cols-2 items-end md:mt-8">
-            {pair.map((o, k) => (
+          {/* the real Ombre in the picked colour, on the sand (both stacked, one shown) */}
+          <div className="relative mt-6 grid w-[min(84vw,520px,calc((100svh-400px)*1.3))] items-end md:mt-8">
+            {pair.map((o) => (
               <figure
                 key={o.key}
                 data-fig={o.key}
-                className={cn("relative origin-bottom", k === 0 ? "-mr-[8%]" : "-ml-[8%]")}
-                style={{ transform: `scale(${FOLDED.scale})`, opacity: FOLDED.dim }}
+                className="relative col-start-1 row-start-1 origin-bottom"
+                style={{ transform: `scale(${FOLDED.scale})`, opacity: 0, visibility: "hidden" }}
               >
                 {/* the Ombre's own silhouette as its shadow on the sand */}
-                <div data-shadow className="absolute inset-x-0 bottom-[2%] h-full origin-bottom" style={{ opacity: 0.22 }} aria-hidden>
+                <div data-shadow className="pointer-events-none absolute inset-x-0 bottom-[2%] h-full origin-bottom" style={{ opacity: 0.22 }} aria-hidden>
                   <div data-shadow-lean className="h-full w-full origin-bottom">
                     <div data-shadow-fold={o.key} className="h-full w-full origin-bottom" style={{ transform: "scaleX(0.3)" }}>
                       <div className="relative h-full w-full origin-bottom [transform:scaleY(-0.32)]">
@@ -300,7 +301,7 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
           </div>
 
           {/* pick a colour: that Ombre unfolds */}
-          <div data-picker className="mt-8 flex items-center gap-3 md:mt-10" role="group" aria-label="Choose your colour">
+          <div data-picker className="relative z-20 mt-8 flex items-center gap-3 md:mt-10" role="group" aria-label="Choose your colour">
             {pair.map((o) => (
               <button
                 key={o.key}
@@ -317,12 +318,13 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
               </button>
             ))}
           </div>
+
+          <div data-hint className="pointer-events-none mt-6 flex flex-col items-center gap-3 text-center md:mt-8">
+            <p className="eyebrow">{intro.hint}</p>
+            <span className="block h-8 w-px origin-top animate-[hint_2.2s_ease-in-out_infinite] bg-charcoal/50" aria-hidden />
+          </div>
         </div>
 
-        <div data-hint className="pointer-events-none absolute inset-x-0 bottom-7 z-10 flex flex-col items-center gap-3 text-center">
-          <p className="eyebrow">{intro.hint}</p>
-          <span className="block h-10 w-px origin-top animate-[hint_2.2s_ease-in-out_infinite] bg-charcoal/50" aria-hidden />
-        </div>
       </div>
 
       {/* the hero, opening out of the light */}

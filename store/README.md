@@ -14,7 +14,9 @@ If `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are not set, t
 
 ## Homepage: The Art of Shade
 
-`src/app/(site)/page.tsx` renders five chapters from `src/components/home/`: the entrance (a drawn Ombre that unfolds on scroll or hover and opens into the hero), product discovery, choose your shade, how it works (interactive demo), and effortless shopping. Their words and images come from `src/lib/home.ts`; a JSON object saved as the `home` row in `site_settings` overrides any of them. Animation uses GSAP and switches off with the reduced-motion setting.
+`src/app/(site)/page.tsx` renders five chapters from `src/components/home/`: the entrance (`EntranceSun`: the OMBRE wordmark, a Beige/Blue picker that unfolds the chosen real Ombre, and a sun that crosses the sky as you scroll and opens into the hero; the site header stays hidden until then), product discovery, choose your shade, how it works (real photos), and effortless shopping. Their words and images come from `src/lib/home.ts`; a JSON object saved as the `home` row in `site_settings` overrides any of them. Animation uses GSAP and switches off with the reduced-motion setting.
+
+**To do:** the unfold in the entrance is an effect made from the still cutouts (`public/img/*-cutout.webp`). Replace it with real footage of the Ombre unfolding once the video is filmed.
 
 ## 1. Requirements
 
