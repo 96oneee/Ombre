@@ -28,12 +28,13 @@ export async function middleware(request: NextRequest) {
     },
   );
 
+  // getSession reads the cookie (refreshing it only when expired) instead of asking Supabase on every
+  // request. That is enough for a redirect: every admin page and server action verifies the user and
+  // the admins table itself (requireAdmin), with Row Level Security behind it.
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // Only the session is checked here: this runs far from the database, and every admin page and
-  // server action checks the admins table itself (requireAdmin), with Row Level Security behind it.
+    data: { session },
+  } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
   if (!user && request.nextUrl.pathname !== "/admin/login") {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";
