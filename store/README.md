@@ -26,7 +26,7 @@ If `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are not set, t
 
 ## 2. Set up the database
 
-**Quickest way:** in the Supabase dashboard open **SQL Editor**, paste the whole of `supabase/setup.sql` and press **Run**, once, on a new project. It contains the five migrations below plus `supabase/seed_ombre.sql` (the real Ombre in Beige and Blue at $80, store details from the live site, stock at 0 until you set it in Admin > Inventory).
+**Quickest way:** in the Supabase dashboard open **SQL Editor**, paste the whole of `supabase/setup.sql` and press **Run**, once, on a new project. It contains the six migrations below plus `supabase/seed_ombre.sql` (the real Ombre in Beige and Blue at $80, store details from the live site, stock at 0 until you set it in Admin > Inventory).
 
 Or run these files yourself **in this order**, one at a time (paste the file contents, press Run). Run each only once, on a fresh project:
 
@@ -37,7 +37,8 @@ Or run these files yourself **in this order**, one at a time (paste the file con
 | 3 | `supabase/migrations/0003_rls.sql` | Row Level Security (who can read/write what) |
 | 4 | `supabase/migrations/0004_storage.sql` | Storage buckets and upload policies |
 | 5 | `supabase/migrations/0005_defaults.sql` | Order statuses, cash on delivery, delivery fee and regions, settings, placeholder Home and About sections |
-| 6 (optional) | `supabase/seed_placeholder.sql` | One placeholder product with two placeholder colors, for testing |
+| 6 | `supabase/migrations/0006_fixed_search_path.sql` | Pins `search_path` on three helper functions (security advisor) |
+| 7 (optional) | `supabase/seed_placeholder.sql` | One placeholder product with two placeholder colors, for testing |
 
 If a script fails, stop and send me the exact error message. Do not skip ahead.
 
