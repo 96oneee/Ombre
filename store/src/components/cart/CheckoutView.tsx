@@ -212,7 +212,7 @@ export function CheckoutView({
           <legend className="mb-2 font-display text-3xl">Payment</legend>
           {methods.length === 0 && <p className="text-sm text-red-700">No payment method is available right now.</p>}
           {methods.map((m) => (
-            <label key={m.key} className={cn("flex cursor-pointer items-start gap-3 rounded-lg border p-4", method === m.key ? "border-lagoon ring-1 ring-lagoon" : "border-ink/20")}>
+            <label key={m.key} className={cn("flex cursor-pointer items-start gap-3 border p-4", method === m.key ? "border-charcoal" : "border-charcoal/20")}>
               <input type="radio" name="payment" className="mt-1 h-4 w-4 accent-[#227b92]" checked={method === m.key} onChange={() => setMethod(m.key)} />
               <span>
                 <span className="block font-normal">{m.label}</span>
@@ -228,7 +228,7 @@ export function CheckoutView({
         </div>
       </div>
 
-      <aside className="h-fit rounded-md bg-linen p-6 lg:sticky lg:top-28" aria-labelledby="sum-h">
+      <aside className="h-fit bg-dune/60 p-6 md:p-8 lg:sticky lg:top-28" aria-labelledby="sum-h">
         <h2 id="sum-h" className="text-3xl">Your order</h2>
         <ul className="mt-4 divide-y divide-ink/15">
           {lines.map((l) => (

@@ -8,6 +8,18 @@ A database-backed online store: public website, cart, checkout (cash on delivery
 
 ---
 
+## Preview without a database
+
+If `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are not set, the storefront runs on the preview data in `src/lib/demo.ts` (only confirmed OMBRE facts: $80, $5 delivery, Beige and Blue, 50 × 50 cm). Orders are refused and the admin stays closed until the database is connected.
+
+## Homepage: The Art of Shade
+
+`src/app/(site)/page.tsx` renders five chapters from `src/components/home/`: the entrance (`EntranceSun`: the OMBRE wordmark, a Beige/Blue picker that unfolds the chosen real Ombre, and a sun that crosses the sky as you scroll and opens into the hero; the site header stays hidden until then), product discovery, choose your shade, how it works (real photos), and effortless shopping. Their words and images come from `src/lib/home.ts`; a JSON object saved as the `home` row in `site_settings` overrides any of them. Animation uses GSAP and switches off with the reduced-motion setting.
+
+**To do:** the unfold in the entrance is an effect made from the still cutouts (`public/img/*-cutout.webp`). Replace it with real footage of the Ombre unfolding once the video is filmed.
+
+**Where things stand (Oct 26):** the database is the Supabase project `mapkkkygvtyqdimdhnbr` (Singapore), with the owner login set up and the order flow tested (order, stock, statuses, cancel restock). The test store runs on Vercel at the branch preview link, with functions pinned to `sin1` in `vercel.json` to sit next to the database. A second, unused project `ombre-eu` (Frankfurt, `zsszzvrazqfzvgaaddvc`) has the same schema in case the database moves closer to Lebanon later; if it does, change `vercel.json` to `fra1`. Next: restyle the admin to match the site.
+
 ## 1. Requirements
 
 - Node.js 20 or newer (`node -v`)
@@ -16,7 +28,9 @@ A database-backed online store: public website, cart, checkout (cash on delivery
 
 ## 2. Set up the database
 
-In the Supabase dashboard open **SQL Editor** and run these files **in this order**, one at a time (paste the file contents, press Run). Run each only once, on a fresh project:
+**Quickest way:** in the Supabase dashboard open **SQL Editor**, paste the whole of `supabase/setup.sql` and press **Run**, once, on a new project. It contains the six migrations below plus `supabase/seed_ombre.sql` (the real Ombre in Beige and Blue at $80, store details from the live site, stock at 0 until you set it in Admin > Inventory).
+
+Or run these files yourself **in this order**, one at a time (paste the file contents, press Run). Run each only once, on a fresh project:
 
 | # | File | What it does |
 |---|------|--------------|
@@ -25,7 +39,8 @@ In the Supabase dashboard open **SQL Editor** and run these files **in this orde
 | 3 | `supabase/migrations/0003_rls.sql` | Row Level Security (who can read/write what) |
 | 4 | `supabase/migrations/0004_storage.sql` | Storage buckets and upload policies |
 | 5 | `supabase/migrations/0005_defaults.sql` | Order statuses, cash on delivery, delivery fee and regions, settings, placeholder Home and About sections |
-| 6 (optional) | `supabase/seed_placeholder.sql` | One placeholder product with two placeholder colors, for testing |
+| 6 | `supabase/migrations/0006_fixed_search_path.sql` | Pins `search_path` on three helper functions (security advisor) |
+| 7 (optional) | `supabase/seed_placeholder.sql` | One placeholder product with two placeholder colors, for testing |
 
 If a script fails, stop and send me the exact error message. Do not skip ahead.
 
@@ -51,6 +66,8 @@ Check them in **Storage** in the dashboard. If `0004` fails on the `storage.obje
 insert into public.admins (user_id, email, role)
 select id, email, 'owner' from auth.users where email = 'you@example.com';
 ```
+
+(The same statement is in `supabase/make_me_admin.sql`.)
 
 Only users with a row in `public.admins` can open `/admin`. Being logged in is not enough.
 

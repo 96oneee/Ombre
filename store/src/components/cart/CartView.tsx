@@ -47,7 +47,7 @@ export function CartView({ currency, delivery, regions }: { currency: Currency; 
             const over = l.quantity > l.stock;
             return (
               <li key={l.variantId} className="grid grid-cols-[88px_1fr] gap-4 py-6 sm:grid-cols-[112px_1fr]">
-                <Link href={`/product/${l.slug}`} className="block overflow-hidden rounded bg-linen">
+                <Link href={`/product/${l.slug}`} className="block overflow-hidden bg-dune">
                   {img ? <img src={img} alt="" className="aspect-[4/5] w-full object-cover" /> : <ImagePlaceholder label="Photo" className="aspect-[4/5] w-full text-xs" />}
                 </Link>
                 <div className="flex flex-col">
@@ -97,7 +97,7 @@ export function CartView({ currency, delivery, regions }: { currency: Currency; 
         </Link>
       </div>
 
-      <aside className="h-fit rounded-md bg-linen p-6 lg:sticky lg:top-28" aria-labelledby="summary-h">
+      <aside className="h-fit bg-dune/60 p-6 md:p-8 lg:sticky lg:top-28" aria-labelledby="summary-h">
         <h2 id="summary-h" className="text-3xl">Order summary</h2>
         <dl className="mt-5 space-y-2">
           <div className="flex justify-between"><dt className="text-ink-soft">Subtotal</dt><dd>{money(subtotal)}</dd></div>

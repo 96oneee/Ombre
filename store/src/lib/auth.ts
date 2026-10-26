@@ -1,8 +1,9 @@
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-/** Call at the top of every admin page and server action. */
-export async function requireAdmin() {
+/** Call at the top of every admin page and server action. Cached, so layout and page share one check per request. */
+export const requireAdmin = cache(async () => {
   const supabase = await createClient();
   const {
     data: { user },
@@ -13,4 +14,4 @@ export async function requireAdmin() {
   if (!admin) redirect("/admin/login?error=unauthorized");
 
   return { supabase, user, role: admin.role as string };
-}
+});

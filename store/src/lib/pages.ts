@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/supabase/env";
 import type { PageSection } from "./types";
 
 export interface PageData {
@@ -12,6 +13,7 @@ export interface PageData {
 }
 
 export async function getPage(slug: string): Promise<PageData | null> {
+  if (!hasSupabase) return null;
   const supabase = await createClient();
   const { data } = await supabase
     .from("pages")

@@ -3,8 +3,7 @@ import { requireAdmin } from "@/lib/auth";
 import { getSettings } from "@/lib/settings";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { user } = await requireAdmin();
-  const settings = await getSettings();
+  const [{ user }, settings] = await Promise.all([requireAdmin(), getSettings()]);
   return (
     <>
       <Sidebar email={user.email ?? ""} brand={settings.brand_name} />

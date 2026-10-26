@@ -1,11 +1,14 @@
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { hasSupabase } from "@/lib/supabase/env";
 import { NextResponse, type NextRequest } from "next/server";
 
 /**
- * Guards /admin/*. A visitor needs a valid Supabase session AND a row in public.admins.
- * (Every admin page and server action re-checks this, and Row Level Security is the final barrier.)
+ * Guards /admin/*: keeps the Supabase session fresh and sends visitors without one to the login page.
+ * Admin rights (a row in public.admins) are checked by every admin page and server action.
  */
 export async function middleware(request: NextRequest) {
+  // Preview without a database: there is no admin to protect yet, so keep it closed.
+  if (!hasSupabase) return new NextResponse("The admin opens once the database is connected.", { status: 503 });
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -16,7 +19,7 @@ export async function middleware(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(list) {
+        setAll(list: { name: string; value: string; options: CookieOptions }[]) {
           list.forEach(({ name, value }) => request.cookies.set(name, value));
           response = NextResponse.next({ request });
           list.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
@@ -25,26 +28,16 @@ export async function middleware(request: NextRequest) {
     },
   );
 
+  // getSession reads the cookie (refreshing it only when expired) instead of asking Supabase on every
+  // request. That is enough for a redirect: every admin page and server action verifies the user and
+  // the admins table itself (requireAdmin), with Row Level Security behind it.
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const isLogin = request.nextUrl.pathname === "/admin/login";
-  let isAdmin = false;
-  if (user) {
-    const { data } = await supabase.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
-    isAdmin = !!data;
-  }
-
-  if (!isAdmin && !isLogin) {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
+  if (!user && request.nextUrl.pathname !== "/admin/login") {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";
-    url.search = user ? "?error=unauthorized" : "";
-    return NextResponse.redirect(url);
-  }
-  if (isAdmin && isLogin) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/admin";
     url.search = "";
     return NextResponse.redirect(url);
   }

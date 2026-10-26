@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from "@/lib/supabase/server";
+import { DEMO_PRODUCT } from "./demo";
+import { hasSupabase } from "@/lib/supabase/env";
 import { variantPrice } from "./pricing";
 import type { CatalogProduct, CatalogVariant, ProductImage } from "./types";
 
@@ -68,12 +70,14 @@ function baseQuery(supabase: any) {
 }
 
 export async function getActiveProducts(): Promise<CatalogProduct[]> {
+  if (!hasSupabase) return [DEMO_PRODUCT];
   const supabase = await createClient();
   const { data } = await baseQuery(supabase);
   return (data ?? []).map(normalizeProduct);
 }
 
 export async function getProductBySlug(slug: string): Promise<CatalogProduct | null> {
+  if (!hasSupabase) return slug === DEMO_PRODUCT.slug ? DEMO_PRODUCT : null;
   const supabase = await createClient();
   const { data } = await baseQuery(supabase).eq("slug", slug).maybeSingle();
   return data ? normalizeProduct(data) : null;

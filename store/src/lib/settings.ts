@@ -1,5 +1,7 @@
 import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { DEMO_DELIVERY, DEMO_SETTINGS } from "./demo";
+import { hasSupabase } from "./supabase/env";
 import type { Currency, DeliveryRegion, DeliverySettings } from "./types";
 
 export interface SiteSettings {
@@ -42,6 +44,7 @@ export const SETTING_DEFAULTS: SiteSettings = {
 
 /** All site settings, merged over defaults. Cached per request. */
 export const getSettings = cache(async (): Promise<SiteSettings> => {
+  if (!hasSupabase) return DEMO_SETTINGS;
   const supabase = await createClient();
   const { data } = await supabase.from("site_settings").select("key, value");
   const merged: Record<string, unknown> = { ...SETTING_DEFAULTS };
@@ -54,6 +57,7 @@ export function currencyOf(s: SiteSettings): Currency {
 }
 
 export const getDelivery = cache(async (): Promise<{ settings: DeliverySettings; regions: DeliveryRegion[] }> => {
+  if (!hasSupabase) return DEMO_DELIVERY;
   const supabase = await createClient();
   const [{ data: s }, { data: r }] = await Promise.all([
     supabase.from("delivery_settings").select("*").eq("id", 1).maybeSingle(),
@@ -73,4 +77,18 @@ export const getDelivery = cache(async (): Promise<{ settings: DeliverySettings;
     sort_order: x.sort_order,
   }));
   return { settings, regions };
+});
+
+export interface PaymentMethodRow {
+  key: string;
+  label: string;
+  description: string | null;
+}
+
+/** Active payment methods for the product and checkout pages. */
+export const getPaymentMethods = cache(async (): Promise<PaymentMethodRow[]> => {
+  if (!hasSupabase) return [{ key: "cod", label: "Cash on delivery", description: "Pay the driver in cash when your Ombre arrives." }];
+  const supabase = await createClient();
+  const { data } = await supabase.from("payment_methods").select("key, label, description").eq("is_active", true).order("sort_order");
+  return (data ?? []) as PaymentMethodRow[];
 });
