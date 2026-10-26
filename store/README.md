@@ -26,7 +26,9 @@ If `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are not set, t
 
 ## 2. Set up the database
 
-In the Supabase dashboard open **SQL Editor** and run these files **in this order**, one at a time (paste the file contents, press Run). Run each only once, on a fresh project:
+**Quickest way:** in the Supabase dashboard open **SQL Editor**, paste the whole of `supabase/setup.sql` and press **Run**, once, on a new project. It contains the five migrations below plus `supabase/seed_ombre.sql` (the real Ombre in Beige and Blue at $80, store details from the live site, stock at 0 until you set it in Admin > Inventory).
+
+Or run these files yourself **in this order**, one at a time (paste the file contents, press Run). Run each only once, on a fresh project:
 
 | # | File | What it does |
 |---|------|--------------|
@@ -61,6 +63,8 @@ Check them in **Storage** in the dashboard. If `0004` fails on the `storage.obje
 insert into public.admins (user_id, email, role)
 select id, email, 'owner' from auth.users where email = 'you@example.com';
 ```
+
+(The same statement is in `supabase/make_me_admin.sql`.)
 
 Only users with a row in `public.admins` can open `/admin`. Being logged in is not enough.
 
