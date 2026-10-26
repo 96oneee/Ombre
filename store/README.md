@@ -18,6 +18,8 @@ If `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are not set, t
 
 **To do:** the unfold in the entrance is an effect made from the still cutouts (`public/img/*-cutout.webp`). Replace it with real footage of the Ombre unfolding once the video is filmed.
 
+**Where things stand (Oct 26):** the database is the Supabase project `mapkkkygvtyqdimdhnbr` (Singapore), with the owner login set up and the order flow tested (order, stock, statuses, cancel restock). The test store runs on Vercel at the branch preview link, with functions pinned to `sin1` in `vercel.json` to sit next to the database. A second, unused project `ombre-eu` (Frankfurt, `zsszzvrazqfzvgaaddvc`) has the same schema in case the database moves closer to Lebanon later; if it does, change `vercel.json` to `fra1`. Next: restyle the admin to match the site.
+
 ## 1. Requirements
 
 - Node.js 20 or newer (`node -v`)
