@@ -23,7 +23,7 @@ export const HOME_DEFAULTS: HomeContent = {
     // "classic": fly into the shade · "sun": the sun crosses the sky and the shadow moves
     style: process.env.NEXT_PUBLIC_INTRO_STYLE === "classic" ? "classic" : "sun",
     eyebrow: "OMBRE",
-    title: "The Art of Shade",
+    title: "Sun? Blocked!",
     hint: "Scroll to enter",
     frontImage: "/img/blue-cutout.webp",
     frontAlt: "The Ombre in Blue",

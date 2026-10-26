@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap, type ScrollTrigger } from "@/lib/gsap";
 import type { HomeContent } from "@/lib/home";
 import { cn } from "@/lib/utils";
@@ -8,12 +8,20 @@ import { Em, plain } from "./Em";
 
 /**
  * Chapter 1 · Cinematic arrival, "sun" version.
- * The real Beige and Blue Ombres stand on the beach; the sun crosses the sky as you scroll (and leans toward your pointer); only scrolling opens the site,
- * and each Ombre's own shadow swings around it. At noon the sun floods the screen and the hero opens out of the light.
+ * The real Beige and Blue Ombres stand on the beach; the one you pick unfolds and steps forward while the other folds away.
+ * The sun crosses the sky as you scroll (and leans toward your pointer), each Ombre's own shadow swings around it,
+ * and at noon the sun floods the screen and the hero opens out of the light. Only scrolling opens the site.
  */
+type Shade = "beige" | "blue";
+
+// folded: the frame lies low and its two halves close in on the middle, like the real Ombre folded flat
+const FOLDED = { lift: 0.42, close: 74, scale: 0.8, dim: 0.55 };
+
 export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero: HomeContent["hero"] }) {
   const root = useRef<HTMLElement>(null);
   const trigger = useRef<ScrollTrigger | null>(null);
+  const [pick, setPick] = useState<Shade>("blue");
+  const first = useRef(true);
 
   useEffect(() => {
     const el = root.current;
@@ -55,7 +63,7 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
           .fromTo(q("[data-product=beige]"), { rotateY: 14, transformPerspective: 1400 }, { rotateY: -10, duration: 0.5 }, 0)
           .fromTo(q("[data-giant]"), { xPercent: -8 }, { xPercent: 8, duration: 0.6 }, 0)
           .to(q("[data-intro-title]"), { autoAlpha: 0, y: -30, duration: 0.12 }, 0.36)
-          .to(q("[data-label]"), { autoAlpha: 0, duration: 0.08 }, 0.36)
+          .to(q("[data-picker]"), { autoAlpha: 0, duration: 0.08 }, 0.36)
           // noon: the light floods everything
           .to(q("[data-product], [data-shadow]"), { autoAlpha: 0, y: 30, duration: 0.12, stagger: 0.02 }, 0.5)
           .to(q("[data-sun]"), { scale: 22, duration: 0.2, ease: "power2.in" }, 0.5)
@@ -126,10 +134,33 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
     return () => mm.revert();
   }, []);
 
+  // the picked Ombre unfolds, the other one folds away
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const q = gsap.utils.selector(el);
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const wait = first.current ? 0.9 : 0;
+    first.current = false;
+    const tweens = (["beige", "blue"] as Shade[]).flatMap((k) => {
+      const on = k === pick;
+      const t = { duration: still ? 0 : on ? 1.4 : 0.8, delay: still ? 0 : on ? wait + 0.25 : 0, overwrite: true };
+      return [
+        gsap.to(q(`[data-fig=${k}]`), { scale: on ? 1 : FOLDED.scale, autoAlpha: on ? 1 : FOLDED.dim, zIndex: on ? 10 : 0, ...t, ease: "power3.inOut" }),
+        gsap.to(q(`[data-fold=${k}]`), { scaleY: on ? 1 : FOLDED.lift, ...t, ease: on ? "back.out(1.5)" : "power2.inOut" }),
+        gsap.to(q(`[data-half=${k}-l]`), { rotateY: on ? 0 : FOLDED.close, ...t, ease: on ? "power3.out" : "power2.in" }),
+        gsap.to(q(`[data-half=${k}-r]`), { rotateY: on ? 0 : -FOLDED.close, ...t, ease: on ? "power3.out" : "power2.in" }),
+        gsap.to(q(`[data-shadow-fold=${k}]`), { scaleX: on ? 1 : 0.3, ...t, ease: "power2.inOut" }),
+      ];
+    });
+    return () => tweens.forEach((tw) => tw.kill());
+  }, [pick]);
+
   const pair = [
     {
       src: intro.backImage,
       alt: intro.backAlt,
+      key: "beige" as Shade,
       label: "Beige",
       hex: "#E8DFD1",
       ratio: "aspect-[674/468]",
@@ -137,6 +168,7 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
     {
       src: intro.frontImage,
       alt: intro.frontAlt,
+      key: "blue" as Shade,
       label: "Blue",
       hex: "#2AA7CC",
       ratio: "aspect-[725/539]",
@@ -211,38 +243,78 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
 
         <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pb-24 pt-16">
           <div data-intro-title className="text-center">
-            <p className="eyebrow">{intro.eyebrow}</p>
-            <p className="mt-4 font-display text-[46px] font-light leading-none tracking-tight md:text-[84px]" aria-label={intro.title}>
+            <h2 className="sr-only">{intro.eyebrow}</h2>
+            <div
+              aria-hidden
+              className="mx-auto aspect-[828/232] w-[min(80vw,560px)] animate-[letter_1.4s_cubic-bezier(.22,1,.36,1)_both] bg-sea"
+              style={{ mask: "url(/img/wordmark-name.svg) no-repeat center / contain", WebkitMask: "url(/img/wordmark-name.svg) no-repeat center / contain" }}
+            />
+            <p className="mt-3 font-display text-[24px] font-light italic leading-none tracking-tight text-charcoal/80 md:mt-4 md:text-[34px]" aria-label={intro.title}>
               {letters.map((ch, i) => (
-                <span key={i} aria-hidden className="inline-block animate-[letter_1.1s_cubic-bezier(.22,1,.36,1)_both]" style={{ animationDelay: `${0.25 + i * 0.04}s` }}>
-                  {ch === " " ? " " : ch}
+                <span key={i} aria-hidden className="inline-block animate-[letter_1.1s_cubic-bezier(.22,1,.36,1)_both]" style={{ animationDelay: `${0.5 + i * 0.04}s` }}>
+                  {ch === " " ? "\u00A0" : ch}
                 </span>
               ))}
             </p>
           </div>
 
-          {/* the two real Ombres, Beige and Blue, standing side by side on the sand */}
-          <div className="relative mt-8 grid w-[min(94vw,820px)] grid-cols-2 items-end md:mt-10">
+          {/* the two real Ombres, Beige and Blue, on the sand */}
+          <div className="relative mt-6 grid w-[min(94vw,820px)] grid-cols-2 items-end md:mt-8">
             {pair.map((o, k) => (
-              <figure key={o.src} className={cn("relative", k === 0 ? "z-0 -mr-[8%] translate-y-[-4%] scale-[0.92]" : "z-10 -ml-[8%]")}>
-                <div className="relative">
-                  {/* the Ombre's own silhouette as its shadow on the sand */}
-                  <div data-shadow className="absolute inset-x-0 bottom-[2%] h-full origin-bottom" style={{ opacity: 0.22 }} aria-hidden>
-                    <div data-shadow-lean className="h-full w-full origin-bottom">
+              <figure
+                key={o.key}
+                data-fig={o.key}
+                className={cn("relative origin-bottom", k === 0 ? "-mr-[8%]" : "-ml-[8%]")}
+                style={{ transform: `scale(${FOLDED.scale})`, opacity: FOLDED.dim }}
+              >
+                {/* the Ombre's own silhouette as its shadow on the sand */}
+                <div data-shadow className="absolute inset-x-0 bottom-[2%] h-full origin-bottom" style={{ opacity: 0.22 }} aria-hidden>
+                  <div data-shadow-lean className="h-full w-full origin-bottom">
+                    <div data-shadow-fold={o.key} className="h-full w-full origin-bottom" style={{ transform: "scaleX(0.3)" }}>
                       <div className="relative h-full w-full origin-bottom [transform:scaleY(-0.32)]">
                         <Image src={o.src} alt="" fill sizes="490px" className="object-contain object-bottom blur-[5px] brightness-0" />
                       </div>
                     </div>
                   </div>
-                  <div data-product={k === 0 ? "beige" : "blue"} className={cn("relative", o.ratio)}>
-                    <Image src={o.src} alt={plain(o.alt)} fill priority sizes="(min-width: 768px) 490px, 47vw" className="object-contain" />
+                </div>
+                <div data-product={o.key} className={cn("relative", o.ratio)}>
+                  <div data-fold={o.key} className="absolute inset-0 origin-bottom" style={{ transform: `scaleY(${FOLDED.lift})` }}>
+                    {/* the photo in two halves that open out from the middle */}
+                    {(["l", "r"] as const).map((side) => (
+                      <div
+                        key={side}
+                        data-half={`${o.key}-${side}`}
+                        className="absolute inset-0 origin-center"
+                        style={{
+                          clipPath: side === "l" ? "inset(0 49.7% 0 0)" : "inset(0 0 0 49.7%)",
+                          transform: `perspective(1200px) rotateY(${side === "l" ? FOLDED.close : -FOLDED.close}deg)`,
+                        }}
+                      >
+                        <Image src={o.src} alt={side === "l" ? plain(o.alt) : ""} fill priority sizes="(min-width: 768px) 490px, 47vw" className="object-contain" />
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <figcaption data-label className="mt-3 flex items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-charcoal/80">
-                  <span className="h-3 w-3 rounded-full ring-1 ring-charcoal/20" style={{ backgroundColor: o.hex }} aria-hidden />
-                  {o.label}
-                </figcaption>
               </figure>
+            ))}
+          </div>
+
+          {/* pick a colour: that Ombre unfolds */}
+          <div data-picker className="mt-8 flex items-center gap-3 md:mt-10" role="group" aria-label="Choose your colour">
+            {pair.map((o) => (
+              <button
+                key={o.key}
+                type="button"
+                aria-pressed={pick === o.key}
+                onClick={() => setPick(o.key)}
+                className={cn(
+                  "flex items-center gap-2.5 rounded-full border px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors",
+                  pick === o.key ? "border-charcoal bg-charcoal text-shell" : "border-charcoal/25 bg-shell/60 text-charcoal hover:border-charcoal/70",
+                )}
+              >
+                <span className="h-3.5 w-3.5 rounded-full ring-1 ring-current/30" style={{ backgroundColor: o.hex }} aria-hidden />
+                {o.label}
+              </button>
             ))}
           </div>
         </div>
