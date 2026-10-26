@@ -8,13 +8,12 @@ import { Em, plain } from "./Em";
 /**
  * Chapter 1 · Cinematic arrival, with the real product.
  * The Blue Ombre (cut out of its studio photo) floats on the sand and follows the pointer.
- * Scrolling, pointing at it or pressing it turns it to face you, brings the Beige one out beside it,
+ * Scrolling turns it to face you, brings the Beige one out beside it,
  * then flies into the blue shade, which opens into the hero.
  */
 export function Entrance({ intro, hero, fabric }: { intro: HomeContent["intro"]; hero: HomeContent["hero"]; fabric: string }) {
   const root = useRef<HTMLElement>(null);
   const trigger = useRef<ScrollTrigger | null>(null);
-  const opening = useRef(false);
 
   useEffect(() => {
     const el = root.current;
@@ -74,16 +73,6 @@ export function Entrance({ intro, hero, fabric }: { intro: HomeContent["intro"];
     return () => mm.revert();
   }, []);
 
-  // Pointing at the Ombre (or pressing it) plays the whole opening by scrolling through the scene.
-  const open = () => {
-    const st = trigger.current;
-    if (!st || opening.current || st.progress > 0.6) return;
-    opening.current = true;
-    const done = () => void (opening.current = false);
-    // autoKill: any scroll by the visitor takes over from the automatic opening
-    gsap.to(window, { scrollTo: { y: st.end, autoKill: true }, duration: 3.2, ease: "power2.inOut", onComplete: done, onInterrupt: done });
-  };
-
   return (
     <section ref={root} className="relative h-[100svh] min-h-[560px] overflow-hidden bg-sand" aria-label="Welcome to OMBRE">
       <div data-stage className="absolute inset-0 flex flex-col items-center justify-center px-4 pb-20">
@@ -105,13 +94,7 @@ export function Entrance({ intro, hero, fabric }: { intro: HomeContent["intro"];
               </div>
               <div
                 data-front
-                role="button"
-                tabIndex={0}
-                aria-label="Open the Ombre and enter the site"
-                onPointerEnter={(e) => e.pointerType === "mouse" && open()}
-                onClick={open}
-                onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), open())}
-                className="absolute inset-0 z-10 cursor-pointer [transform-origin:58%_58%] [transform:perspective(1400px)_rotateY(-18deg)_rotateX(6deg)_scale(0.9)]"
+                className="absolute inset-0 z-10 [transform-origin:58%_58%] [transform:perspective(1400px)_rotateY(-18deg)_rotateX(6deg)_scale(0.9)]"
               >
                 <Image src={intro.frontImage} alt={plain(intro.frontAlt)} fill priority sizes="(min-width: 768px) 640px, 84vw" className="object-contain drop-shadow-[0_30px_30px_rgba(31,35,37,0.18)]" />
               </div>

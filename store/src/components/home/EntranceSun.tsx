@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { gsap, type ScrollTrigger } from "@/lib/gsap";
 import type { HomeContent } from "@/lib/home";
 import { cn } from "@/lib/utils";
@@ -8,14 +8,12 @@ import { Em, plain } from "./Em";
 
 /**
  * Chapter 1 · Cinematic arrival, "sun" version.
- * The real Ombre stands on the beach; the sun crosses the sky as you scroll (and leans toward your pointer),
- * and the Ombre's own shadow swings around it. At noon the sun floods the screen and the hero opens out of the light.
+ * The real Beige and Blue Ombres stand on the beach; the sun crosses the sky as you scroll (and leans toward your pointer); only scrolling opens the site,
+ * and each Ombre's own shadow swings around it. At noon the sun floods the screen and the hero opens out of the light.
  */
 export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero: HomeContent["hero"] }) {
   const root = useRef<HTMLElement>(null);
   const trigger = useRef<ScrollTrigger | null>(null);
-  const opening = useRef(false);
-  const [colour, setColour] = useState<"front" | "back">("front");
 
   useEffect(() => {
     const el = root.current;
@@ -24,7 +22,10 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
     const mm = gsap.matchMedia(el);
 
     mm.add(
-      { motion: "(prefers-reduced-motion: no-preference)", reduce: "(prefers-reduced-motion: reduce)" },
+      {
+        motion: "(prefers-reduced-motion: no-preference)",
+        reduce: "(prefers-reduced-motion: reduce)",
+      },
       (ctx) => {
         if (ctx.conditions?.reduce) {
           gsap.set(q("[data-hero]"), { clipPath: "none" });
@@ -34,7 +35,13 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
 
         const tl = gsap.timeline({
           defaults: { ease: "none" },
-          scrollTrigger: { trigger: el, start: "top top", end: "+=200%", pin: true, scrub: 0.8 },
+          scrollTrigger: {
+            trigger: el,
+            start: "top top",
+            end: "+=200%",
+            pin: true,
+            scrub: 0.8,
+          },
         });
         tl.to(q("[data-hint]"), { autoAlpha: 0, y: 12, duration: 0.08 }, 0)
           // the sun crosses the sky: rising to noon, then on toward the hero
@@ -44,22 +51,52 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
           // the Ombre's shadow swings round as the light moves over it
           .fromTo(q("[data-shadow]"), { skewX: 48, opacity: 0.22 }, { skewX: 0, opacity: 0.42, duration: 0.25 }, 0)
           .to(q("[data-shadow]"), { skewX: -48, opacity: 0.24, duration: 0.25 }, 0.25)
-          .fromTo(q("[data-product]"), { rotateY: -14, transformPerspective: 1400 }, { rotateY: 12, duration: 0.5 }, 0)
+          .fromTo(q("[data-product=blue]"), { rotateY: -14, transformPerspective: 1400 }, { rotateY: 12, duration: 0.5 }, 0)
+          .fromTo(q("[data-product=beige]"), { rotateY: 14, transformPerspective: 1400 }, { rotateY: -10, duration: 0.5 }, 0)
           .fromTo(q("[data-giant]"), { xPercent: -8 }, { xPercent: 8, duration: 0.6 }, 0)
           .to(q("[data-intro-title]"), { autoAlpha: 0, y: -30, duration: 0.12 }, 0.36)
-          .to(q("[data-swatches]"), { autoAlpha: 0, duration: 0.08 }, 0.36)
+          .to(q("[data-label]"), { autoAlpha: 0, duration: 0.08 }, 0.36)
           // noon: the light floods everything
-          .to(q("[data-product], [data-shadow]"), { autoAlpha: 0, y: 30, duration: 0.12 }, 0.5)
+          .to(q("[data-product], [data-shadow]"), { autoAlpha: 0, y: 30, duration: 0.12, stagger: 0.02 }, 0.5)
           .to(q("[data-sun]"), { scale: 22, duration: 0.2, ease: "power2.in" }, 0.5)
-          .fromTo(q("[data-hero]"), { clipPath: "circle(0% at 72% 24%)" }, { clipPath: "circle(160% at 72% 24%)", duration: 0.32, ease: "power2.in" }, 0.66)
+          .fromTo(
+            q("[data-hero]"),
+            { clipPath: "circle(0% at 72% 24%)" },
+            {
+              clipPath: "circle(160% at 72% 24%)",
+              duration: 0.32,
+              ease: "power2.in",
+            },
+            0.66,
+          )
           .fromTo(q("[data-hero-img]"), { scale: 1.15 }, { scale: 1, duration: 0.34 }, 0.66)
-          .fromTo(q("[data-hero-line]"), { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.1, stagger: 0.03, ease: "power2.out" }, 0.88);
+          .fromTo(
+            q("[data-hero-line]"),
+            { autoAlpha: 0, y: 28 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.1,
+              stagger: 0.03,
+              ease: "power2.out",
+            },
+            0.88,
+          );
         trigger.current = tl.scrollTrigger ?? null;
 
         // before scrolling, the sun leans toward the pointer and the shadow answers
-        const sx = gsap.quickTo(q("[data-sun-lean]")[0], "x", { duration: 1.2, ease: "power3.out" });
-        const sy = gsap.quickTo(q("[data-sun-lean]")[0], "y", { duration: 1.2, ease: "power3.out" });
-        const sk = gsap.quickTo(q("[data-shadow-lean]")[0], "skewX", { duration: 1.2, ease: "power3.out" });
+        const sx = gsap.quickTo(q("[data-sun-lean]")[0], "x", {
+          duration: 1.2,
+          ease: "power3.out",
+        });
+        const sy = gsap.quickTo(q("[data-sun-lean]")[0], "y", {
+          duration: 1.2,
+          ease: "power3.out",
+        });
+        const sk = gsap.quickTo(q("[data-shadow-lean]"), "skewX", {
+          duration: 1.2,
+          ease: "power3.out",
+        });
         const onMove = (e: PointerEvent) => {
           if (e.pointerType !== "mouse") return;
           const calm = 1 - Math.min(1, (trigger.current?.progress ?? 0) * 5);
@@ -70,7 +107,14 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
           sk(-nx * 22 * calm);
         };
         window.addEventListener("pointermove", onMove);
-        const breathe = gsap.to(q("[data-glow]"), { scale: 1.12, opacity: 0.75, duration: 2.6, ease: "sine.inOut", yoyo: true, repeat: -1 });
+        const breathe = gsap.to(q("[data-glow]"), {
+          scale: 1.12,
+          opacity: 0.75,
+          duration: 2.6,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+        });
 
         return () => {
           window.removeEventListener("pointermove", onMove);
@@ -82,25 +126,52 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
     return () => mm.revert();
   }, []);
 
-  const open = () => {
-    const st = trigger.current;
-    if (!st || opening.current || st.progress > 0.6) return;
-    opening.current = true;
-    const done = () => void (opening.current = false);
-    gsap.to(window, { scrollTo: { y: st.end, autoKill: true }, duration: 3.6, ease: "power2.inOut", onComplete: done, onInterrupt: done });
-  };
-
-  const product = colour === "front" ? { src: intro.frontImage, alt: intro.frontAlt } : { src: intro.backImage, alt: intro.backAlt };
+  const pair = [
+    {
+      src: intro.backImage,
+      alt: intro.backAlt,
+      label: "Beige",
+      hex: "#E8DFD1",
+      ratio: "aspect-[674/468]",
+    },
+    {
+      src: intro.frontImage,
+      alt: intro.frontAlt,
+      label: "Blue",
+      hex: "#2AA7CC",
+      ratio: "aspect-[725/539]",
+    },
+  ];
   const letters = Array.from(intro.title);
 
   return (
     <section ref={root} className="relative h-[100svh] min-h-[600px] overflow-hidden bg-sand" aria-label="Welcome to OMBRE">
-      <div data-stage className="absolute inset-0 overflow-hidden" style={{ background: "linear-gradient(180deg,#F7E8CF 0%,#F4EBDD 40%,#F2EDE3 50%,#E8DDC8 100%)" }}>
+      <div
+        data-stage
+        className="absolute inset-0 overflow-hidden"
+        style={{
+          background: "linear-gradient(180deg,#F7E8CF 0%,#F4EBDD 40%,#F2EDE3 50%,#E8DDC8 100%)",
+        }}
+      >
         {/* the sun, with its breathing glow */}
         <div data-sun className="absolute z-0 -translate-x-1/2 -translate-y-1/2" style={{ left: "14%", top: "34%" }}>
           <div data-sun-lean>
-            <div data-glow aria-hidden className="absolute left-1/2 top-1/2 h-[46vmin] w-[46vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60" style={{ background: "radial-gradient(circle, rgba(255,214,150,.75) 0%, rgba(255,214,150,0) 65%)" }} />
-            <div aria-hidden className="relative h-[11vmin] w-[11vmin] rounded-full" style={{ background: "radial-gradient(circle at 40% 40%, #FFF6E2 0%, #FFD99A 55%, #F2B766 100%)", boxShadow: "0 0 80px 20px rgba(255,205,130,.45)" }} />
+            <div
+              data-glow
+              aria-hidden
+              className="absolute left-1/2 top-1/2 h-[46vmin] w-[46vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60"
+              style={{
+                background: "radial-gradient(circle, rgba(255,214,150,.75) 0%, rgba(255,214,150,0) 65%)",
+              }}
+            />
+            <div
+              aria-hidden
+              className="relative h-[11vmin] w-[11vmin] rounded-full"
+              style={{
+                background: "radial-gradient(circle at 40% 40%, #FFF6E2 0%, #FFD99A 55%, #F2B766 100%)",
+                boxShadow: "0 0 80px 20px rgba(255,205,130,.45)",
+              }}
+            />
           </div>
         </div>
 
@@ -117,7 +188,10 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
           data-giant
           aria-hidden
           className="absolute left-1/2 top-[50%] aspect-[830/262] w-[120vw] -translate-x-1/2 -translate-y-1/2 bg-sea/[0.06] md:w-[92vw]"
-          style={{ mask: "url(/img/wordmark.svg) no-repeat center / contain", WebkitMask: "url(/img/wordmark.svg) no-repeat center / contain" }}
+          style={{
+            mask: "url(/img/wordmark.svg) no-repeat center / contain",
+            WebkitMask: "url(/img/wordmark.svg) no-repeat center / contain",
+          }}
         />
 
         {/* drifting glints of light */}
@@ -126,7 +200,11 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
             <span
               key={i}
               className="absolute block h-1 w-1 rounded-full bg-white/80 animate-[glint_7s_ease-in-out_infinite]"
-              style={{ left: `${(i * 37) % 100}%`, top: `${30 + ((i * 53) % 55)}%`, animationDelay: `${(i * 0.53) % 7}s` }}
+              style={{
+                left: `${(i * 37) % 100}%`,
+                top: `${30 + ((i * 53) % 55)}%`,
+                animationDelay: `${(i * 0.53) % 7}s`,
+              }}
             />
           ))}
         </div>
@@ -143,54 +221,28 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
             </p>
           </div>
 
-          <div className="relative mt-6 w-[min(80vw,560px)] md:mt-8">
-            {/* the Ombre's own silhouette as its shadow on the sand */}
-            <div data-shadow className="absolute inset-x-0 bottom-[2%] h-full origin-bottom" style={{ opacity: 0.22 }} aria-hidden>
-              <div data-shadow-lean className="h-full w-full origin-bottom">
-                <div className="relative h-full w-full origin-bottom [transform:scaleY(-0.32)]">
-                  <Image src={product.src} alt="" fill sizes="560px" className="object-contain object-bottom blur-[5px] brightness-0" />
+          {/* the two real Ombres, Beige and Blue, standing side by side on the sand */}
+          <div className="relative mt-8 grid w-[min(94vw,820px)] grid-cols-2 items-end md:mt-10">
+            {pair.map((o, k) => (
+              <figure key={o.src} className={cn("relative", k === 0 ? "z-0 -mr-[8%] translate-y-[-4%] scale-[0.92]" : "z-10 -ml-[8%]")}>
+                <div className="relative">
+                  {/* the Ombre's own silhouette as its shadow on the sand */}
+                  <div data-shadow className="absolute inset-x-0 bottom-[2%] h-full origin-bottom" style={{ opacity: 0.22 }} aria-hidden>
+                    <div data-shadow-lean className="h-full w-full origin-bottom">
+                      <div className="relative h-full w-full origin-bottom [transform:scaleY(-0.32)]">
+                        <Image src={o.src} alt="" fill sizes="490px" className="object-contain object-bottom blur-[5px] brightness-0" />
+                      </div>
+                    </div>
+                  </div>
+                  <div data-product={k === 0 ? "beige" : "blue"} className={cn("relative", o.ratio)}>
+                    <Image src={o.src} alt={plain(o.alt)} fill priority sizes="(min-width: 768px) 490px, 47vw" className="object-contain" />
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div
-              data-product
-              role="button"
-              tabIndex={0}
-              aria-label="Enter the site"
-              onPointerEnter={(e) => e.pointerType === "mouse" && open()}
-              onClick={open}
-              onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), open())}
-              className="relative aspect-[725/539] cursor-pointer"
-            >
-              {[intro.frontImage, intro.backImage].map((src, k) => (
-                <Image
-                  key={src}
-                  src={src}
-                  alt={(k === 0) === (colour === "front") ? plain(product.alt) : ""}
-                  fill
-                  priority={k === 0}
-                  sizes="(min-width: 768px) 560px, 80vw"
-                  className={cn("object-contain transition-[opacity,transform] duration-700 ease-shade", (k === 0) === (colour === "front") ? "scale-100 opacity-100" : "scale-95 opacity-0")}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div data-swatches className="mt-14 flex items-center gap-3" role="group" aria-label="Colour">
-            {[
-              { k: "back" as const, label: "Beige", hex: "#E8DFD1" },
-              { k: "front" as const, label: "Blue", hex: "#2AA7CC" },
-            ].map((s) => (
-              <button
-                key={s.k}
-                type="button"
-                aria-pressed={colour === s.k}
-                onClick={() => setColour(s.k)}
-                className={cn("flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors", colour === s.k ? "border-charcoal bg-shell/80" : "border-charcoal/20 hover:border-charcoal/60")}
-              >
-                <span className="h-3.5 w-3.5 rounded-full ring-1 ring-charcoal/20" style={{ backgroundColor: s.hex }} aria-hidden />
-                {s.label}
-              </button>
+                <figcaption data-label className="mt-3 flex items-center justify-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-charcoal/80">
+                  <span className="h-3 w-3 rounded-full ring-1 ring-charcoal/20" style={{ backgroundColor: o.hex }} aria-hidden />
+                  {o.label}
+                </figcaption>
+              </figure>
             ))}
           </div>
         </div>
