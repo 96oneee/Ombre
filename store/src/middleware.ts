@@ -3,8 +3,8 @@ import { hasSupabase } from "@/lib/supabase/env";
 import { NextResponse, type NextRequest } from "next/server";
 
 /**
- * Guards /admin/*. A visitor needs a valid Supabase session AND a row in public.admins.
- * (Every admin page and server action re-checks this, and Row Level Security is the final barrier.)
+ * Guards /admin/*: keeps the Supabase session fresh and sends visitors without one to the login page.
+ * Admin rights (a row in public.admins) are checked by every admin page and server action.
  */
 export async function middleware(request: NextRequest) {
   // Preview without a database: there is no admin to protect yet, so keep it closed.
@@ -32,22 +32,11 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isLogin = request.nextUrl.pathname === "/admin/login";
-  let isAdmin = false;
-  if (user) {
-    const { data } = await supabase.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
-    isAdmin = !!data;
-  }
-
-  if (!isAdmin && !isLogin) {
+  // Only the session is checked here: this runs far from the database, and every admin page and
+  // server action checks the admins table itself (requireAdmin), with Row Level Security behind it.
+  if (!user && request.nextUrl.pathname !== "/admin/login") {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";
-    url.search = user ? "?error=unauthorized" : "";
-    return NextResponse.redirect(url);
-  }
-  if (isAdmin && isLogin) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/admin";
     url.search = "";
     return NextResponse.redirect(url);
   }
