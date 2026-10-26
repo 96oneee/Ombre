@@ -99,7 +99,7 @@ export function ChooseShade({ c, product, currency }: { c: HomeContent["shade"];
             <button type="button" onClick={onAdd} disabled={soldOut} className="btn btn-primary flex-1">
               {added ? "Added to cart" : soldOut ? "Sold out" : "Add to cart"}
             </button>
-            <Link href={`/product/${product.slug}`} className="btn btn-outline">
+            <Link href={`/product/${product.slug}?colour=${encodeURIComponent(v.name)}`} className="btn btn-outline">
               Details
             </Link>
           </div>

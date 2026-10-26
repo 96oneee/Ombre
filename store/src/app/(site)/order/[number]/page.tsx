@@ -41,7 +41,7 @@ export default async function OrderPage({ params }: Props) {
           Thank you, {String(order.customer_name).split(" ")[0]}. We&apos;ll contact you to confirm your delivery.
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 rounded-md bg-linen p-5">
+        <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 bg-dune/60 p-5">
           <div>
             <p className="text-xs text-ink-soft">Order number</p>
             <p className="font-display text-3xl tracking-wide">{order.order_number}</p>

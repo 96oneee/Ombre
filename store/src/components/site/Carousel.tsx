@@ -9,7 +9,7 @@ export interface Slide {
 
 export function ImagePlaceholder({ label = "Image placeholder", className }: { label?: string; className?: string }) {
   return (
-    <div className={cn("grid place-items-center bg-linen text-sm text-ink-soft", className)}>
+    <div className={cn("grid place-items-center bg-dune text-sm text-mist", className)}>
       <span className="rounded-full border border-dashed border-ink/30 px-4 py-2">{label}</span>
     </div>
   );
@@ -21,7 +21,7 @@ export function Carousel({ slides, label, placeholderLabel }: { slides: Slide[];
   const [index, setIndex] = useState(0);
 
   if (slides.length === 0) {
-    return <ImagePlaceholder label={placeholderLabel ?? "No photos yet"} className="aspect-[4/5] w-full rounded-md" />;
+    return <ImagePlaceholder label={placeholderLabel ?? "No photos yet"} className="aspect-[4/5] w-full" />;
   }
 
   const go = (i: number) => {
@@ -51,7 +51,7 @@ export function Carousel({ slides, label, placeholderLabel }: { slides: Slide[];
               go(index - 1);
             }
           }}
-          className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto rounded-md bg-linen"
+          className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto bg-dune"
         >
           {slides.map((s, i) => (
             <div key={s.url + i} className="aspect-[4/5] w-full shrink-0 snap-center" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}`}>
@@ -68,7 +68,7 @@ export function Carousel({ slides, label, placeholderLabel }: { slides: Slide[];
               aria-label="Previous image"
               onClick={() => go(index - 1)}
               disabled={index === 0}
-              className="absolute left-3 top-1/2 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-sand/90 text-xl shadow disabled:opacity-0 md:grid"
+              className="absolute left-3 top-1/2 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-shell/90 text-xl disabled:opacity-0 md:grid"
             >
               ‹
             </button>
@@ -77,11 +77,11 @@ export function Carousel({ slides, label, placeholderLabel }: { slides: Slide[];
               aria-label="Next image"
               onClick={() => go(index + 1)}
               disabled={index === slides.length - 1}
-              className="absolute right-3 top-1/2 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-sand/90 text-xl shadow disabled:opacity-0 md:grid"
+              className="absolute right-3 top-1/2 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-shell/90 text-xl disabled:opacity-0 md:grid"
             >
               ›
             </button>
-            <span className="absolute bottom-3 right-3 rounded-full bg-ink/70 px-3 py-1 text-xs text-sand" aria-live="polite">
+            <span className="absolute bottom-3 right-3 rounded-full bg-charcoal/70 px-3 py-1 text-xs text-shell" aria-live="polite">
               {index + 1} / {slides.length}
             </span>
           </>
@@ -97,7 +97,7 @@ export function Carousel({ slides, label, placeholderLabel }: { slides: Slide[];
               onClick={() => go(i)}
               aria-label={`Show image ${i + 1}`}
               aria-current={i === index}
-              className={cn("aspect-square overflow-hidden rounded border-2 bg-linen transition-opacity", i === index ? "border-lagoon" : "border-transparent opacity-60 hover:opacity-100")}
+              className={cn("aspect-square overflow-hidden border bg-dune transition-opacity", i === index ? "border-charcoal" : "border-transparent opacity-60 hover:opacity-100")}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={s.url} alt="" className="h-full w-full object-cover" loading="lazy" />
