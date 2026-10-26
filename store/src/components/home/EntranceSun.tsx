@@ -56,16 +56,20 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
             start: "top top",
             end: "+=200%",
             pin: true,
-            scrub: 0.8,
+            // a short catch-up keeps it smooth without feeling late on the first scroll
+            scrub: 0.35,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
             // the site header stays away until the visitor is almost through the opening
             onUpdate: (st) => setIntro(st.progress < 0.85),
           },
         });
         tl.to(q("[data-hint]"), { autoAlpha: 0, y: 12, duration: 0.08 }, 0)
           // the sun crosses the sky: rising to noon, then on toward the hero
-          .fromTo(q("[data-sun]"), { left: "14%" }, { left: "70%", duration: 0.5 }, 0)
-          .fromTo(q("[data-sun]"), { top: "34%" }, { top: "12%", duration: 0.25, ease: "sine.out" }, 0)
-          .to(q("[data-sun]"), { top: "22%", duration: 0.25, ease: "sine.in" }, 0.25)
+          // (moved with transforms, measured from the viewport, so the browser never has to re-layout)
+          .fromTo(q("[data-sun]"), { x: () => innerWidth * 0.14 }, { x: () => innerWidth * 0.7, duration: 0.5 }, 0)
+          .fromTo(q("[data-sun]"), { y: () => innerHeight * 0.34 }, { y: () => innerHeight * 0.12, duration: 0.25, ease: "sine.out" }, 0)
+          .to(q("[data-sun]"), { y: () => innerHeight * 0.22, duration: 0.25, ease: "sine.in" }, 0.25)
           // the Ombre's shadow swings round as the light moves over it
           .fromTo(q("[data-shadow]"), { skewX: 48, opacity: 0.22 }, { skewX: 0, opacity: 0.42, duration: 0.25 }, 0)
           .to(q("[data-shadow]"), { skewX: -48, opacity: 0.24, duration: 0.25 }, 0.25)
@@ -198,24 +202,25 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
         }}
       >
         {/* the sun, with its breathing glow */}
-        <div data-sun className="absolute z-0 -translate-x-1/2 -translate-y-1/2" style={{ left: "14%", top: "34%" }}>
+        <div data-sun className="absolute left-0 top-0 z-0 origin-top-left will-change-transform" style={{ transform: "translate(14vw, 34vh)" }}>
           <div data-sun-lean>
-            <div
-              data-glow
-              aria-hidden
-              className="absolute left-1/2 top-1/2 h-[46vmin] w-[46vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60"
-              style={{
-                background: "radial-gradient(circle, rgba(255,214,150,.75) 0%, rgba(255,214,150,0) 65%)",
-              }}
-            />
-            <div
-              aria-hidden
-              className="relative h-[11vmin] w-[11vmin] rounded-full"
-              style={{
-                background: "radial-gradient(circle at 40% 40%, #FFF6E2 0%, #FFD99A 55%, #F2B766 100%)",
-                boxShadow: "0 0 80px 20px rgba(255,205,130,.45)",
-              }}
-            />
+            <div className="-translate-x-1/2 -translate-y-1/2">
+              <div
+                data-glow
+                aria-hidden
+                className="absolute left-1/2 top-1/2 h-[52vmin] w-[52vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60"
+                style={{
+                  background: "radial-gradient(circle, rgba(255,214,150,.75) 0%, rgba(255,214,150,0) 65%)",
+                }}
+              />
+              <div
+                aria-hidden
+                className="relative h-[11vmin] w-[11vmin] rounded-full"
+                style={{
+                  background: "radial-gradient(circle at 40% 40%, #FFF6E2 0%, #FFD99A 55%, #F2B766 100%)",
+                }}
+              />
+            </div>
           </div>
         </div>
 
@@ -269,7 +274,7 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
                 style={{ transform: `scale(${FOLDED.scale})`, opacity: 0, visibility: "hidden" }}
               >
                 {/* the Ombre's own silhouette as its shadow on the sand */}
-                <div data-shadow className="pointer-events-none absolute inset-x-0 bottom-[2%] h-full origin-bottom" style={{ opacity: 0.22 }} aria-hidden>
+                <div data-shadow className="pointer-events-none absolute will-change-transform inset-x-0 bottom-[2%] h-full origin-bottom" style={{ opacity: 0.22 }} aria-hidden>
                   <div data-shadow-lean className="h-full w-full origin-bottom">
                     <div data-shadow-fold={o.key} className="h-full w-full origin-bottom" style={{ transform: "scaleX(0.3)" }}>
                       <div className="relative h-full w-full origin-bottom [transform:scaleY(-0.32)]">
@@ -324,7 +329,6 @@ export function EntranceSun({ intro, hero }: { intro: HomeContent["intro"]; hero
             <span className="block h-8 w-px origin-top animate-[hint_2.2s_ease-in-out_infinite] bg-charcoal/50" aria-hidden />
           </div>
         </div>
-
       </div>
 
       {/* the hero, opening out of the light */}
