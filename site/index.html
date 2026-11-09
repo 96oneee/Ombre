@@ -1121,11 +1121,11 @@ testimonials:(s,it)=>`<section class="sec wrap"><div class="sechead"><h2>${T(s.t
 };
 /* before / after slider: the left of the photo shows the hands-up shot, the right the same people under OMBRÉ; drag, swipe or use the arrow keys */
 const CMP_ARR=`<svg viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 1 1 7l6 6M19 1l6 6-6 6M1 7h24"/></svg>`;
-function cmpHTML(s){const b=IMG(s.image1)||"img/couple.jpg",a=IMG(s.imageAfter)||"img/inuse.jpg",bl=s.beforeLabel||"Hands up",al=s.afterLabel||"With OMBRÉ";
+function cmpHTML(s){const b=IMG(s.image1)||"img/couple.jpg",a=IMG(s.imageAfter)||"img/inuse.jpg",bl=s.beforeLabel||"Sun?",al=s.afterLabel||"Blocked!!";
   return `<section class="wrap" style="padding-bottom:clamp(72px,10vw,150px)"><div class="ed cmpw">
     <div class="a"><div class="cmp" data-cmp style="--x:50%;--xn:.5"><img src="${a}" alt="The same couple lying under OMBRÉ shades" loading="lazy"><img class="bf" src="${b}" alt="A couple on the beach shading their eyes with their hands" loading="lazy">
       <span class="tg l">${esc(bl)}</span><span class="tg r">${esc(al)}</span><span class="ln"></span><span class="kn">${CMP_ARR}</span>
-      <input type="range" min="0" max="100" value="50" aria-label="Compare: drag left to see more ${esc(al)}, right to see more ${esc(bl)}" data-cmpr></div></div>
+      <input type="range" min="0" max="100" value="50" aria-label="Compare without and with OMBRÉ: left shows the sun, right shows it blocked" data-cmpr></div></div>
     <div class="b"><p class="lbl">${T(s.eyebrow)}</p><blockquote>${T(s.quote)}</blockquote>
       <ul class="cmpk"><li><b>${esc(bl)}</b><span>${T(s.beforeText||"Arms up, squinting, turning every few minutes.")}</span></li><li><b>${esc(al)}</b><span>${T(s.afterText||"Head and shoulders in shade. Hands free for the book.")}</span></li></ul>
       <p class="cmpnote">${CMP_ARR} Drag the photo to compare</p></div></div></section>`}
