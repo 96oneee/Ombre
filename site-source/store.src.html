@@ -159,13 +159,13 @@ body.noticker .cine .ctop{top:calc(78px + 18px)}
 .cine .chint{position:absolute;left:50%;bottom:calc(clamp(24px,4vh,44px) + 62px);transform:translateX(-50%);font-size:10px;letter-spacing:.3em;text-transform:uppercase;opacity:calc(.7 - var(--f) * 2);display:flex;flex-direction:column;align-items:center;gap:10px}
 .cine .chint i{width:1px;height:34px;background:linear-gradient(currentColor,transparent);animation:chint 2s ease-in-out infinite}
 @keyframes chint{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-.cine .cchap{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);pointer-events:none;opacity:clamp(0,calc(var(--f) * 2 - 1),1)}
+.cine .cchap{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);pointer-events:none;opacity:calc(clamp(0,calc(var(--f) * 2 - 1),1) * (1 - min(1,calc(var(--g) * 2))))}
 .cine .ch{position:absolute;left:var(--gut);top:0;transform:translateY(-50%);max-width:min(36ch,34vw);opacity:0;translate:0 26px;transition:opacity .6s var(--ease),translate .8s var(--ease)}
 .cine .ch.on{opacity:1;translate:0 0}
 .cine .ch .k{display:inline-flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;padding:6px 10px;border:1px solid color-mix(in srgb,var(--cfg) 30%,transparent)}
 .cine .ch h2{font-size:clamp(40px,4.6vw,80px);line-height:.96;margin-top:20px}
 .cine .ch p{margin-top:18px;font-size:16px;line-height:1.6;opacity:.85}
-.cine .crail{position:absolute;right:var(--gut);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;opacity:clamp(0,calc(var(--f) * 2 - 1),1)}
+.cine .crail{position:absolute;right:var(--gut);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;opacity:calc(clamp(0,calc(var(--f) * 2 - 1),1) * (1 - min(1,calc(var(--g) * 2))))}
 .cine .crail span{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--cfg) 25%,transparent);opacity:.5;transition:opacity .4s,background .4s,color .4s}
 .cine .crail span svg{width:18px;height:18px}
 .cine .crail span.on{opacity:1;background:var(--cfg);color:var(--cink)}
@@ -184,6 +184,20 @@ body.noticker .cine .ctop{top:calc(78px + 18px)}
 .cine .btn.gh{background:transparent;color:var(--cfg);border-color:color-mix(in srgb,var(--cfg) 45%,transparent)}
 .cine .btn.gh:hover{background:var(--cfg);color:var(--cink)}
 .cine .cstatic{display:none}
+/* finale: after the last chapter the colour gives way to the real beach photo, and both colours stand side by side */
+.cine{--g:0}
+.cine .cbeach{position:absolute;inset:0;z-index:-4;opacity:var(--g);overflow:hidden;pointer-events:none}
+.cine .cbeach img{width:100%;height:100%;object-fit:cover;object-position:50% 0%;transform:scale(calc(1.14 - var(--g) * .1));filter:blur(calc((1 - var(--g)) * 8px + 3px)) saturate(1.1)}
+.cine .cbeach::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 62%,rgba(6,26,34,.2),rgba(4,18,24,.7)),linear-gradient(180deg,rgba(4,18,24,.55) 0%,rgba(6,26,34,.25) 45%,rgba(4,18,24,.8) 100%)}
+.cine .ctop{opacity:calc(1 - var(--g) * 2)}
+.cine .cword{scale:calc(1 - var(--g) * .06)}
+.cine .cword.on{opacity:calc(var(--f) * .9 * (1 - var(--g)))}
+.cine .cfin{position:absolute;left:0;right:0;top:calc(78px + 36px + 40px);text-align:center;pointer-events:none;opacity:clamp(0,calc(var(--g) * 2 - 1),1);translate:0 calc((1 - var(--g)) * 30px)}
+body.noticker .cine .cfin,body.cine-pin .cine .cfin{top:calc(78px + 40px)}
+.cine .cfin h2{font-size:clamp(40px,4.8vw,84px);line-height:.96}
+.cine .cfin p{margin:16px auto 0;max-width:40ch;font-size:16px;line-height:1.6;opacity:.88}
+.cine .cp.side.fin{filter:none;opacity:var(--g)}
+.cine .cp.side.fin:hover{filter:brightness(1.06)}
 .sw-sec:first-child>.cine{margin-top:-36px}
 body.noticker .sw-sec:first-child>.cine{margin-top:0}
 body.over .ticker{position:relative;z-index:41}
@@ -211,6 +225,9 @@ body.over.cine-pin header.site:not(.solid){position:fixed;top:0}
   .cine .cname{top:calc(52% + min(31vw,15svh));font-size:18px}
   .cine .cname small{display:none}
   .cine .chint{display:none}
+  .cine .cfin{top:calc(66px + 24px)}
+  .cine .cfin h2{font-size:clamp(32px,9vw,44px)}
+  .cine .cfin p{font-size:14px;margin-top:10px;padding:0 var(--gut)}
   .cine .cchap{top:calc(66px + 24px);transform:none}
   .cine .ch{left:var(--gut);right:var(--gut);transform:none;max-width:none}
   .cine .ch h2{font-size:clamp(32px,9vw,44px);margin-top:12px}
@@ -229,7 +246,7 @@ body.over.cine-pin header.site:not(.solid){position:fixed;top:0}
 @media (prefers-reduced-motion:reduce){
   .cine{height:auto!important}
   .cine .cpin{position:relative}
-  .cine .cchap,.cine .crail,.cine .chint{display:none}
+  .cine .cchap,.cine .crail,.cine .chint,.cine .cfin,.cine .cbeach{display:none}
   .cine .cstatic{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:color-mix(in srgb,var(--cfg) 18%,transparent)}
   .cine .cstatic div{background:#061a22;padding:28px var(--gut)}
   .cine .cstatic h2{font-size:28px;margin:10px 0 8px}
@@ -997,7 +1014,7 @@ const LINKS=[["home","Home"],["product","Product page"],["shop","Shop"],["about"
 const ICONS=[["size","Size"],["frame","Frame"],["cash","Cash"],["truck","Delivery"],["chat","WhatsApp"],["check","Check"]];
 const F=(k,label,type="text",x={})=>({k,label,type,...x});
 const SCHEMA={
-  hero:{name:"Image banner",fields:[F("layout","Layout","select",{options:[["photo","Photo banner"],["cinematic","Cinematic product with colour swatches"]]}),F("img_beige","Beige product photo (cinematic)","image"),F("img_blue","Blue product photo (cinematic)","image"),F("image","Banner image (photo layout)","image"),F("eyebrow","Small heading"),F("title","Heading","textarea"),F("text","Text","textarea"),F("btn1","First button label"),F("link1","First button link","link"),F("btn2","Second button label"),F("link2","Second button link","link"),F("height","Banner height","select",{options:[["full","Full screen"],["large","Large"],["medium","Medium"]]}),F("badge","Show round badge","toggle"),F("badgeTop","Badge big text"),F("badgeText","Badge small text")],list:{label:"Story chapter (cinematic)",max:6,fields:[F("icon","Icon","select",{options:ICONS}),F("title","Heading"),F("text","Text","textarea")],blank:{icon:"check",title:"New *chapter*",text:"A line about OMBRÉ."}}},
+  hero:{name:"Image banner",fields:[F("layout","Layout","select",{options:[["photo","Photo banner"],["cinematic","Cinematic product with colour swatches"]]}),F("img_beige","Beige product photo (cinematic)","image"),F("img_blue","Blue product photo (cinematic)","image"),F("image","Banner image (photo layout)","image"),F("img_beach","Beach photo at the end of the story (cinematic)","image"),F("finTitle","Closing heading (cinematic)"),F("finText","Closing text (cinematic)","textarea"),F("eyebrow","Small heading"),F("title","Heading","textarea"),F("text","Text","textarea"),F("btn1","First button label"),F("link1","First button link","link"),F("btn2","Second button label"),F("link2","Second button link","link"),F("height","Banner height","select",{options:[["full","Full screen"],["large","Large"],["medium","Medium"]]}),F("badge","Show round badge","toggle"),F("badgeTop","Badge big text"),F("badgeText","Badge small text")],list:{label:"Story chapter (cinematic)",max:6,fields:[F("icon","Icon","select",{options:ICONS}),F("title","Heading"),F("text","Text","textarea")],blank:{icon:"check",title:"New *chapter*",text:"A line about OMBRÉ."}}},
   usps:{name:"Icons with text",fields:[],list:{label:"Item",max:6,fields:[F("icon","Icon","select",{options:ICONS}),F("title","Heading"),F("text","Text")],blank:{icon:"check",title:"New item",text:"Short description"}}},
   featured:{name:"Featured product",single:true,fields:[F("eyebrow","Small heading"),F("title","Heading"),F("text","Text","textarea"),F("link","Details link label")]},
   editorial:{name:"Editorial photos",fields:[F("eyebrow","Small heading"),F("quote","Quote","textarea"),F("image1","Large image","image"),F("image2","Small image","image")]},
@@ -1079,18 +1096,22 @@ const CINE_CHAPTERS=[
   {icon:"frame",title:"Folds *flat*",text:"A wooden frame that opens in seconds and folds flat for the walk back from the beach."},
   {icon:"check",title:"Tilt it. *Lie back.*",text:"Set it on the sand, angle it to the sun and lie in your own shade, wherever you are."},
   {icon:"cash",title:"{price}, *delivered*",text:"{fee} delivery anywhere in Lebanon. You pay the driver in cash when it arrives."}];
-/* product pose per scene: [x in vw, y in vh, scale, rotate deg]; index 0 is the carousel, then one per chapter (repeats after four) */
-const CINE_POSE={d:[[0,0,1,0],[15,2,1.12,-7],[5,8,1.6,-13],[17,0,.98,6],[14,1,1.18,-3]],m:[[0,0,1,0],[0,4,1.08,-6],[6,8,1.5,-12],[0,4,.96,6],[0,4,1.12,-3]]};
+/* product pose per scene: [x in vw, y in vh, scale, rotate deg, turn deg]; index 0 is the carousel, then one per chapter (repeats after four).
+   The turn tilts the real photo in 3D, so the shade seems to swing round as you scroll. fin is the closing pose, where both colours stand side by side. */
+const CINE_POSE={d:[[0,0,1,0,0],[15,2,1.12,-7,-20],[5,8,1.6,-13,12],[17,0,.98,6,26],[14,1,1.18,-3,-12]],m:[[0,0,1,0,0],[0,4,1.08,-6,-18],[6,8,1.5,-12,10],[0,4,.96,6,22],[0,4,1.12,-3,-10]],
+  fin:{d:[[-15,9,.72,-4,18],[15,9,.72,4,-18]],m:[[-22,10,.5,-4,16],[22,10,.5,4,-16]]}};
+const CINE_FIN={title:"Beige or Blue. *Your shade.*",text:"The same square of shade in two colours. Pick yours below, and pay the driver in cash when it arrives."};
 const cineMood=id=>(CINE[id]||{}).mood||"dark";
 const cineNo=id=>String(Object.keys(COLORS).indexOf(id)+1).padStart(2,"0");
 const cineRM=()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}};
 const cinePic=(s,id)=>IMG(s["img_"+id])||("img/"+id+"-cut.webp");
 function cineHTML(s,items){const vs=VIS(),cur=vs.some(([id])=>id===sel)?sel:(vs[0]||["beige"])[0],c=COLORS[cur]||{name:""};
   const ch=(items&&items.length?items:CINE_CHAPTERS),on=id=>id===cur?" on":"";
-  return `<section class="cine" data-c="${cur}" data-mood="dark" data-n="${ch.length}" style="height:${160+ch.length*80}vh;height:${160+ch.length*80}svh" aria-label="OMBRÉ in ${esc(c.name)}">
+  return `<section class="cine" data-c="${cur}" data-mood="dark" data-n="${ch.length}" style="height:${300+ch.length*80}vh;height:${300+ch.length*80}svh" aria-label="OMBRÉ in ${esc(c.name)}">
   <div class="cpin">
     <div class="cnight"></div>
     ${vs.map(([id])=>`<div class="cflood${on(id)}" data-cv="${id}"></div>`).join("")}
+    <div class="cbeach" aria-hidden="true"><img src="${IMG(s.img_beach)||"img/shore.jpg"}" alt="" loading="lazy" decoding="async"></div>
     <div class="cbeam"></div><div class="cring"></div>
     ${vs.map(([id,x])=>`<div class="cword${on(id)}" data-cv="${id}" aria-hidden="true">${esc(x.name)}</div>`).join("")}
     <div class="cfloor"></div>
@@ -1101,6 +1122,7 @@ function cineHTML(s,items){const vs=VIS(),cur=vs.some(([id])=>id===sel)?sel:(vs[
     <div class="wrap cintro"><h1 class="rv">${T(s.title)}</h1>${s.text?`<p class="rv" style="animation-delay:.1s">${T(s.text)}</p>`:""}</div>
     <div class="chint" aria-hidden="true">Scroll<i></i></div>
     <div class="cchap" aria-hidden="true">${ch.map((x,i)=>`<div class="ch${i===0?" on":""}" data-ch="${i}"><span class="k">${String(i+1).padStart(2,"0")} / ${String(ch.length).padStart(2,"0")}</span><h2>${T(x.title)}</h2><p>${T(x.text)}</p></div>`).join("")}</div>
+    <div class="cfin" aria-hidden="true"><h2>${T(s.finTitle||CINE_FIN.title)}</h2><p>${T(s.finText||CINE_FIN.text)}</p></div>
     <div class="crail" aria-hidden="true">${ch.map((x,i)=>`<span data-cr="${i}" class="${i===0?"on":""}">${ICON[x.icon]||ICON.check}</span>`).join("")}</div>
     <div class="wrap cbar">
       <div class="csw" role="group" aria-label="Choose a colour" style="--n:${vs.length}">${vs.map(([id,x])=>`<button type="button" class="csb" data-csel="${id}" aria-pressed="${id===cur}"><i style="background:${x.hex}"></i><span>${esc(x.name)}</span></button>`).join("")}</div>
@@ -1121,20 +1143,26 @@ function cineSet(id,announce){const c=$(".cine");if(!c||!COLORS[id])return;c.dat
 /* scroll scrub: --f is how far the colour flood has gone (0 carousel, 1 full colour); chapters follow */
 let _cineRaf=0;
 function cineTick(){const c=$(".cine");if(!c){document.body.classList.remove("cine-pin","cine-light");return}
-  const vh=innerHeight,r=c.getBoundingClientRect(),n=+c.dataset.n||1,rm=cineRM(),mob=innerWidth<=860;
+  const vh=innerHeight,r=c.getBoundingClientRect(),n=+c.dataset.n||1,N=n+1,rm=cineRM(),mob=innerWidth<=860;
   const u=rm?0:Math.max(0,-r.top)/vh,f=Math.min(1,Math.max(0,(u-.08)/.5)),cu=u-.6;
   const sm=t=>t*t*(3-2*t),cl=t=>Math.min(1,Math.max(0,t));
-  let P=f;if(cu>0){const k=Math.min(n-1,Math.floor(cu/.8));P=1+k+(k<n-1?sm(cl((cu-.8*k-.5)/.3)):0)}
-  const k=Math.max(0,Math.min(n-1,Math.round(P-1)));
-  c.style.setProperty("--f",f.toFixed(3));
-  const mood=f>.5?cineMood(c.dataset.c):"dark";if(c.dataset.mood!==mood)c.dataset.mood=mood;
+  /* P: 0 carousel, 1..n the chapters, n+1 the closing beach scene */
+  let P=f;if(cu>0){const k=Math.min(N-1,Math.floor(cu/.8));P=1+k+(k<N-1?sm(cl((cu-.8*k-.5)/.3)):0)}
+  const k=Math.max(0,Math.min(n-1,Math.round(P-1))),g=cl(P-n);
+  c.style.setProperty("--f",f.toFixed(3));c.style.setProperty("--g",g.toFixed(3));
+  const mood=g>.5?"dark":f>.5?cineMood(c.dataset.c):"dark";if(c.dataset.mood!==mood)c.dataset.mood=mood;
   c.querySelectorAll("[data-ch]").forEach(e=>e.classList.toggle("on",+e.dataset.ch===k));
   c.querySelectorAll("[data-cr]").forEach(e=>e.classList.toggle("on",+e.dataset.cr===k));
-  const T5=CINE_POSE[mob?"m":"d"],pose=i=>i===0?T5[0]:T5[1+((i-1)%4)],a=Math.floor(P),t=P-a,A=pose(a),B=pose(a+1);
-  const p=A.map((v,j)=>v+(B[j]-v)*t);
-  const vs=[...c.querySelectorAll(".cp")],ai=vs.findIndex(e=>e.dataset.cp===c.dataset.c);
-  vs.forEach((e,i)=>{const d=i-ai;if(d===0){e.classList.add("act");e.classList.remove("side");e.tabIndex=-1;e.style.transform=`translate(${p[0]}vw,${p[1]}vh) scale(${p[2]}) rotate(${p[3]}deg)`}
-    else{e.classList.add("side");e.classList.remove("act");e.tabIndex=-1;const dx=(mob?62:36)*d+(d>0?1:-1)*f*20;e.style.transform=`translate(${dx}vw,${mob?2:-2}vh) scale(${mob?.42:.5}) rotate(${d>0?6:-6}deg)`}});
+  const T5=CINE_POSE[mob?"m":"d"],FIN=CINE_POSE.fin[mob?"m":"d"];
+  const vs=[...c.querySelectorAll(".cp")],ai=vs.findIndex(e=>e.dataset.cp===c.dataset.c),two=vs.length>1;
+  const pose=i=>i===0?T5[0]:i>n?(two?FIN[0]:[0,9,.8,0,0]):T5[1+((i-1)%4)],a=Math.floor(P),t=P-a,A=pose(a),B=pose(Math.min(a+1,N));
+  const mix=(A,B,t)=>A.map((v,j)=>v+(B[j]-v)*t),tf=q=>`translate(${q[0]}vw,${q[1]}vh) perspective(1400px) rotateY(${q[4]}deg) rotate(${q[3]}deg) scale(${q[2]})`;
+  const p=mix(A,B,t);
+  vs.forEach((e,i)=>{const d=i-ai;e.tabIndex=-1;if(d===0){e.classList.add("act");e.classList.remove("side","fin");e.style.transform=tf(p);return}
+    e.classList.add("side");e.classList.remove("act");
+    const sx=(mob?62:36)*d+(d>0?1:-1)*f*20,away=[sx,mob?2:-2,mob?.42:.5,d>0?6:-6,0];
+    if(g>0&&Math.abs(d)===1){e.classList.add("fin");e.style.transform=tf(mix([mob?70:50,FIN[1][1],FIN[1][2],FIN[1][3],0],FIN[1],sm(g)))}
+    else{e.classList.remove("fin");e.style.transform=tf(away)}});
   const pin=r.top<=-(document.body.classList.contains("noticker")?0:36)&&r.bottom>vh*.5;document.body.classList.toggle("cine-pin",pin&&document.body.classList.contains("over"));
   document.body.classList.toggle("cine-light",mood==="light"&&r.bottom>80&&document.body.classList.contains("over"))}
 function cineScroll(){if(_cineRaf)return;_cineRaf=requestAnimationFrame(()=>{_cineRaf=0;cineTick()})}
