@@ -22,7 +22,7 @@
   --shadow:0 30px 60px -30px rgba(0,0,0,.7); color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--sand);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{margin:0;background:var(--sand);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 img{display:block}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -114,6 +114,80 @@ body.over header.site:not(.solid) .bubble{background:#f6f4ea;color:#10323b}
 .hero .badge{position:absolute;z-index:2;right:var(--gut);top:calc(78px + 36px + 28px);width:118px;height:118px;border-radius:50%;border:1px solid rgba(246,244,234,.5);display:grid;place-items:center;text-align:center;font-size:10px;letter-spacing:.2em;text-transform:uppercase;line-height:1.5;backdrop-filter:blur(6px);background:rgba(16,50,59,.18)}
 .hero .badge b{display:block;font-family:var(--display);font-size:34px;letter-spacing:0;font-weight:400;text-transform:none}
 @media (max-width:860px){.hero .badge{top:auto;bottom:auto;top:96px;width:92px;height:92px}.hero .badge b{font-size:26px}}
+
+/* cinematic product hero: the shade stays centre stage while light, colour and type change around it */
+@property --cfg{syntax:"<color>";inherits:true;initial-value:#f6f4ea}
+@property --cink{syntax:"<color>";inherits:true;initial-value:#0b2b36}
+.cine{--cfg:#f6f4ea;--cink:#0b2b36;position:relative;height:calc(100vh - 36px);height:calc(100svh - 36px);min-height:620px;max-height:1080px;overflow:hidden;isolation:isolate;color:var(--cfg);background:#0b2b36;transition:--cfg 1s var(--ease),--cink 1s var(--ease)}
+body.noticker .cine{height:100vh;height:100svh}
+.cine[data-mood="light"]{--cfg:#10323b;--cink:#f6efe2}
+.cine .cbg{position:absolute;inset:0;z-index:-4;opacity:0;transition:opacity 1.2s var(--ease)}
+.cine .cbg.on{opacity:1}
+.cine .cbg[data-cv="beige"]{background:radial-gradient(70% 62% at 50% 50%,#fbf4e6 0%,#f1e2c6 38%,#dcc29a 74%,#c4a275 100%)}
+.cine .cbg[data-cv="blue"]{background:radial-gradient(70% 62% at 50% 50%,#2f7c93 0%,#16566b 34%,#0b3746 70%,#061f29 100%)}
+.cine .cbg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.10) 0%,transparent 22%,transparent 70%,rgba(0,0,0,.14) 100%)}
+.cine .cword{position:absolute;inset:0;z-index:-3;display:grid;place-items:center;pointer-events:none;font-family:var(--display);font-style:italic;font-size:clamp(130px,27vw,460px);line-height:.8;letter-spacing:-.04em;white-space:nowrap;opacity:0;transform:translateY(6%) scale(.97);transition:opacity 1.1s var(--ease),transform 1.4s var(--ease)}
+.cine .cword.on{opacity:1;transform:none}
+.cine .cword[data-cv="beige"]{color:rgba(169,106,42,.13)}
+.cine .cword[data-cv="blue"]{color:rgba(246,244,234,.07)}
+.cine .cprod{position:absolute;left:50%;top:51%;width:min(66vh,54vw,780px);aspect-ratio:1;transform:translate(-50%,-50%);z-index:-1}
+.cine .cprod .float{position:absolute;inset:0;animation:cfloat 9s ease-in-out infinite}
+.cine .cprod .halo{position:absolute;inset:-6%;border-radius:50%;opacity:0;transition:opacity 1.2s var(--ease)}
+.cine .cprod .halo.on{opacity:1}
+.cine .cprod .halo[data-cv="beige"]{background:radial-gradient(closest-side,rgba(232,228,220,1) 52%,rgba(240,230,210,.55) 74%,rgba(240,230,210,0) 100%)}
+.cine .cprod .halo[data-cv="blue"]{background:radial-gradient(closest-side,rgba(214,216,216,1) 44%,rgba(178,204,210,.62) 62%,rgba(110,165,182,.22) 80%,rgba(60,130,150,0) 100%)}
+.cine .cprod img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;-webkit-mask:radial-gradient(closest-side,#000 64%,transparent 100%);mask:radial-gradient(closest-side,#000 64%,transparent 100%);opacity:0;transform:translateX(4%) scale(.94);transition:opacity .9s var(--ease),transform 1.3s var(--ease)}
+.cine .cprod img.on{opacity:1;transform:none}
+.cine .cprod .ground{position:absolute;left:18%;right:18%;bottom:12%;height:8%;border-radius:50%;background:radial-gradient(closest-side,rgba(6,24,30,.28),transparent);filter:blur(6px);z-index:-1}
+@keyframes cfloat{50%{transform:translateY(-1.4%)}}
+.cine .cui{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding-top:calc(78px + clamp(20px,3vw,40px));padding-bottom:clamp(24px,4vw,48px)}
+.cine .ctop{display:flex;justify-content:space-between;align-items:start;gap:16px}
+.cine .ctag{font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;opacity:.85}
+.cine .ctag b{font-weight:600}
+.cine .cnote{font-family:var(--display);font-style:italic;font-size:clamp(18px,1.6vw,24px);text-align:right;opacity:.9}
+.cine .cbot{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:28px}
+.cine h1{font-size:clamp(46px,6.2vw,104px);line-height:.94;letter-spacing:-.03em;max-width:11ch}
+.cine .ccopy p{margin-top:16px;max-width:34ch;font-size:15px;opacity:.88}
+.cine .cact{display:flex;flex-direction:column;align-items:flex-end;gap:16px}
+.cine .csw{display:flex;gap:10px}
+.cine .csb{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:8px 20px 8px 8px;border-radius:40px;border:1px solid color-mix(in srgb,var(--cfg) 28%,transparent);background:color-mix(in srgb,var(--cfg) 6%,transparent);color:inherit;cursor:pointer;font-size:13px;font-weight:500;letter-spacing:.04em;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:border-color .4s var(--ease),background .4s var(--ease),transform .2s}
+.cine .csb i{width:34px;height:34px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14),0 0 0 3px transparent;transition:box-shadow .4s var(--ease)}
+.cine .csb[aria-pressed="true"]{border-color:var(--cfg);background:color-mix(in srgb,var(--cfg) 12%,transparent)}
+.cine .csb[aria-pressed="true"] i{box-shadow:inset 0 0 0 1px rgba(0,0,0,.14),0 0 0 3px color-mix(in srgb,var(--cfg) 35%,transparent)}
+.cine .csb:active{transform:scale(.97)}
+.cine .cprice{font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
+.cine .cprice b{font-family:var(--display);font-size:22px;letter-spacing:0;font-weight:400;text-transform:none;margin-right:6px}
+.cine .ctas{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.cine .btn{--b:var(--cfg);color:var(--cink);height:56px;padding:0 34px}
+.cine .btn:hover{color:var(--cfg)}
+.cine .btn.gh{background:transparent;color:var(--cfg);border-color:color-mix(in srgb,var(--cfg) 45%,transparent)}
+.cine .btn.gh:hover{background:var(--cfg);color:var(--cink)}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+body.over.cine-light header.site:not(.solid){color:#10323b;border-color:rgba(16,50,59,.16)}
+body.over.cine-light header.site:not(.solid) .wm{color:#10323b}
+body.over.cine-light header.site:not(.solid) .bubble{background:#10323b;color:#f6efe2}
+body.over header.site:not(.solid) .wm{transition:color .9s var(--ease)}
+@media (max-width:860px){
+  .cine{min-height:580px}
+  .cine .cui{padding-top:calc(66px + 14px);padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+  .cine .ctop{display:block}
+  .cine .ctop .cnote{display:none}
+  .cine h1{font-size:clamp(38px,11vw,56px);margin-top:10px;max-width:none}
+  .cine .ccopy p{display:none}
+  .cine .cprod{width:min(96vw,44svh,520px);top:52%}
+  .cine .cword{font-size:clamp(120px,40vw,240px)}
+  .cine .cui{justify-content:flex-start}
+  .cine .cbot{display:contents}
+  .cine .ccopy{order:1}
+  .cine .cact{order:2;margin-top:auto;align-items:stretch;gap:12px}
+  .cine .csw{display:grid;grid-template-columns:repeat(var(--n,2),1fr)}
+  .cine .csb{justify-content:flex-start;min-height:56px}
+  .cine .cprice{text-align:center}
+  .cine .ctas{display:grid;grid-template-columns:1fr}
+  .cine .ctas .btn{width:100%}
+  .cine .ctas .btn.gh{display:none}
+}
+@media (max-width:860px) and (max-height:700px){.cine .cprod{width:min(92vw,40svh)}.cine .cprice{display:none}}
 
 /* usp strip */
 .usps{display:grid;grid-template-columns:repeat(var(--cols,4),1fr);border-bottom:1px solid var(--line)}
@@ -854,7 +928,7 @@ const DEFAULT_SITE={
   global:{ticker:["Cash on delivery across Lebanon","Delivery {fee}, anywhere in Lebanon","Two colours: Beige and Blue","Sun? Blocked.","Follow @weareombre"],
     footerTitle:"Sun? Blocked.",footerText:"A square folding shade, delivered anywhere in Lebanon. Pay in cash when it arrives.",instagram:"https://www.instagram.com/weareombre/"},
   home:[
-    {id:"hero",type:"hero",s:{image:"img/inuse-wide.jpg",eyebrow:"Ombre",title:"Sun? Blocked.",text:"The square folding shade you carry to the beach, set on the sand and lie back under. In Beige and Blue.",btn1:"Shop the Ombre",link1:"product",btn2:"Our story",link2:"about",badge:true,badgeTop:"{price}",badgeText:"Cash on delivery",height:"full"}},
+    {id:"hero",type:"hero",s:{layout:"cinematic",image:"img/inuse-wide.jpg",img_beige:"img/beige.jpg",img_blue:"img/blue.jpg",eyebrow:"OMBRÉ · Folding beach shade",title:"Sun? *Blocked.*",text:"The square shade you carry to the beach, set on the sand and lie back under.",btn1:"Shop OMBRÉ",link1:"product",btn2:"Our story",link2:"about",badge:true,badgeTop:"{price}",badgeText:"Cash on delivery",height:"full"}},
     {id:"usps",type:"usps",s:{},items:[{icon:"size",title:"50 × 50 cm",text:"Square shade"},{icon:"frame",title:"Folding frame",text:"Wood, carried by hand"},{icon:"cash",title:"Cash on delivery",text:"Pay when it arrives"},{icon:"truck",title:"{fee} delivery",text:"Anywhere in Lebanon"}]},
     {id:"featured",type:"featured",s:{eyebrow:"The product",title:"The *Ombre*",text:"A square of canvas on a folding wooden frame. Set it on the sand, tilt it over your head and stay in the shade while you lie in the sun.",link:"View full details"}},
     {id:"editorial",type:"editorial",s:{eyebrow:"On the sand",quote:"Hand up, squint, shift. Or bring your own shade.",image1:"img/couple.jpg",image2:"img/hands.jpg"}},
@@ -876,7 +950,7 @@ const LINKS=[["home","Home"],["product","Product page"],["shop","Shop"],["about"
 const ICONS=[["size","Size"],["frame","Frame"],["cash","Cash"],["truck","Delivery"],["chat","WhatsApp"],["check","Check"]];
 const F=(k,label,type="text",x={})=>({k,label,type,...x});
 const SCHEMA={
-  hero:{name:"Image banner",fields:[F("image","Image","image"),F("eyebrow","Small heading"),F("title","Heading","textarea"),F("text","Text","textarea"),F("btn1","First button label"),F("link1","First button link","link"),F("btn2","Second button label"),F("link2","Second button link","link"),F("height","Banner height","select",{options:[["full","Full screen"],["large","Large"],["medium","Medium"]]}),F("badge","Show round badge","toggle"),F("badgeTop","Badge big text"),F("badgeText","Badge small text")]},
+  hero:{name:"Image banner",fields:[F("layout","Layout","select",{options:[["photo","Photo banner"],["cinematic","Cinematic product with colour swatches"]]}),F("img_beige","Beige product photo (cinematic)","image"),F("img_blue","Blue product photo (cinematic)","image"),F("image","Banner image (photo layout)","image"),F("eyebrow","Small heading"),F("title","Heading","textarea"),F("text","Text","textarea"),F("btn1","First button label"),F("link1","First button link","link"),F("btn2","Second button label"),F("link2","Second button link","link"),F("height","Banner height","select",{options:[["full","Full screen"],["large","Large"],["medium","Medium"]]}),F("badge","Show round badge","toggle"),F("badgeTop","Badge big text"),F("badgeText","Badge small text")]},
   usps:{name:"Icons with text",fields:[],list:{label:"Item",max:6,fields:[F("icon","Icon","select",{options:ICONS}),F("title","Heading"),F("text","Text")],blank:{icon:"check",title:"New item",text:"Short description"}}},
   featured:{name:"Featured product",single:true,fields:[F("eyebrow","Small heading"),F("title","Heading"),F("text","Text","textarea"),F("link","Details link label")]},
   editorial:{name:"Editorial photos",fields:[F("eyebrow","Small heading"),F("quote","Quote","textarea"),F("image1","Large image","image"),F("image2","Small image","image")]},
@@ -889,6 +963,7 @@ const SCHEMA={
   richtext:{name:"Text block",fields:[F("eyebrow","Small heading"),F("title","Heading"),F("text","Text","textarea"),F("align","Alignment","select",{options:[["center","Centre"],["left","Left"]]}),F("btn","Button label"),F("link","Button link","link")],blank:{eyebrow:"",title:"A short *statement*",text:"Write something about Ombre here.",align:"center",btn:"",link:"shop"}},
   testimonials:{name:"Customer quotes",fields:[F("title","Heading")],list:{label:"Quote",max:6,fields:[F("quote","Quote","textarea"),F("name","Name")],blank:{quote:"Write a real customer's words here.",name:"Customer name"}},blank:{title:"What customers *say*"},blankItems:[{quote:"Write a real customer's words here.",name:"Customer name"}]}
 };
+SCHEMA.hero.blank={layout:"photo",image:"img/inuse-wide.jpg",img_beige:"img/beige.jpg",img_blue:"img/blue.jpg",eyebrow:"",title:"Image banner",text:"Add a short line about this banner.",btn1:"Shop OMBRÉ",link1:"product",btn2:"",link2:"about",height:"large",badge:false,badgeTop:"",badgeText:""};
 SCHEMA.usps.blankItems=[{icon:"check",title:"New item",text:"Short description"}];
 SCHEMA.steps.blankItems=[{title:"First step",text:"Describe this step."}];
 SCHEMA.faq.blankItems=[{q:"New question?",a:"The answer."}];
@@ -910,7 +985,7 @@ const HREF=l=>l==="faq"?"#home":"#"+(LINKS.some(([k])=>k===l)?l:"home");
 const ANCH=l=>l==="faq"?' data-anchor="faq"':"";
 
 const R={
-hero:(s)=>`<section class="hero h-${s.height||"full"}">
+hero:(s)=>s.layout!=="photo"?cineHTML(s):`<section class="hero h-${s.height||"full"}">
   ${IMG(s.image)?`<img src="${IMG(s.image)}" alt="">`:""}
   ${s.badge?`<div class="badge"><div><b>${T(s.badgeTop)}</b>${T(s.badgeText)}</div></div>`:""}
   <div class="wrap in">
@@ -949,6 +1024,37 @@ imagetext:(s)=>`<section class="sec wrap"><div class="itx ${s.side==="right"?"re
 richtext:(s)=>`<section class="sec wrap"><div class="rtx ${s.align==="left"?"l":""}">${s.eyebrow?`<p class="lbl">${T(s.eyebrow)}</p>`:""}<h2>${T(s.title)}</h2>${s.text?`<p class="muted">${T(s.text)}</p>`:""}${s.btn?`<a href="${HREF(s.link)}"${ANCH(s.link)} class="btn line">${T(s.btn)}</a>`:""}</div></section>`,
 testimonials:(s,it)=>`<section class="sec wrap"><div class="sechead"><h2>${T(s.title)}</h2></div><div class="tms">${it.map(x=>`<figure><blockquote>“${T(x.quote)}”</blockquote><figcaption>${T(x.name)}</figcaption></figure>`).join("")}</div></section>`
 };
+/* cinematic hero: one mood per colour. Colours without an entry fall back to the deep-sea mood. */
+const CINE={beige:{mood:"light",note:"Warm sand"},blue:{mood:"dark",note:"Deep coast"}};
+const cineMood=id=>(CINE[id]||{}).mood||"dark";
+const cineNo=id=>String(Object.keys(COLORS).indexOf(id)+1).padStart(2,"0");
+function cineHTML(s){const vs=VIS(),cur=vs.some(([id])=>id===sel)?sel:(vs[0]||["beige"])[0],c=COLORS[cur]||{name:""};
+  const on=id=>id===cur?" on":"",pic=id=>IMG(s["img_"+id])||COLORS[id].imgs[0];
+  return `<section class="cine" data-c="${cur}" data-mood="${cineMood(cur)}" aria-label="OMBRÉ in ${esc(c.name)}">
+  ${vs.map(([id])=>`<div class="cbg${on(id)}" data-cv="${id}"></div>`).join("")}
+  ${vs.map(([id,x])=>`<div class="cword${on(id)}" data-cv="${id}" aria-hidden="true">${esc(x.name)}</div>`).join("")}
+  <div class="cprod"><div class="float">${vs.map(([id])=>`<div class="halo${on(id)}" data-cv="${id}"></div>`).join("")}<div class="ground"></div>
+    ${vs.map(([id,x])=>`<img class="${on(id).trim()}" data-cv="${id}" src="${pic(id)}" alt="${id===cur?`OMBRÉ folding beach shade in ${esc(x.name)}`:""}"${id===cur?"":` aria-hidden="true"`}>`).join("")}</div></div>
+  <div class="wrap cui">
+    <div class="ctop"><p class="ctag">${s.eyebrow?T(s.eyebrow):"OMBRÉ"}</p><p class="cnote"><span data-cnote>No. ${cineNo(cur)} · ${esc(c.name)}, ${esc((CINE[cur]||{}).note||"")}</span></p></div>
+    <div class="cbot">
+      <div class="ccopy"><h1 class="rv">${T(s.title)}</h1>${s.text?`<p class="rv" style="animation-delay:.1s">${T(s.text)}</p>`:""}</div>
+      <div class="cact rv" style="animation-delay:.18s">
+        <div class="csw" role="group" aria-label="Choose a colour" style="--n:${vs.length}">${vs.map(([id,x])=>`<button type="button" class="csb" data-csel="${id}" aria-pressed="${id===cur}"><i style="background:${x.hex}"></i><span>${esc(x.name)}</span></button>`).join("")}</div>
+        ${s.badge&&(s.badgeTop||s.badgeText)?`<p class="cprice"><b>${T(s.badgeTop)}</b>${T(s.badgeText)}</p>`:""}
+        <div class="ctas">${s.btn2?`<a href="${HREF(s.link2)}"${ANCH(s.link2)} class="btn gh">${T(s.btn2)}</a>`:""}${s.btn1?`<a href="${HREF(s.link1)}"${ANCH(s.link1)} class="btn" data-cshop>${T(s.btn1)} ${ARW}</a>`:""}</div>
+      </div>
+    </div>
+  </div>
+  <p class="vh" aria-live="polite" data-clive></p></section>`}
+function cineSet(id,announce){const c=$(".cine");if(!c||!COLORS[id])return;c.dataset.c=id;c.dataset.mood=cineMood(id);c.setAttribute("aria-label","OMBRÉ in "+COLORS[id].name);
+  c.querySelectorAll("[data-cv]").forEach(e=>{const m=e.dataset.cv===id;e.classList.toggle("on",m);if(e.tagName==="IMG"){e.alt=m?"OMBRÉ folding beach shade in "+COLORS[id].name:"";m?e.removeAttribute("aria-hidden"):e.setAttribute("aria-hidden","true")}});
+  c.querySelectorAll("[data-csel]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.csel===id));
+  const n=c.querySelector("[data-cnote]");if(n)n.textContent=`No. ${cineNo(id)} · ${COLORS[id].name}, ${(CINE[id]||{}).note||""}`;
+  if(announce){const l=c.querySelector("[data-clive]");if(l)l.textContent=COLORS[id].name+" selected"}
+  cineHeader()}
+function cineHeader(){const c=$(".cine");document.body.classList.toggle("cine-light",!!(c&&c.dataset.mood==="light"&&document.body.classList.contains("over")))}
+function featSet(id){if(!$("#fstage"))return;$$("#fstage img").forEach(i=>i.classList.toggle("off",i.dataset.c!==id));$("#fcap").textContent=`No. ${id==="beige"?"01":"02"} — ${COLORS[id].name}`;$("#fstage .lbl").textContent="Studio · "+COLORS[id].name;$$("#fsw .swb").forEach(x=>x.setAttribute("aria-pressed",x.dataset.fsel===id));$("#fstock").innerHTML=stockHTML(id)}
 function renderHome(){const vis=SITE.home.filter(x=>!x.hidden);
   return vis.map(x=>`<div class="sw-sec" data-sid="${x.id}">${(R[x.type]||(()=>""))(x.s||{},x.items||[])}</div>`).join("")||`<section class="sec wrap"><p class="muted">This page has no visible sections.</p></section>`}
 function applyTheme(){const t=SITE.theme;let st=$("#theme-vars");if(!st){st=document.createElement("style");st.id="theme-vars";document.head.appendChild(st)}
@@ -1110,7 +1216,7 @@ function render(){
   if(!PREVIEW)SITE=PUB;applyTheme();fillStatic();
   const html=V[r]();if(html===null)return;
   app.innerHTML=html;
-  document.body.classList.toggle("over",r==="home"&&firstHero());document.body.classList.toggle("admin",r==="admin");
+  document.body.classList.toggle("over",r==="home"&&firstHero());cineHeader();document.body.classList.toggle("admin",r==="admin");
   $$("[data-r]").forEach(a=>a.dataset.r===r?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
   closeMenu();
   const an=window._anchor;window._anchor=null;
@@ -1140,7 +1246,8 @@ document.addEventListener("click",e=>{
   if(b.dataset.qd){const o=b.closest("[data-q]").querySelector("output");o.textContent=Math.max(1,Math.min(Math.max(1,left(sel)),+o.textContent+ +b.dataset.qd))}
   if(b.dataset.addsel!==undefined){const o=document.querySelector("[data-q] output");add(sel,o?+o.textContent:1);if(o)o.textContent=1;const st=$("#fstock");if(st)st.innerHTML=stockHTML(sel)}
   if(b.dataset.addone){e.preventDefault();e.stopPropagation();add(b.dataset.addone,1)}
-  if(b.dataset.fsel){const id=b.dataset.fsel;setSel(id);$$("#fstage img").forEach(i=>i.classList.toggle("off",i.dataset.c!==id));$("#fcap").textContent=`No. ${id==="beige"?"01":"02"} — ${COLORS[id].name}`;$("#fstage .lbl").textContent="Studio · "+COLORS[id].name;$$("#fsw .swb").forEach(x=>x.setAttribute("aria-pressed",x.dataset.fsel===id));$("#fstock").innerHTML=stockHTML(id)}
+  if(b.dataset.fsel){const id=b.dataset.fsel;setSel(id);featSet(id);cineSet(id)}
+  if(b.dataset.csel){const id=b.dataset.csel;setSel(id);cineSet(id,true);featSet(id)}
   if(b.dataset.psel){setSel(b.dataset.psel);const y=window.scrollY;render();window.scrollTo({top:y,behavior:"instant"})}
   if(b.dataset.filter){V._f=b.dataset.filter;render()}
   if(b.dataset.gi)gto(+b.dataset.gi);
@@ -1286,7 +1393,7 @@ R.contact=s=>`<section class="sec wrap"><div class="nl"><h2>${T(s.title)}</h2>${
 const PRESETS={
   ombre:()=>clone(DEFAULT_SITE.home),
   dawn:()=>[
-    {type:"hero",s:{image:"img/inuse-wide.jpg",eyebrow:"",title:"Image banner",text:"Give customers details about the banner image(s) or content on the template.",btn1:"Shop all",link1:"shop",btn2:"",link2:"about",height:"large",badge:false,badgeTop:"",badgeText:""}},
+    {type:"hero",s:{layout:"photo",image:"img/inuse-wide.jpg",eyebrow:"",title:"Image banner",text:"Give customers details about the banner image(s) or content on the template.",btn1:"Shop all",link1:"shop",btn2:"",link2:"about",height:"large",badge:false,badgeTop:"",badgeText:""}},
     {type:"richtext",s:{eyebrow:"",title:"Talk about your brand",text:"Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.",align:"center",btn:"",link:"shop"}},
     {type:"colours",s:{title:"Featured collection",link:"View all"}},
     {type:"editorial",s:{eyebrow:"Collage",quote:"Multimedia collage",image1:"img/couple.jpg",image2:"img/hands.jpg"}},
