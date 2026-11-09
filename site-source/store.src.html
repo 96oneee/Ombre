@@ -301,6 +301,28 @@ body.over.cine-pin header.site:not(.solid){position:fixed;top:0}
 .ed .a:hover img,.ed .sm:hover img{transform:scale(1.04)}
 .ed blockquote{margin:0;font-family:var(--display);font-size:clamp(30px,3.4vw,52px);line-height:1.08;font-style:italic}
 @media (max-width:900px){.ed .a,.ed .b{grid-column:1/-1}}
+/* before / after: drag across one photo to compare hands-up with OMBRÉ */
+.cmp{--x:50%;position:relative;aspect-ratio:3/4;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:pan-y;cursor:ew-resize;background:#0b2b36}
+.cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
+.cmp .bf{clip-path:inset(0 calc(100% - var(--x)) 0 0)}
+.cmp .ln{position:absolute;top:0;bottom:0;left:var(--x);width:2px;margin-left:-1px;background:#f6efe2;box-shadow:0 0 12px rgba(0,0,0,.35);pointer-events:none}
+.cmp .kn{position:absolute;top:50%;left:var(--x);width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;background:#f6efe2;color:#0b2b36;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.3);pointer-events:none;transition:transform .2s}
+.cmp.drag .kn{transform:scale(1.08)}
+.cmp .kn svg{width:26px;height:14px}
+.cmp .tg{position:absolute;top:16px;padding:8px 14px;border-radius:30px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;background:rgba(6,26,34,.55);color:#f6efe2;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);pointer-events:none;transition:opacity .3s}
+.cmp .tg.l{left:16px;opacity:clamp(0,calc((var(--xn) - .12) * 6),1)}
+.cmp .tg.r{right:16px;opacity:clamp(0,calc((.88 - var(--xn)) * 6),1)}
+.cmp input{position:absolute;inset:auto 0 0 0;width:100%;height:1px;opacity:0;pointer-events:none}
+.cmp:has(input:focus-visible){outline:2px solid #f6efe2;outline-offset:4px}
+.ed.cmpw{align-items:center}
+.ed.cmpw .a{aspect-ratio:auto}
+.ed.cmpw .cmp{max-height:86vh;max-height:86svh;width:100%}
+.ed .cmpnote{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.7}
+.ed .cmpnote svg{width:22px;height:12px}
+.ed .cmpk{display:grid;gap:14px;margin:0;padding:0;list-style:none}
+.ed .cmpk li{display:flex;gap:14px;align-items:baseline;font-size:15px;line-height:1.5}
+.ed .cmpk b{flex:0 0 auto;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;min-width:9ch}
+@media (max-width:900px){.cmp{aspect-ratio:4/5}.cmp .kn{width:50px;height:50px;margin:-25px 0 0 -25px}}
 
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line-2)}
@@ -995,7 +1017,7 @@ const DEFAULT_SITE={
     {id:"hero",type:"hero",s:{layout:"cinematic",image:"img/inuse-wide.jpg",img_beige:"img/beige-cut.webp",img_blue:"img/blue-cut.webp",eyebrow:"OMBRÉ · Folding beach shade",title:"Sun? *Blocked.*",text:"The square shade you carry to the beach, set on the sand and lie back under.",btn1:"Shop OMBRÉ",link1:"product",btn2:"",link2:"about",badge:true,badgeTop:"{price}",badgeText:"Cash on delivery",height:"full"},items:[{icon:"size",title:"A square of *shade*",text:"50 × 50 cm of canvas. Big enough for your head and shoulders, small enough to carry under one arm."},{icon:"frame",title:"Folds *flat*",text:"A wooden frame that opens in seconds and folds flat for the walk back from the beach."},{icon:"check",title:"Tilt it. *Lie back.*",text:"Set it on the sand, angle it to the sun and lie in your own shade, wherever you are."},{icon:"cash",title:"{price}, *delivered*",text:"{fee} delivery anywhere in Lebanon. You pay the driver in cash when it arrives."}]},
     {id:"usps",type:"usps",s:{},items:[{icon:"size",title:"50 × 50 cm",text:"Square shade"},{icon:"frame",title:"Folding frame",text:"Wood, carried by hand"},{icon:"cash",title:"Cash on delivery",text:"Pay when it arrives"},{icon:"truck",title:"{fee} delivery",text:"Anywhere in Lebanon"}]},
     {id:"featured",type:"featured",s:{eyebrow:"The product",title:"The *Ombre*",text:"A square of canvas on a folding wooden frame. Set it on the sand, tilt it over your head and stay in the shade while you lie in the sun.",link:"View full details"}},
-    {id:"editorial",type:"editorial",s:{eyebrow:"On the sand",quote:"Hand up, squint, shift. Or bring your own shade.",image1:"img/couple.jpg",image2:"img/hands.jpg"}},
+    {id:"editorial",type:"editorial",s:{layout:"compare",imageAfter:"img/inuse.jpg",eyebrow:"On the sand",quote:"Hand up, squint, shift. Or bring your own shade.",image1:"img/couple.jpg",image2:"img/hands.jpg"}},
     {id:"colours",type:"colours",s:{title:"Pick a colour",link:"Shop all"}},
     {id:"steps",type:"steps",s:{title:"How ordering *works*",text:"No card, no account. Order in a minute and pay the driver."},items:[{title:"Choose your colour",text:"Beige or Blue, as many as you like. Add them to your cart."},{title:"We confirm on WhatsApp",text:"Leave your name, phone and address. We message you to confirm the order."},{title:"Pay on delivery",text:"We deliver anywhere in Lebanon for {fee}. You pay in cash when it arrives."}]},
     {id:"band",type:"band",s:{image:"img/shore.jpg",eyebrow:"Ombre · Lebanon",title:"Shade, carried.",btn:"Shop now",link:"shop"}},
@@ -1017,7 +1039,7 @@ const SCHEMA={
   hero:{name:"Image banner",fields:[F("layout","Layout","select",{options:[["photo","Photo banner"],["cinematic","Cinematic product with colour swatches"]]}),F("img_beige","Beige product photo (cinematic)","image"),F("img_blue","Blue product photo (cinematic)","image"),F("image","Banner image (photo layout)","image"),F("img_beach","Beach photo at the end of the story (cinematic)","image"),F("finTitle","Closing heading (cinematic)"),F("finText","Closing text (cinematic)","textarea"),F("eyebrow","Small heading"),F("title","Heading","textarea"),F("text","Text","textarea"),F("btn1","First button label"),F("link1","First button link","link"),F("btn2","Second button label"),F("link2","Second button link","link"),F("height","Banner height","select",{options:[["full","Full screen"],["large","Large"],["medium","Medium"]]}),F("badge","Show round badge","toggle"),F("badgeTop","Badge big text"),F("badgeText","Badge small text")],list:{label:"Story chapter (cinematic)",max:6,fields:[F("icon","Icon","select",{options:ICONS}),F("title","Heading"),F("text","Text","textarea")],blank:{icon:"check",title:"New *chapter*",text:"A line about OMBRÉ."}}},
   usps:{name:"Icons with text",fields:[],list:{label:"Item",max:6,fields:[F("icon","Icon","select",{options:ICONS}),F("title","Heading"),F("text","Text")],blank:{icon:"check",title:"New item",text:"Short description"}}},
   featured:{name:"Featured product",single:true,fields:[F("eyebrow","Small heading"),F("title","Heading"),F("text","Text","textarea"),F("link","Details link label")]},
-  editorial:{name:"Editorial photos",fields:[F("eyebrow","Small heading"),F("quote","Quote","textarea"),F("image1","Large image","image"),F("image2","Small image","image")]},
+  editorial:{name:"Editorial photos",fields:[F("layout","Layout","select",{options:[["compare","Before and after slider"],["collage","Two photos (collage)"]]}),F("eyebrow","Small heading"),F("quote","Quote","textarea"),F("image1","Large image, or the before photo (slider)","image"),F("image2","Small image (collage)","image"),F("imageAfter","After photo, with OMBRÉ (slider)","image"),F("beforeLabel","Before label (slider)"),F("beforeText","Before line (slider)"),F("afterLabel","After label (slider)"),F("afterText","After line (slider)")]},
   colours:{name:"Colour tiles",fields:[F("title","Heading"),F("link","Link label")]},
   steps:{name:"Steps",fields:[F("title","Heading"),F("text","Text","textarea")],list:{label:"Step",max:5,fields:[F("title","Heading"),F("text","Text","textarea")],blank:{title:"New step",text:"Describe this step."}}},
   band:{name:"Full-width image",fields:[F("image","Image","image"),F("eyebrow","Small heading"),F("title","Heading","textarea"),F("btn","Button label"),F("link","Button link","link")]},
@@ -1070,7 +1092,7 @@ featured:(s)=>`<section class="sec wrap"><div class="feat">
       <div class="buyrow">${qtyHTML()}<button class="btn" data-addsel>Add to cart</button></div>
       <div id="fstock">${stockHTML(sel)}</div>
       ${s.link?`<a href="#product" class="ulink" style="display:inline-block;margin-top:28px">${T(s.link)}</a>`:""}</div></div></section>`,
-editorial:(s)=>`<section class="wrap" style="padding-bottom:clamp(72px,10vw,150px)"><div class="ed">
+editorial:(s)=>s.layout!=="collage"?cmpHTML(s):`<section class="wrap" style="padding-bottom:clamp(72px,10vw,150px)"><div class="ed">
     <div class="a">${IMG(s.image1)?`<img src="${IMG(s.image1)}" alt="">`:""}</div>
     <div class="b"><p class="lbl">${T(s.eyebrow)}</p><blockquote>${T(s.quote)}</blockquote><div class="sm">${IMG(s.image2)?`<img src="${IMG(s.image2)}" alt="">`:""}</div></div></div></section>`,
 colours:(s)=>`<section class="sec tight wrap"><div class="sechead"><h2>${T(s.title)}</h2>${s.link?`<a class="ulink" href="#shop">${T(s.link)}</a>`:""}</div>
@@ -1088,6 +1110,31 @@ imagetext:(s)=>`<section class="sec wrap"><div class="itx ${s.side==="right"?"re
 richtext:(s)=>`<section class="sec wrap"><div class="rtx ${s.align==="left"?"l":""}">${s.eyebrow?`<p class="lbl">${T(s.eyebrow)}</p>`:""}<h2>${T(s.title)}</h2>${s.text?`<p class="muted">${T(s.text)}</p>`:""}${s.btn?`<a href="${HREF(s.link)}"${ANCH(s.link)} class="btn line">${T(s.btn)}</a>`:""}</div></section>`,
 testimonials:(s,it)=>`<section class="sec wrap"><div class="sechead"><h2>${T(s.title)}</h2></div><div class="tms">${it.map(x=>`<figure><blockquote>“${T(x.quote)}”</blockquote><figcaption>${T(x.name)}</figcaption></figure>`).join("")}</div></section>`
 };
+/* before / after slider: the left of the photo shows the hands-up shot, the right the same people under OMBRÉ; drag, swipe or use the arrow keys */
+const CMP_ARR=`<svg viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 1 1 7l6 6M19 1l6 6-6 6M1 7h24"/></svg>`;
+function cmpHTML(s){const b=IMG(s.image1)||"img/couple.jpg",a=IMG(s.imageAfter)||"img/inuse.jpg",bl=s.beforeLabel||"Hands up",al=s.afterLabel||"With OMBRÉ";
+  return `<section class="wrap" style="padding-bottom:clamp(72px,10vw,150px)"><div class="ed cmpw">
+    <div class="a"><div class="cmp" data-cmp style="--x:50%;--xn:.5"><img src="${a}" alt="The same couple lying under OMBRÉ shades" loading="lazy"><img class="bf" src="${b}" alt="A couple on the beach shading their eyes with their hands" loading="lazy">
+      <span class="tg l">${esc(bl)}</span><span class="tg r">${esc(al)}</span><span class="ln"></span><span class="kn">${CMP_ARR}</span>
+      <input type="range" min="0" max="100" value="50" aria-label="Compare: drag left to see more ${esc(al)}, right to see more ${esc(bl)}" data-cmpr></div></div>
+    <div class="b"><p class="lbl">${T(s.eyebrow)}</p><blockquote>${T(s.quote)}</blockquote>
+      <ul class="cmpk"><li><b>${esc(bl)}</b><span>${T(s.beforeText||"Arms up, squinting, turning every few minutes.")}</span></li><li><b>${esc(al)}</b><span>${T(s.afterText||"Head and shoulders in shade. Hands free for the book.")}</span></li></ul>
+      <p class="cmpnote">${CMP_ARR} Drag the photo to compare</p></div></div></section>`}
+function cmpSet(el,v){v=Math.max(0,Math.min(100,v));el.style.setProperty("--x",v+"%");el.style.setProperty("--xn",(v/100).toFixed(3));const r=el.querySelector("[data-cmpr]");if(r&&+r.value!==Math.round(v))r.value=Math.round(v)}
+(()=>{let cur=null,sx=0,sy=0,go=false;
+  const at=(el,x)=>{const r=el.getBoundingClientRect();cmpSet(el,(x-r.left)/r.width*100)};
+  document.addEventListener("pointerdown",e=>{const el=e.target.closest("[data-cmp]");if(!el||e.button>0)return;cur=el;sx=e.clientX;sy=e.clientY;go=e.pointerType==="mouse";if(go){el.classList.add("drag");at(el,e.clientX);e.preventDefault()}});
+  document.addEventListener("pointermove",e=>{if(!cur)return;if(!go){const dx=Math.abs(e.clientX-sx),dy=Math.abs(e.clientY-sy);if(dy>dx&&dy>6){cur=null;return}if(dx>6){go=true;cur.classList.add("drag")}}if(go)at(cur,e.clientX)});
+  const end=e=>{if(!cur)return;if(!go&&e&&e.type==="pointerup")at(cur,e.clientX);cur.classList.remove("drag");cur=null;go=false};
+  document.addEventListener("pointerup",end);document.addEventListener("pointercancel",()=>{if(cur)cur.classList.remove("drag");cur=null});
+  document.addEventListener("input",e=>{if(e.target.matches&&e.target.matches("[data-cmpr]"))cmpSet(e.target.closest("[data-cmp]"),+e.target.value)});
+  /* first time it scrolls into view, the line sweeps once to show it can move */
+  const seen=new WeakSet();const io="IntersectionObserver" in window?new IntersectionObserver(es=>es.forEach(x=>{const el=x.target;if(!x.isIntersecting||seen.has(el))return;seen.add(el);io.unobserve(el);
+    if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;const t0=performance.now(),D=1600;
+    const st=t=>{if(el.classList.contains("drag"))return;const k=Math.min(1,(t-t0)/D);cmpSet(el,50+Math.sin(k*Math.PI*2)*18*(1-k));if(k<1)requestAnimationFrame(st)};requestAnimationFrame(st)}),{threshold:.6}):null;
+  const watch=()=>{if(io)document.querySelectorAll("[data-cmp]").forEach(el=>{if(!seen.has(el))io.observe(el)})};
+  let q=0;new MutationObserver(()=>{if(!q)q=requestAnimationFrame(()=>{q=0;watch()})}).observe(document.body,{childList:true,subtree:true});
+})();
 /* cinematic hero: a colour carousel, then the chosen colour floods the stage and the shade stays pinned while the story chapters scroll past.
    Moods and default chapters live here; heading, text, buttons, photos and chapters are edited in Customize site → Image banner. */
 const CINE={beige:{mood:"light",note:"Warm sand"},blue:{mood:"dark",note:"Deep coast"}};
@@ -1511,7 +1558,7 @@ const PRESETS={
     {type:"hero",s:{layout:"photo",image:"img/inuse-wide.jpg",eyebrow:"",title:"Image banner",text:"Give customers details about the banner image(s) or content on the template.",btn1:"Shop all",link1:"shop",btn2:"",link2:"about",height:"large",badge:false,badgeTop:"",badgeText:""}},
     {type:"richtext",s:{eyebrow:"",title:"Talk about your brand",text:"Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.",align:"center",btn:"",link:"shop"}},
     {type:"colours",s:{title:"Featured collection",link:"View all"}},
-    {type:"editorial",s:{eyebrow:"Collage",quote:"Multimedia collage",image1:"img/couple.jpg",image2:"img/hands.jpg"}},
+    {type:"editorial",s:{layout:"collage",eyebrow:"Collage",quote:"Multimedia collage",image1:"img/couple.jpg",image2:"img/hands.jpg"}},
     {type:"multicolumn",s:clone(SCHEMA.multicolumn.blank),items:clone(SCHEMA.multicolumn.blankItems)},
     {type:"newsletter",s:clone(SCHEMA.newsletter.blank)}]
 };
